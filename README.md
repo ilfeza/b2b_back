@@ -17,6 +17,8 @@ docker compose up --build -d
 - [Goods API](http://localhost:8081/docs)
 - [Publications API](http://localhost:8082/docs)
 
+Полный список эндпоинтов: [документация API](docs/API.md).
+
 Для добавления демонстрационных данных:
 
 ```sh
@@ -29,4 +31,4 @@ docker compose exec b2b python -m scripts.seed --base-url http://localhost:8000
 
 ```sh
 docker compose --profile test run --build --rm tests
-``
+```
