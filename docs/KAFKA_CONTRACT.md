@@ -185,7 +185,7 @@ TEST_POSTGRES_URL=postgresql+asyncpg://postgres:local-postgres-only@localhost:54
 TEST_KAFKA_BOOTSTRAP_SERVERS=localhost:9092 uv run sh scripts/test.sh
 ```
 
-Kafka integration tests используют уникальные topics/groups каждого теста и удаляют эти topics после остановки workers. Без TEST_KAFKA_BOOTSTRAP_SERVERS либо PostgreSQL они явно пропускаются. Compose test profile и CI передают обе переменные.
+Kafka integration tests используют уникальные topics/groups каждого теста и удаляют эти topics после остановки workers. Без TEST_KAFKA_BOOTSTRAP_SERVERS либо PostgreSQL они явно пропускаются. Compose test profile передаёт обе переменные.
 
 Реальное действие через запущенные HTTP-сервисы, без fake Kafka:
 
