@@ -29,12 +29,4 @@ docker compose exec b2b python -m scripts.seed --base-url http://localhost:8000
 
 ```sh
 docker compose --profile test run --build --rm tests
-```
-
-## Документация
-
-- [Архитектура](docs/ARCHITECTURE.md)
-- [API](docs/API.md)
-- [Интеграции](docs/INTEGRATIONS.md)
-- [События Kafka](docs/KAFKA_CONTRACT.md)
-- [Результаты проверок](docs/TEST_RESULTS.md)
+``
