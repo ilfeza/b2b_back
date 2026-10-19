@@ -1,0 +1,1705 @@
+Software Requirements Specification
+for
+E-Commerce Platform for Selling and  Promoting Handmade Products
+
+
+
+
+
+
+
+Version 1.0 approved
+Prepared by 
+Timergalin Timur,
+Lavitskaya Alexandra
+Tolmatskaya Irina
+Madenov Denis
+Created: 08.10.2026
+
+
+
+
+
+Table of Contents
+1. Introduction 1.1 Purpose 1.2 Document Conventions 1.3 Intended Audience and Reading Suggestions 1.4 Product Scope 1.5 References
+2. Overall Description 2.1 Product Perspective 2.2 Product Functions 2.3 User Classes and Characteristics 2.4 Operating Environment 2.5 Design and Implementation Constraints 2.6 User Documentation 2.7 Assumptions and Dependencies
+3. External Interface Requirements 3.1 User Interfaces     3.1.1 Design Principles     3.1.2 Shared UI Conventions     3.1.3 B2C (Buyer-Facing) Screens     3.1.4 B2B (Seller-Facing) Screens     3.1.5 Error and Empty States     3.1.6 Accessibility     3.1.7 Responsive Behavior 3.2 Hardware Interfaces 3.3 Software Interfaces 3.4 Communications Interfaces
+    3.4.1 Client-Server Communication
+    3.4.2 Communication with External Services
+    3.4.3 Internal Service Communication
+    3.4.4 Security and Data Transfer 
+4. System Features
+4.1 System Features of the Buyer-Facing Part (B2C) 4.1.1 Central B2C Module (Single Entry Point for the Buyer) 4.1.2 Home Page and Personalized Feed 4.1.3 Product Search and Search Results 4.1.4 Publication Feed and Publication Page 4.1.5 Product Page and Master Profile 4.1.6 Buyer Subscriptions to Masters 4.1.7 Buyer Shopping Cart 4.1.8 Checkout, Order Confirmation, and Order History 4.1.9 Behavioral Event Collection and Recommendations 4.1.10 Buyer Identification and Context 4.1.11 B2C Interaction with Upstream Services (Interface Summary) 4.1.12 Non-Functional Requirements Related to B2C
+4.2 System Features of the Seller-Facing Part (B2B) 4.2.1 Seller Access, Registration and Onboarding 4.2.2 Store Profile Management 4.2.3 Product Catalog Management 4.2.4 Publication and Linked-Product Management 4.2.5 Media File Management 4.2.6 Subscription Plan Management 4.2.7 Seller Dashboard and Follower Information 4.2.8 Seller-Side Order Information and Actions 4.2.9 Seller Delivery Preferences 4.2.10 Shared Validation and Error Responses
+5. Other Nonfunctional Requirements 5.1 Performance Requirements 5.2 Safety Requirements 5.3 Security Requirements
+Appendix A: Glossary
+Appendix B: To Be Determined List
+
+Revision History
+Name
+Date
+Reason For Changes
+Version
+Timergalin Timur;
+Lavitskaya Alexandra; Tolmatskaya Irina; 
+Madenov Denis 
+08.10.2026 
+Initial approved version of the Software Requirements Specification. Defined the MVP scope, user classes, interfaces, B2C and B2B functional requirements, and non-functional requirements.
+
+
+
+
+1.0
+Introduction
+1.1 Purpose
+This Software Requirements Specification (SRS) defines the functional and non-functional requirements for a content-integrated e-commerce platform designed to unify content making, product discovery, and a purchase within a single user journey. The document follows the IEEE 830-1998 recommended practice for software requirements specifications.
+This SRS serves as the reference for the development team (one frontend developer and three backend developers), for the academic supervisor evaluating the quality, and for any future maintainers of the system. It describes the release 1.0 MVP scope. Features designated as out of scope for the MVP are explicitly marked.
+The document covers three user-facing subsystems:
+B2C subsystem – the buyer-facing marketplace and social content feed.
+B2B subsystem – the seller's workspace for content creation, product catalog management, order processing, and store configuration.
+Administrative subsystem – the internal moderator and administrator interfaces (referenced where relevant, but detailed specification is deferred to a separate SRS, as internal roles are not part of the customer journey scope).
+
+1.2 Document Conventions
+The following conventions are used throughout this document:
+Requirement identifiers follow the pattern REQ-<FEATURE>-<N> (e.g., REQ-AUTH-1), where <FEATURE> is a short mnemonic for the feature group and <N> is a sequential number within that group.
+Priority levels are expressed as:
+High – required for the MVP to be considered functional.
+Medium – strongly desired; may be deferred if schedule pressure requires it.
+Low – nice-to-have; scheduled for post-MVP.
+Modal verbs follow RFC 2119 semantics:
+Must – mandatory requirement.
+Should – recommended, though exceptions are permitted with justification.
+May – optional.
+Placeholders marked as TBD (To Be Determined) indicate requirements that require further investigation before they can be finalized.
+All UI text and user-facing terminology is written in English in this document; the initial product UI will be delivered in Russian (see Section 1.4).
+
+1.3 Intended Audience and Reading Suggestions
+This document is intended for the following audiences:
+Audience
+Reading Path
+Purpose
+Frontend Developer
+Sections 1, 2, 4 (System Features), 5 (Non-functional)
+Understand the required UI behaviors, data flows, and integration points.
+Backend Developers
+Sections 1, 2, 3 (Interfaces), 4, 5
+Understand the domain model, API surface, and infrastructure requirements.
+Project Supervisor / Academic Evaluator
+Sections 1, 2, 5
+Evaluate scope, completeness, and quality attributes.
+QA / Testers
+Sections 3, 4, 5
+Derive test cases from functional requirements and non-functional constraints.
+Future Maintainers
+Full document
+Onboarding to system intent and design rationale.
+
+1.4 Product Scope
+The platform is a content-integrated e-commerce platform for handmade goods. It addresses a documented market gap: existing platforms separate content (maker blogs, posts, storytelling) from commerce (product catalog, cart, checkout), forcing buyers to leave the discovery context to complete a purchase and forcing sellers to promote products on external channels.
+The platform's central value proposition is the continuous relationship between content, product discovery, and commerce, expressed in two core flows:
+Buyer flow: Post → Product → Cart → Order
+Seller flow: Create content → Link product → Receive order → Manage sale
+
+1.5 References
+1.5.1. The Workmen, Project Proposal Report, v1.0, 22 Sep 2026.
+Link: https://drive.google.com/file/d/1134csYMuDLJ9AkuzV6u_-YTU_zbdQSEl/view  
+Briefly covers project gap, goals, end users and expected results.
+1.5.2. IEEE Std 830-1998, IEEE Recommended Practice for Software Requirements Specifications. 
+Link: https://www.math.uaa.alaska.edu/~afkjm/cs401/IEEE830.pdf 
+1.5.3. RFC 2119, Key words for use in RFCs to Indicate Requirement Levels. 
+https://datatracker.ietf.org/doc/html/rfc2119 
+2. Overall Description
+2.1 Product Perspective
+The Handmade Marketplace Platform is a new, self-contained product. The MVP is intended for academic demonstration and is not deployed to production; third-party payment and delivery integrations are implemented against sandbox environments.
+The platform fits into the broader market context described in project proposal (reference 1.5.1), where existing competitors fall into three categories:
+Content-strong, commerce-weak – Yarmarka Masterov (blogs separated from product cards; journal app distinct from marketplace).
+Commerce-strong, content-absent – Ozon, Wildberries (no maker identity; factory competition on price).
+Content-present, integration-absent – Lambda Market (Telegram-only content), Hands4U (blogs invisible to buyers).
+The proposed platform's distinguishing architectural decision is that content and product are linked entities within a single system. Technologies below are referenced in paragraph 1.5.1 in the technology stack section.
+
+The frontend (Next.js) communicates exclusively with the Core API over HTTPS. It never contacts PostgreSQL, Redis, YooKassa, or CDEK directly. The Core API mediates all persistence, third-party integration, and business-rule enforcement.
+2.2 Product Functions
+At a high level, the platform provides the following major functions:
+2.2.1 Buyer-Facing Functions (B2C)
+F1. OAuth2 registration and authentication via Yandex ID.
+F2. Content feed discovery – browse a recommendation-driven feed of maker posts.
+F3. Search and filtering across posts, products, and sellers.
+F4. Seller public profile browsing with posts and product catalog tabs.
+F5. Product detail viewing with sale mode, delivery options, and seller card.
+F6. Seller follow/unfollow.
+F7. Cart management with seller- and delivery-based grouping.
+F8. Checkout with online payment (YooKassa) and delivery selection (CDEK or self-pickup).
+F9. Order history and order detail viewing.
+F10. Buyer profile management.
+2.2.2 Seller-Facing Functions (B2B)
+F11. Seller onboarding and store creation.
+F12. Subscription tier selection (Free / Premium).
+F13. Product catalog CRUD (create, edit, delete, stock and price management).
+F14. Content creation – post composition with linked products.
+F15. Order management – view incoming orders, update status, view delivery details.
+F16. Delivery configuration – enable self-pickup locations and/or CDEK integration.
+F17. Store profile management – display name, avatar, bio, and storefront preferences.
+F18. Dashboard with operational summary (orders, views, followers).
+2.2.3 Platform Functions
+F19. Content–product linkage in the data model (a post may reference one or more products; a product page may surface related posts).
+F20. Recommendation of posts on the buyer home feed (initially rule-based / recency-weighted; ML deferred).
+F21. Integration with YooKassa for online payments and seller subscription billing.
+F22. Integration with CDEK for shipping and order tracking.
+2.3 User Classes and Characteristics
+The platform serves four user classes, of which two are external (part of the customer journey) and two are internal (operational roles).
+2.3.1 Buyers 
+Profile. Women, age 25–44, seeking soulful, non-mass-produced items. They discover products through visual content, value the maker's story, and prefer to purchase without leaving the discovery context.
+Characteristics.
+Moderate technical proficiency; mobile-first browsing habits.
+Motivated by curiosity, authenticity, and engagement with creators.
+Value continuity: a purchase must be completed without navigating to a separate marketplace or social platform.
+Primary success signal: a completed order reached from a content post.
+Requirements that pertain specifically to buyers: F1-F10, F19, F20, F21.
+2.3.2 Sellers 
+Profile. Small business owners or self-employed creators producing handmade goods in small series. They currently manage content, promotion, and sales across fragmented channels (Instagram, Telegram, marketplaces).
+Characteristics.
+Moderate to high technical proficiency; accustomed to content tools and light analytics.
+Operate solo or in very small teams; time-constrained.
+Need integrated tooling: create content → link products → receive orders → manage delivery – without context switching.
+Primary success signal: an order received without leaving the platform and without manual cross-channel coordination.
+Requirements that pertain specifically to sellers: F11-F18, F19, F21, F22.
+2.3.3 Administrators 
+Profile. Platform operators responsible for user account management, dispute resolution, and configuration of platform-wide parameters (commission rates, subscription tier features).
+Characteristics.
+Full access to all platform data.
+Requirements deferred to a separate Administrative SRS.
+2.3.4 Moderators
+Profile. Platform staff responsible for content moderation (post and product review), policy enforcement, and takedown of non-compliant listings.
+Characteristics.
+Read-mostly access to content and product entities.
+Requirements deferred to a separate Administrative SRS.
+2.3.5 Priority of User Classes
+For the MVP, Buyers and Sellers are the primary user classes; both must be fully functional for the deliverable to be considered complete. Administrators and Moderators are secondary for this release and are acknowledged in the system design but not implemented.
+
+2.4 Operating Environment
+2.4.1 Client-Side Environment
+Supported browsers: latest two version of Chrome (desktop and mobile).
+Devices: desktop (≥1280px), tablet (768–1279px), mobile (≤767px).
+Network: functional over HTTPS
+JavaScript required for interactive features; no SSR-only fallback for the MVP.
+2.4.2 Server-Side Environment
+Container orchestration: Kubernetes.
+Runtime: JVM (Kotlin, Spring Boot 3).
+Database: PostgreSQL 16 (primary data store; relational model with JSONB for flexible fields, and tsvector for full-text search).
+Cache: Redis (hot feed cache, view counters, session-adjacent data).
+Deployment targets: Yandex Cloud (compute and manage PostgreSQL/Redis).
+Observability: structured logging, health-check endpoints; detailed monitoring stack TBD.
+2.4.3 Frontend Deployment
+Framework: Next.js (App Router), TypeScript.
+Rendering: server components for content-heavy pages; client components for interactive surfaces (cart, forms, feeds with infinite scroll).
+Hosting: TBD (Vercel or Yandex Cloud static + edge).
+
+2.5 Design and Implementation Constraints
+2.5.1 Technology Constraints
+Backend language is fixed to Kotlin with Spring Boot 3 to leverage strict typing, mature ecosystem, and first-class OAuth2 and third-party API integration.
+PostgreSQL is the mandated primary data store. Alternative data stores (MongoDB, Elasticsearch) are not permitted for the MVP; full-text search must be implemented via tsvector.
+Redis is mandated for caching of the hot feed and view counters; caching must not be implemented in the application layer to preserve horizontal scalability.
+Kubernetes is the mandated deployment substrate to allow independent scaling of Core API, Search Service, and Recommendation Service.
+Frontend must be built with Next.js and TypeScript. No alternative framework is in scope.
+Authentication is delegated to Yandex ID via OAuth2. Storing passwords is explicitly prohibited. No SMTP configuration for password reset is required, as credential management is fully delegated to the identity provider.
+2.5.2 Integration Constraints
+Payment integration is limited to YooKassa, which is chosen because it provides both subscription billing (for Premium tier) and safe-deal fund holding (for online purchases). No alternative payment providers are in scope for the MVP.
+Delivery integration is limited to CDEK, chosen because tracking-by-tracking-number enables automatic closure of the safe deal upon delivery. Self-pickup is offered as a non-integrated alternative.
+External integrations are developed against sandbox environments for the MVP; no live production keys are used.
+2.5.3 Organizational Constraints
+Team composition is fixed: one frontend developer and three backend developers, over the project development and defense period.
+No production deployment is required for the MVP. Deliverable is a demonstrable, functional system in a controlled environment.
+2.5.4 Security Constraints
+All client–server communication must be over HTTPS.
+All third-party integrations must use OAuth2 or equivalent token-based delegation; no credentials may be stored in frontend code.
+Personal data processing must comply with Russian Federal Law No. 152-FZ "On Personal Data."
+
+2.6 User Documentation
+The following user-facing documentation components are planned for the MVP deliverable:
+Document
+Format
+Audience
+Status
+Buyer quick-start guide
+In-app onboarding modal + markdown page
+Buyers
+Planned
+Seller onboarding guide
+In-app walkthrough (B2B onboarding page)
+Sellers
+Planned (Section 4)
+Subscription tier comparison
+In-app pricing page
+Sellers
+Planned (Section 4)
+FAQ
+Static markdown page
+Buyers, Sellers
+Planned
+Developer README
+Markdown in repository
+Maintainers
+Required at submission
+API reference
+OpenAPI/Swagger generated spec
+Backend, Frontend
+Required at submission
+Detailed documentation standards and formats are TBD.
+2.7 Assumptions and Dependencies
+2.7.1 Assumptions
+Yandex ID remains available and stable as the sole authentication provider for the MVP. If the provider's API changes significantly during development, the authentication flow will require revision.
+YooKassa sandbox provides sufficient fidelity to validate subscription billing and safe-deal fund holding without a production merchant account.
+CDEK sandbox provides sufficient fidelity to validate shipment creation and tracking lookup.
+The MVP scale is bounded at ~300,000 SKUs, as declared in the project proposal. Above this threshold, the current tsvector-based search and PostgreSQL configuration may require re-evaluation (e.g., dedicated search service).
+User research is hypothesis-based. Both Customer Journey Maps (buyer and seller) were derived from secondary research, not validated with representative users. Post-MVP usability testing is expected to refine the requirements.
+No traffic beyond academic demonstration is anticipated for the MVP; performance targets in Section 5 assume demonstrative, not commercial, load.
+2.7.2 Dependencies
+Dependency
+Type
+Impact if Unavailable
+Yandex ID OAuth2 service
+External, critical
+Authentication blocked; MVP non-functional
+YooKassa sandbox API
+External, critical
+Payment flow cannot be demonstrated
+CDEK sandbox API
+External, high
+Delivery tracking cannot be demonstrated; self-pickup path still viable
+PostgreSQL 16 with tsvector
+Infrastructure, critical
+Core persistence and search blocked
+Redis instance
+Infrastructure, high
+Hot feed performance degrades; fallback to direct PostgreSQL reads required
+Kubernetes cluster
+Infrastructure, medium
+Deployment model changes; MVP demonstrable on single-node Docker Compose
+Yandex Cloud account
+Infrastructure, medium
+Alternative cloud or on-premises deployment required
+2.7.3 Known TBD Items
+The following items require resolution before the SRS can be considered final:
+TBD-1: Exact structure and priority matrix of Free vs. Premium subscription features (partially defined; needs commercial validation).
+TBD-2: Full specification of Administrator and Moderator subsystems (out of MVP scope, to be addressed in a separate SRS).
+TBD-3: Observability and monitoring stack for the Kubernetes deployment.
+TBD-4: Final list of supported self-pickup point fields (city, address, working hours, contact person).
+TBD-5: Data retention and deletion policy under 152-FZ for user content and order history.
+3. External Interface Requirements
+3.1 User Interfaces
+3.1.1 Design Principles
+The user interface is designed around the platform's core value proposition – a continuous relationship between content, product discovery, and commerce. The following principles govern all UI decisions:
+Content-to-commerce continuity. A buyer must be able to move from a content post to a completed purchase without leaving the platform and without losing context. Every post exposes its linked products inline; every product page exposes the seller's content.
+Dual persona clarity. The B2C (buyer) and B2B (seller) interfaces are visually and structurally distinct. A user with both roles can switch between them without ambiguity about which mode they are in.
+Progressive disclosure. Complex operations (e.g., product creation, post composition, checkout) are broken into steps or surfaces, not presented as single overwhelming forms.
+Mobile-first B2C, desktop-first B2B. Buyers are expected to discover and purchase on mobile. Sellers are expected to manage catalog and content on desktop.
+Optimistic feedback. Interactive actions (add-to-cart, follow, like) provide immediate visual feedback without waiting for server confirmation; the server response reconciles state asynchronously.
+The UI implementation uses Next.js (App Router) with TypeScript, Tailwind CSS for styling, and shadcn/ui as the component primitive library. Icons are sourced from Lucide. Notifications are rendered via Sonner.
+3.1.2 Shared UI Conventions
+The following UI elements and conventions are shared across all screens. The application is divided into three top-level layout groups, each with a distinct layout wrapper:
+Layout Group
+Route Prefix
+Layout Contents
+Applies To
+B2C
+(b2c)
+Top header (logo, search, cart icon, profile menu) + footer + mobile bottom navigation
+All buyer-facing screens
+B2B
+(b2b)
+Left sidebar (navigation) + top bar (store switcher, notifications, profile menu)
+All seller-facing screens
+Auth
+(auth)
+Centered card with logo, minimal chrome
+Login and registration
+Standard Components
+Component
+Purpose
+Appears On
+Primary Button
+Main call-to-action (e.g., "Add to cart", "Pay")
+Throughout
+Secondary Button
+Alternative action (e.g., "Cancel", "Back")
+Throughout
+Icon Button
+Compact action (e.g., like, follow, close)
+Feed, product cards
+Input Field
+Text entry with label, validation, and error message
+Forms
+Card
+Content container (product, post, order)
+Feed, catalog, orders
+Modal / Drawer
+Overlay for focused tasks (cart drawer, product picker, confirmation)
+Throughout
+Toast Notification
+Transient feedback (success, error, info)
+Throughout
+Skeleton
+Loading placeholder preserving layout
+All async content
+Empty State
+Illustration + message + action when no data
+Cart, orders, feed, catalog
+Error Boundary
+Fallback UI when a screen-level error occurs
+Every route segment
+Tabs
+Section switcher
+Search, seller page, product detail (where applicable)
+Breadcrumbs
+Navigation hierarchy
+Product detail, checkout, order detail
+Navigation Conventions
+B2C header: Logo (left) → Search bar (center, expandable on mobile) → Cart icon with badge → Profile menu (right).
+B2C bottom nav (mobile only): Home, Search, Feed, Cart, Profile – five items.
+B2B sidebar: Dashboard, Products, Posts, Orders, Delivery, Pricing, Profile – top to bottom. Active items are highlighted.
+B2B top bar: Store name, notifications bell, "View public store" link, profile menu.
+Browser back/forward must work correctly on all routes; modals must be dismissible with the Escape key.
+Typography and Color
+Typography scale follows Tailwind's default: text-sm for metadata, text-base for body, text-xl/text-2xl for headings.
+The primary accent color is a warm terracotta tone (#C2410C, Tailwind orange-700), evoking the handmade craft aesthetic.
+Neutral palette derived from Tailwind's stone family for a warm, natural feel.
+Semantic colors: green for success, red for errors/destructive actions, amber for warnings, blue for informational.
+Localization and Formatting
+The UI language at MVP is Russian only.
+Prices are displayed in Russian rubles, formatted as 2 500 ₽ (space as thousands separator, ₽ suffix).
+Dates are displayed relative (e.g., "2 часа назад") for recent timestamps and absolute (e.g., "15 марта 2026") for older ones.
+All user-facing strings are centralized in a constant file to enable future i18n.
+3.1.3 B2C (Buyer-Facing) Screens
+Eleven screens comprise the B2C interface. All are reachable without authentication except where noted.
+B2C-1: Home / Feed (/)
+Purpose. Primary discovery surface. Presents a search bar and a vertically scrolling feed of recommended posts, each with linked product snippets.
+Key elements:
+Search bar (top) – navigates to /search?q=... on submit.
+Feed – infinite-scrolling list of post cards.
+Post card consists of:
+Seller header: avatar, display name or username, follower count, "Follow" / "Following" button.
+Post content: title and body text (truncated with "Read more" if long).
+Optional cover image.
+Linked products strip: horizontally scrollable list of product snippets.
+Engagement row: like count, comment count.
+Product snippet consists of: image, title, price, delivery method badge, and two action buttons – "Add to cart" and "Buy now" (the latter navigates directly to /checkout).
+Clicking the product image or title (not the buttons) navigates to /product/[id].
+Empty state: "Пока нет публикаций" with a link to search.
+B2C-2: Search / Results (/search)
+Purpose. Search results across three entity types, with tabbed navigation.
+Key elements:
+Search bar (top) – persistent, prefilled with the current query.
+Three tabs: Posts | Products | Sellers.
+Posts tab: grid or list of post cards (same structure as home feed, but without infinite scroll – paginated or "load more").
+Products tab: grid of product cards with filters (price range, delivery method, sale mode, in-stock only).
+Sellers tab: grid of seller cards (avatar, name, follower count, product count, "Follow" button).
+No-results state: "Ничего не найдено. Попробуйте изменить запрос." with suggestions.
+URL state is reflected in query parameters: ?q=...&tab=posts|products|sellers&page=N.
+B2C-3: Seller Public Profile (/seller/[username])
+Purpose. Public storefront for a seller. Reachable from post cards, product cards, and search results.
+Key elements:
+Seller header: avatar, display name, @username, bio, follower count, product count, "Follow" / "Following" button, rating (out of 5).
+Search bar scoped to seller's products – filters the Products tab.
+Two tabs: Posts | Products.
+Posts tab: list of the seller's posts, same card format as home feed.
+Products tab: grid of the seller's products with the seller-scoped search applied.
+No-results / empty states for both tabs.
+B2C-4: Product Detail (/product/[id])
+Purpose. Full product information and primary purchase entry point.
+Key elements:
+Image gallery (left on desktop, top on mobile).
+Product info (right on desktop):
+Title, price, stock indicator (inStock).
+Sale mode determines actions:
+online – "Add to cart" and "Buy now" buttons; quantity selector; delivery method indicator.
+out_of_stock – buttons disabled with message "Нет в наличии".
+deal_only – no cart buttons; instead, a contact block displaying dealContacts text ("Свяжитесь с продавцом для оформления сделки").
+Delivery options block:
+If pickup – list of pickup points as {city} – {address}, multiple entries possible.
+If cdek – label "Доставка СДЭК".
+Seller card (bottom of the page) with five fields: avatar, name, rating, follower count, "Перейти в магазин" button linking to /seller/[username].
+Related posts (optional, below seller card): posts from the same seller that link this product.
+B2C-5: Cart (/cart)
+Purpose. Review and group items before checkout. Requires authentication.
+Key elements:
+Groups – cart is grouped by (seller, delivery method) pair. Each group contains:
+Seller header: avatar, name, delivery method label.
+Available items – horizontally scrollable row of product snippets with quantity controls and remove action.
+Unavailable items – same format, visually de-emphasized, with a "Remove" action and a reason label ("Нет в наличии" or "Только по сделке").
+"К оформлению" button – proceeds to checkout for this group only.
+Empty state: "Ваша корзина пуста" with a link to the feed.
+Cart summary (bottom sticky bar): total items, total price across all groups.
+B2C-6: Checkout (/checkout)
+Purpose. Confirm delivery and pay. Requires authentication.
+Key elements:
+Grouped display by seller and delivery method (same grouping as cart).
+Delivery method: displayed as a label (not editable here – determined by the group's products).
+Item list: compact list without images – quantity × title × unit price = line total.
+Pickup point selector (only if pickup): radio list of pickup points to choose.
+Order summary: subtotal, delivery cost (if applicable), total to pay.
+"Оплатить" button – initiates payment via YooKassa. Button state during processing: disabled with spinner.
+Cancel link – returns to cart without losing selection.
+B2C-7: Buyer Profile (/account)
+Purpose. Manage personal account.
+Key elements:
+Profile header: avatar, display name, @username, email (read-only, from Yandex ID), registration date.
+Editable fields: display name, avatar, bio.
+Role management: if the user is not yet a seller, a prominent "Стать продавцом" button that initiates the seller onboarding flow.
+Navigation links: "Мои заказы" → /account/orders; "Выйти" → clears session and redirects to /.
+B2C-8: Buyer Orders List (/account/orders)
+Purpose. List of the buyer's orders.
+Key elements:
+Order cards – each shows: order number, date, seller, delivery method, total, status badge, first item's thumbnail, and a "Подробнее" link to /account/orders/[id].
+Status filter tabs: All | Active | Completed | Cancelled.
+Pagination or "load more".
+Empty state: "У вас пока нет заказов" with a link to the feed.
+B2C-9: Buyer Order Detail (/account/orders/[id])
+Purpose. Full information about a single order.
+Key elements:
+Header: order number, status badge, date.
+Delivery block: delivery method, pickup point (if pickup), tracking number (if CDEK and available).
+Items list: product snippets with quantity and price.
+Total block: subtotal, delivery, total.
+Seller card: link to /seller/[username].
+Actions: "Повторить заказ" (re-adds items to cart, if available); "Отменить" (only if status is created or paid).
+B2C-10: Login (/login)
+Purpose. Authentication entry point.
+Key elements:
+Centered card with platform logo.
+"Войти через Яндекс" button – initiates OAuth2 flow via Yandex ID. No email/password form (delegated to Yandex).
+Link to register ("Впервые здесь? Зарегистрироваться").
+Error state: if OAuth callback fails, display error message and retry button.
+B2C-11: Registration (/register)
+Purpose. Account creation. Because authentication is delegated to Yandex ID, registration is effectively the first successful OAuth flow plus a role-selection step.
+Key elements:
+Centered card with platform logo.
+"Продолжить с Яндекс" button – same OAuth2 flow as login.
+Intent parameter: if URL contains ?intent=seller, the post-registration redirect goes to /seller/onboarding; otherwise to /account.
+Terms of service checkbox (required).
+Link to login ("Уже есть аккаунт? Войти").
+3.1.4 B2B (Seller-Facing) Screens
+Eleven screens comprise the B2B interface. All require authentication with the seller role; unauthorized access is redirected to /seller/onboarding if the user is authenticated but not yet a seller, or to /login if not authenticated.
+B2B-1: Dashboard (/seller)
+Purpose. Operational summary for the seller. Default landing page after login.
+Key elements:
+Four summary cards: new orders count, unshipped orders count, total product views (last 30 days), follower count.
+Recent orders list – last 5 orders with status badges and a link to each.
+Low-stock alerts – list of products with inStock below a threshold (e.g., 3), with quick links to edit.
+Quick action buttons: "Добавить товар", "Создать пост".
+B2B-2: Onboarding (/seller/onboarding)
+Purpose. Guide new sellers through store setup. Displayed once after the first "become a seller" action; subsequently available from the sidebar.
+Key elements:
+Textual introduction to platform capabilities.
+Checklist:
+Create a store profile (name, avatar, bio).
+Add first product.
+Publish first post.
+Configure delivery.
+Each item is clickable and navigates to the corresponding screen. Completed items are marked with a checkmark.
+"Перейти в кабинет" button when the profile is created (minimum requirement to access the rest of B2B).
+B2B-3: Subscription Pricing (/seller/pricing)
+Purpose. Compare Free and Premium subscription tiers; upgrade to Premium.
+Key elements:
+Two plan cards side-by-side: Free (current by default) and Premium.
+Feature comparison matrix:
+Feature
+Free
+Premium
+Products limit
+10
+Unlimited
+Posts limit
+5
+Unlimited
+Public storefront
+✓
+✓
+Analytics
+–
+✓
+Search promotion priority
+–
+✓
+Platform commission
+10%
+5%
+"Upgrade to Premium" button on the Premium card – opens a modal with payment details and initiates YooKassa subscription flow.
+Current plan indicator – the plan the seller is currently on is highlighted.
+B2B-4: Product Catalog (/seller/products)
+Purpose. List and manage all products of the seller.
+Key elements:
+Toolbar: "Добавить товар" button, search within own products, filter by status (online / out_of_stock / deal_only).
+Product table (desktop) or card list (mobile):
+Thumbnail, title, price, stock, delivery method, sale mode.
+Actions per row: "Редактировать" (→ /seller/products/[id]), "Удалить" (with confirmation modal).
+Bulk actions (optional for MVP): select multiple → delete.
+Empty state: "У вас пока нет товаров" with "Добавить первый товар" CTA.
+B2B-5: Product Create / Edit (/seller/products/[id])
+Purpose. Create a new product or edit an existing one. id === "new" indicates creation mode.
+Key elements:
+Form sections:
+Basic info: title, description (textarea), price, currency (RUB, read-only at MVP).
+Image: single primary image upload (or URL) with preview.
+Stock: quantity in stock (inStock).
+Sale mode: radio – "Online", "Out of stock", "Deal only". Selecting "Deal only" reveals a textarea for dealContacts.
+Delivery: radio – "Pickup" or "CDEK". Selecting "Pickup" reveals a repeatable list of {city, address} entries (add/remove).
+Form validation using Zod schemas; inline error messages.
+Save actions: "Сохранить" (stay on page with success toast), "Сохранить и закрыть" (return to catalog).
+Delete action (edit mode only).
+B2B-6: Posts List (/seller/posts)
+Purpose. List and manage all posts of the seller.
+Key elements:
+Toolbar: "Создать пост" button, search within own posts.
+Post list: each row shows – cover thumbnail (if present), title, linked products count, publication date, engagement (likes, comments).
+Actions per row: "Редактировать" (→ /seller/posts/[id]), "Удалить" (with confirmation).
+Empty state: "У вас пока нет публикаций" with "Создать первую публикацию" CTA.
+B2B-7: Post Create / Edit (/seller/posts/[id])
+Purpose. Compose or edit a post with linked products. id === "new" indicates creation mode.
+Key elements:
+Title field (single line).
+Body field – plain textarea (multi-line). Rich-text editor is out of scope for MVP; formatting is limited to line breaks.
+Cover image upload (optional).
+Linked products section:
+Displays currently linked product cards with remove action.
+"Добавить товар" button – opens a modal with the seller's own product catalog, allowing selection of one or more products.
+Linked products appear in the post in the same order as they were added (drag-to-reorder is out of scope for MVP).
+Preview panel (right side on desktop, below on mobile) – renders the post as a buyer will see it in the feed.
+Actions: "Опубликовать" / "Сохранить", "Сохранить черновик" (optional), "Удалить".
+B2B-8: Orders List (/seller/orders)
+Purpose. List of incoming orders.
+Key elements:
+Status filter tabs: All | New (created + paid) | Shipped | Delivered | Cancelled.
+Order rows: order number, buyer name, item count, total, status badge, date, "Подробнее" link.
+Search by order number or buyer name.
+Empty state: "Пока нет заказов".
+B2B-9: Order Detail (/seller/orders/[id])
+Purpose. Full information and status management for a single order.
+Key elements:
+Header: order number, status badge, creation date.
+Buyer block: buyer name, contact info (from Yandex ID profile).
+Delivery block: delivery method, pickup point (if applicable), tracking number (if CDEK; editable field for seller to enter).
+Items list: products with quantity and price.
+Total block.
+Status action buttons based on current status:
+paid → "Отметить как отправленный" (→ shipped)
+shipped → "Отметить как доставленный" (→ delivered)
+any of created, paid, shipped → "Отменить заказ" (→ cancelled, with confirmation modal)
+B2B-10: Delivery Settings (/seller/delivery)
+Purpose. Configure which delivery methods are available for this seller's products.
+Key elements:
+Toggle: "Самовывоз" – enables self-pickup as a delivery option. When enabled, reveals:
+Repeatable list of pickup points, each with city and address fields.
+"Добавить точку" button; remove action per point.
+Toggle: "СДЭК" – enables CDEK shipping. When enabled, shows a stub block for future CDEK account configuration (integration details are TBD at MVP).
+Save button at the bottom.
+B2B-11: Seller Profile (/seller/profile)
+Purpose. Manage the seller's public storefront identity.
+Key elements:
+Avatar upload with preview.
+Display name (editable).
+Username (@username) – read-only. Set once during onboarding and cannot be changed thereafter, because it is used in the public URL /seller/[username].
+Bio (textarea, short).
+"Просмотреть публичную страницу" link – opens /seller/[username] in a new tab.
+Save button.
+3.1.5 Error and Empty States
+All screens must implement the following states.
+State
+Behavior
+Loading
+Skeleton placeholders matching the layout of the eventual content. No spinners on top of blank space.
+Empty
+Illustration (or icon) + message + a primary action button where applicable.
+Network error
+Toast notification + retry button; existing data remains visible if cached.
+Not found (404)
+Full-page 404 with a link to home.
+Forbidden (403)
+Message "У вас нет доступа" with a link to home or login.
+Server error (5xx)
+Error boundary fallback + retry button; report to monitoring.
+Validation error
+Inline error message below the offending field, red border on the field, first invalid field auto-focused.
+Form submission errors do not reset the form – user input is preserved.
+3.1.6 Accessibility
+The following accessibility requirements apply to all screens:
+WCAG 2.1 Level AA conformance target.
+All interactive elements are keyboard-accessible in logical tab order.
+Focus rings are visible on all focusable elements.
+All images have alt text; decorative images use alt="".
+Form inputs are associated with <label> elements.
+Color is not the sole means of conveying information (status badges include icons or text).
+Color contrast ratio ≥ 4.5:1 for normal text, ≥ 3:1 for large text.
+Modals trap focus and are dismissible with Escape.
+Live regions (aria-live) announce async changes (toast notifications, cart updates).
+3.1.7 Responsive Behavior
+Breakpoint
+Range
+Layout
+Mobile
+≤ 767px
+Single column; bottom navigation in B2C; collapsible sidebar in B2B; product snippets horizontally scrollable.
+Tablet
+768–1279px
+Two-column layouts where applicable; sidebar partially expanded in B2B.
+Desktop
+≥ 1280px
+Full layout; sticky sidebars; multi-column grids.
+B2C screens are optimized for mobile-first rendering. B2B screens are optimized for desktop, with graceful degradation on mobile (functional but not primary target).
+
+3.2 Hardware Interfaces
+The system does not contain hardware components.
+3.3 Software Interfaces
+External software the system can communicate with is:
+Yukassa
+CDEK
+The system must communicate with CDEK via CDEK API.
+Messages it sends must comply with the specification of CDEK API.
+The system must communicate with Yukassa via Yukassa API.
+Messages it sends must comply with the specification of Yukassa API.
+The system must be able to receive messages from Yukassa API via webhooks according to the specification of Yukassa API.
+3.4 Communications Interfaces
+The platform is a web-based application in which communication between the frontend, backend services, and external systems is performed over standard HTTP-based protocols.
+3.4.1 Client-Server Communication
+The web frontend communicates with the backend exclusively through HTTPS. The frontend does not access PostgreSQL, Redis, YooKassa, CDEK, or other internal services directly.
+The following communication requirements apply:
+All client–server communication shall use HTTPS.
+HTTP API requests and responses shall use JSON as the primary message format.
+REST-style HTTP methods shall be used according to the operation being performed: GET for data retrieval, POST for creation or actions, PATCH and PUT for updates, and DELETE for removal.
+API endpoints shall use the /api/v1 version prefix.
+B2C page endpoints shall use the /api/v1/pages prefix and return structured page models.
+API error responses shall use a unified structure containing an error code, message, details, and request identifier.
+The system shall support X-Request-Id propagation for tracing a request across backend services.
+Authentication in production shall use a JWT transmitted through the Authorization: Bearer HTTP header. The development environment may use the X-User-Id header as specified in Section 4.1.10.
+3.4.2 Communication with External Services
+The platform communicates with external services through their provided APIs.
+Yandex ID. Authentication is performed through the OAuth2 authorization flow provided by Yandex ID. User credentials are not stored by the platform.
+YooKassa. Payment and subscription-related operations communicate with YooKassa through its API. The platform shall also be able to receive payment-related notifications from YooKassa through webhooks. External payment communication shall use authenticated API requests and shall not expose payment credentials to the frontend.
+CDEK. Delivery-related operations communicate with CDEK through the CDEK API. Requests and responses shall comply with the communication format and protocol defined by CDEK. Tracking information may be obtained through the CDEK API using the corresponding shipment or tracking identifier.
+External integrations for the MVP shall use sandbox environments rather than live production credentials.
+3.4.3 Internal Service Communication
+The B2C and B2B subsystems communicate with data-owning backend services through HTTP APIs. The B2C module acts as an intermediary between the frontend and upstream services such as Users, Goods, Publications, Cart, Orders, Search, and Eventer. Independent upstream requests may be executed in parallel when assembling a page. If a non-critical upstream service is unavailable, the corresponding page section shall be marked as unavailable without preventing the remaining page content from being returned. The frontend shall not communicate directly with upstream backend services.
+3.4.4 Security and Data Transfer
+All network communication containing user, order, authentication, or other sensitive information shall be protected using HTTPS/TLS. The platform shall use TLS 1.2 or higher as specified by the security requirements. Credentials, access tokens, and other confidential integration data shall not be embedded in frontend code or exposed through API responses. No fixed network bandwidth or data transfer rate is specified for the MVP. Performance expectations for user-visible requests are defined separately in Section 5.
+
+4. System Features
+4.1 System Features of the Buyer-Facing Part (B2C) 
+This section specifies the functional requirements for the buyer-facing (B2C) part of the handmade goods marketplace. B2C covers everything the buyer needs to browse the catalog, engage with master content, manage the cart, and place orders. Seller-side (B2B) capabilities - creating products, publications, and master profiles - are out of scope for this chapter: that data enters the platform from elsewhere and is available to B2C only through read models and events.
+Architectural principle: the web client talks to a single central B2C module (Backend-for-Frontend). For each frontend screen, the module exposes one GET endpoint that returns a typed page model (metadata, sections, cards). Mutations (cart, subscriptions, checkout, event submission) use separate action endpoints on the same module. B2C aggregates data from the users, publications, cart, orders, goods, search, and eventer services, plus the Gorse recommendation engine; the frontend has no direct access to upstream services.
+4.1.1 Central B2C Module (Single Entry Point for the Buyer) 
+4.1.1.1 Description and Priority
+The central B2C module acts as a page orchestrator: it accepts HTTP requests from the client, resolves the user context, fetches data from specialized services in parallel, maps responses into a unified contract of cards and sections, and returns a result suitable for direct UI rendering without additional assembly on the frontend.
+Priority: High.
+Component
+Rating (1–9)
+Comment
+Benefit
+9
+Reduces frontend coupling to microservices; speeds UI development
+Penalty
+8
+Without a BFF, the frontend must know dozens of upstream contracts
+Cost
+6
+Requires maintaining page assemblers and clients
+Risk
+5
+Risk of cascading latency without section degradation
+4.1.1.2 Stimulus/Response Sequences
+
+User/client action
+System response
+S1
+Client opens any application page
+Client calls GET /api/v1/pages/<page_name> on B2C with optional query parameters and identification headers
+S2
+B2C receives a page request
+Module runs parallel upstream calls, assembles sections, returns 200 and a JSON page model
+S3
+One upstream is unavailable; section data is non-critical
+B2C returns 200; that section has status: unavailable; other sections unchanged
+S4
+Upstream does not return a mandatory entity (e.g., product)
+B2C returns 404 with the unified error format
+S5
+Client performs an action (add to cart, place order)
+Client calls POST/PATCH/PUT/DELETE /api/v1/... on B2C; B2C proxies or coordinates calls to cart, orders, users, eventer
+S6
+Client sends a behavioral event
+POST /api/v1/events → B2C → eventer → Redis/Kafka/Gorse
+4.1.1.3 Functional Requirements
+REQ-4.1.1-01: B2C shall be the only component exposed to the buyer web client for B2C business operations (pages and actions), except static assets and external payment widgets (if added later).
+REQ-4.1.1-02: All page endpoints shall use the prefix /api/v1/pages and return JSON that conforms to Pydantic page models (documented in the B2C module OpenAPI).
+REQ-4.1.1-03: All action endpoints shall use the prefix /api/v1 (without pages) and shall not duplicate data-ownership logic: writes are performed in the owning service (cart, orders, users); B2C coordinates call sequences.
+REQ-4.1.1-04: Error responses shall use a unified structure: { "error": { "code", "message", "details", "request_id" } }.
+REQ-4.1.1-05: B2C shall propagate or generate X-Request-Id for end-to-end request tracing to upstreams.
+REQ-4.1.1-06: Page assembly shall use parallel execution of independent upstream requests (gather_sections).
+REQ-4.1.1-07: Each non-critical page section shall have a status field with values ok, empty, or unavailable, and a list of items (or an empty list when degraded).
+REQ-4.1.1-08: Data critical to the page (entity id in the URL) that is missing from the catalog shall result in HTTP 404, not a partial page with an empty body.
+REQ-4.1.1-09: B2C shall not perform cross-service database JOINs; enrichment (hydration) shall be done only via HTTP APIs of data owners (e.g., batch products after search or recommendations).
+REQ-4.1.1-10: Contracts for shared UI blocks (ProductCard, MasterCard, PublicationCard, PriceBlock, PageMeta, CategoryChip) shall remain stable across pages.
+4.1.2 Home Page and Personalized Feed
+4.1.2.1 Description and Priority
+The home page is the buyer’s entry point: popular masters, personalized product recommendations, new arrivals, a selection of publications, and category navigation. Recommendations are built from candidate ids returned by Gorse, followed by hydration of product cards from the goods service.
+Priority: High.
+4.1.2.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+Anonymous user opens home
+GET /api/v1/pages/home without X-User-Id → recommendations section empty or no personal block; other sections filled with public content
+S2
+Authenticated buyer opens home
+Request with X-User-Id (dev) / JWT (prod) → B2C requests product ids from Gorse, batch call to goods, recommendations section with status ok
+S3
+Gorse unavailable
+200, recommendations.status = unavailable, recommendations.items = []
+S4
+User clicks a product/master/publication card
+Navigate to the corresponding page (/pages/products/{id}, /pages/masters/{id}, /pages/publications/{id})
+4.1.2.3 Functional Requirements
+REQ-4.1.2-01: B2C shall provide GET /api/v1/pages/home, returning a HomePage model with fields meta, popular_masters, recommendations, new_arrivals, publications, categories.
+REQ-4.1.2-02: The popular_masters section shall be populated from users (GET /api/v1/masters/popular, default limit 12).
+REQ-4.1.2-03: The new_arrivals section shall be populated from goods (sort newest, limit 12).
+REQ-4.1.2-04: The publications section shall be populated from publications (feed, limit 6).
+REQ-4.1.2-05: The categories section shall be populated from goods (GET /api/v1/categories).
+REQ-4.1.2-06: For an identified buyer, B2C shall request recommendations from Gorse (/api/recommend/{user_id}) and preserve candidate order when hydrating via POST /api/v1/goods/batch.
+REQ-4.1.2-07: For an anonymous user, personal recommendations shall not be requested; the recommendations section shall have status empty.
+REQ-4.1.2-08: On Gorse or goods failure for the recommendations block, the page shall still be returned with recommendations.status = unavailable and HTTP status 200.
+REQ-4.1.2-09: meta.title for home shall be set (e.g., “Home”) for SEO and the browser tab title.
+4.1.3 Product Search and Search Results
+4.1.3.1 Description and Priority
+The search/results page provides full-text search and category filtering with pagination. Search returns product identifiers via the search service (MeiliSearch); B2C hydrates product cards through goods.
+Priority: High.
+4.1.3.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+User enters a query and taps Search
+GET /api/v1/pages/search?q=...&page=1&limit=24
+S2
+User selects a category in facets
+Repeat request with category=<slug>
+S3
+search returns product ids
+B2C batch-calls goods and orders cards by search relevance
+S4
+search unavailable
+200, results.status = unavailable, total = 0 (or last known value TBD)
+4.1.3.3 Functional Requirements
+REQ-4.1.3-01: B2C shall provide GET /api/v1/pages/search with parameters q (string, may be empty), category (optional), page (≥ 1), limit (1–100, default 24).
+REQ-4.1.3-02: The response shall include query, page, limit, total, facets (category_slug, tags with counts), results (product card section), and meta.
+REQ-4.1.3-03: B2C shall call search (GET /api/v1/search) and use returned product_id values only as hydration keys.
+REQ-4.1.3-04: Card order in results.items shall match the order in the search response, not the order of the goods batch response.
+REQ-4.1.3-05: Products missing from goods after indexing shall be skipped without failing the entire page.
+REQ-4.1.3-06: When search is unavailable, the results section shall have status: unavailable; HTTP 200.
+REQ-4.1.3-07: The client shall be able to send a search event via POST /api/v1/events (see Section 4.9) to improve recommendations (optional on the analytics side).
+4.1.4 Publication Feed and Publication Page
+4.1.4.1 Description and Priority
+Publications are master content (articles, lookbooks, product stories). The buyer browses a feed and a detail page with linked products. Publication authoring is B2B; B2C is read-only.
+Priority: Medium.
+4.1.4.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+Open Publications section
+GET /api/v1/pages/publications?cursor=&limit=20
+S2
+Scroll the feed
+Request with cursor from the previous response
+S3
+Click a publication
+GET /api/v1/pages/publications/{publication_id}
+S4
+Publication not found
+404
+4.1.4.3 Functional Requirements
+REQ-4.1.4-01: B2C shall provide GET /api/v1/pages/publications with cursor-based pagination (cursor, limit 1-50).
+REQ-4.1.4-02: The feed response shall include a publication card section and cursor navigation fields (next_cursor, has_more - via the page model or a nested feed object).
+REQ-4.1.4-03: B2C shall provide GET /api/v1/pages/publications/{publication_id} with a PublicationPage model: content, metadata, author (master), product section (hydrate product_ids via goods).
+REQ-4.1.4-04: If the publication does not exist, B2C shall return 404.
+REQ-4.1.4-05: Feed cards shall include at minimum: publication_id, slug, title, summary, cover_url, master_id, published_at, likes_count, and a list of product_ids.
+REQ-4.1.4-06: If goods is unavailable when hydrating products on the detail page, the product section shall degrade (unavailable) without blocking display of publication text.
+4.1.5 Product Page and Master Profile
+4.1.5.1 Description and Priority
+The product page is the core commerce screen: prices, offers, gallery, attributes, master, similar products, and in-cart indication. The master profile combines master header, their products, publications, and the buyer’s subscription status.
+Priority: High.
+4.1.5.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+Navigate to product from results
+GET /api/v1/pages/products/{product_id}
+S2
+Product exists
+200, product block filled; sections master, similar, in_cart per degradation rules
+S3
+Product deleted or missing
+404
+S4
+Navigate to master profile
+GET /api/v1/pages/masters/{master_id}
+S5
+Buyer subscribed to master
+On master page subscription.subscribed = true (for authenticated user)
+S6
+Add to cart
+POST /api/v1/cart/items (see Section 4.1.7)
+4.1.5.3 Functional Requirements
+REQ-4.1.5-01: B2C shall provide GET /api/v1/pages/products/{product_id} with a ProductPage model.
+REQ-4.1.5-02: A mandatory field is the product detail model (ProductDetail): titles, description, images, attributes, tags, offers, default price, master_id.
+REQ-4.1.5-03: If goods does not return the product, B2C shall respond with 404, not 200 with an empty body.
+REQ-4.1.5-04: The master section shall be filled from users (GET /api/v1/masters/{id}); on error - unavailable.
+REQ-4.1.5-05: The similar-products section shall use Gorse neighbors (item_neighbors or equivalent) with hydration via goods/batch; on error - unavailable.
+REQ-4.1.5-06: For an authenticated buyer, B2C shall determine whether the product is in the cart (call to cart) and reflect this in the in_cart section (ok/empty).
+REQ-4.1.5-07: B2C shall provide GET /api/v1/pages/masters/{master_id} with a MasterPage model: header (extended MasterCard), product sections (goods with master_id), publications (publications filtered by master_id), subscription (users).
+REQ-4.1.5-08: If the master does not exist - 404.
+REQ-4.1.5-09: From the master page, the buyer shall be able to subscribe/unsubscribe (Section 4.1.6).
+4.1.6 Buyer Subscriptions to Masters
+4.1.6.1 Description and Priority
+The buyer can follow masters to see their new items and publications on a dedicated page and in personalized blocks. Subscription data is stored in the users service.
+Priority: Medium.
+4.1.6.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+Open My subscriptions
+GET /api/v1/pages/subscriptions (user required)
+S2
+Unauthenticated access
+401
+S3
+Subscribe to a master
+PUT /api/v1/subscriptions/{master_id} with body { notifications_enabled }
+S4
+Unsubscribe
+DELETE /api/v1/subscriptions/{master_id} → 204
+S5
+Master does not exist
+404 from upstream, propagated in unified error format
+4.1.6.3 Functional Requirements
+REQ-4.1.6-01: B2C shall provide GET /api/v1/pages/subscriptions only for an identified buyer (RequiredUser).
+REQ-4.1.6-02: The subscriptions page shall include a list of masters (cards) and a section of new items/publications from subscribed masters (aggregate publications + goods).
+REQ-4.1.6-03: B2C shall provide PUT /api/v1/subscriptions/{master_id}, proxying to users PUT /api/v1/users/{user_id}/subscriptions/{master_id}.
+REQ-4.1.6-04: B2C shall provide DELETE /api/v1/subscriptions/{master_id}, proxying unsubscribe to users.
+REQ-4.1.6-05: Re-subscribing shall be idempotent (update notifications_enabled).
+REQ-4.1.6-06: A subscribe event shall be supported via POST /api/v1/events for delivery to eventer/Gorse as positive feedback (type subscribe).
+4.1.7 Buyer Shopping Cart
+4.1.7.1 Description and Priority
+The cart holds selected line items (offers), quantities, price snapshots, and promo codes. Data owner: cart service. B2C renders the cart page and performs CRUD via action endpoints.
+Priority: High.
+4.1.7.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+Open cart
+GET /api/v1/pages/cart
+S2
+Add product from product page
+POST /api/v1/cart/items with product_id, offer_id, quantity, price_amount, snapshot title/image_url
+S3
+Change quantity
+PATCH /api/v1/cart/items/{item_id}
+S4
+Remove line
+DELETE /api/v1/cart/items/{item_id}
+S5
+Add same offer_id again
+Upsert: increase quantity, update price snapshot (cart behavior)
+S6
+Unauthenticated user
+401 on cart page and cart actions
+4.1.7.3 Functional Requirements
+REQ-4.1.7-01: B2C shall provide GET /api/v1/pages/cart for an authenticated user with a CartPage model: lines (CartLine), totals (items_amount, discount_amount, total_amount, currency), promo_code.
+REQ-4.1.7-02: Cart page data shall be fetched from cart (GET /api/v1/carts/{user_id}).
+REQ-4.1.7-03: B2C shall provide POST /api/v1/cart/items with validated line fields and proxy to cart.
+REQ-4.1.7-04: B2C shall provide PATCH /api/v1/cart/items/{item_id} to change quantity and/or is_selected.
+REQ-4.1.7-05: B2C shall provide DELETE /api/v1/cart/items/{item_id}.
+REQ-4.1.7-06: If the line does not exist, cart returns an error; B2C shall propagate 404 in the unified format.
+REQ-4.1.7-07: An add_to_cart event shall be sent via POST /api/v1/events (type add_to_cart, item_id = product).
+REQ-4.1.7-08: The cart page shall reflect catalog price drift TBD: current implementation uses line price snapshots; catalog mismatch at checkout - TBD for a separate requirement.
+4.1.8 Checkout, Order Confirmation, and Order History
+4.1.8.1 Description and Priority
+Checkout combines the cart, delivery addresses, shipping options, and order creation. After checkout, the buyer sees a thank-you page and can view the order list and details. Order owner: orders service.
+Priority: High.
+4.1.8.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+Proceed to checkout
+GET /api/v1/pages/checkout—draft: cart, addresses from users, delivery options from orders
+S2
+Confirm order
+POST /api/v1/checkout/order → create order in orders with Idempotency-Key, clear cart
+S3
+Success
+201, body with order_id → redirect to GET /api/v1/pages/order-success/{order_id}
+S4
+Retry with same idempotency key
+Return existing order, no duplicate
+S5
+Order list
+GET /api/v1/pages/orders?limit&offset
+S6
+Order details
+GET /api/v1/pages/orders/{order_id} with user_id check
+4.1.8.3 Functional Requirements
+REQ-4.1.8-01: B2C shall provide GET /api/v1/pages/checkout for an authenticated user (CheckoutPage).
+REQ-4.1.8-02: The checkout page shall include: cart lines, available addresses (users), delivery options (orders /api/v1/delivery-options), and totals.
+REQ-4.1.8-03: B2C shall provide POST /api/v1/checkout/order with a body including at minimum: delivery_method, delivery_address, recipient_name, recipient_phone, payment_method, optionally comment, address_id.
+REQ-4.1.8-04: When creating an order, B2C shall pass cart lines to orders with snapshots of prices and titles.
+REQ-4.1.8-05: B2C shall support the Idempotency-Key header when creating an order and pass it to orders.
+REQ-4.1.8-06: After successful order creation, B2C shall clear the cart (POST /api/v1/carts/{user_id}/clear or equivalent).
+REQ-4.1.8-07: B2C shall provide GET /api/v1/pages/order-success/{order_id} only if the order belongs to the current user; otherwise 404.
+REQ-4.1.8-08: B2C shall provide GET /api/v1/pages/orders with limit/offset pagination and a list of order summaries.
+REQ-4.1.8-09: B2C shall provide GET /api/v1/pages/orders/{order_id} with full model: lines, amounts, status, status history.
+REQ-4.1.8-10: Payment provider integration at MVP may be stubbed: order is created in status created; payment - TBD.
+REQ-4.1.8-11: A purchase event shall be sent to eventer (directly or via B2C) to train Gorse.
+4.1.9 Behavioral Event Collection and Recommendations
+4.1.9.1 Description and Priority
+The frontend sends interaction events (views, search, cart, purchase, subscribe). B2C accepts them and forwards them to eventer, which writes to Redis and Kafka; Gorse consumes the stream and updates recommendations.
+Priority: High (for feed quality); Medium for individual analytics event types.
+4.1.9.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+View product page
+POST /api/v1/events { type: "view", item_id, page }
+S2
+B2C accepts event
+202 Accepted, { accepted, forwarded_to_gorse } (eventer response fields)
+S3
+Eventer processes
+Write to Redis stream, publish to user.events, Gorse feedback for whitelisted types
+S4
+Next home request
+Gorse returns updated candidates
+4.1.9.3 Functional Requirements
+REQ-4.1.9-01: B2C shall provide POST /api/v1/events with body ClientEvent: type, optional user_id (or from context), anonymous_id, item_id, page, query, value, context, occurred_at.
+REQ-4.1.9-02: Allowed event types shall include at minimum: view, add_to_cart, remove_from_cart, favorite, purchase, search, subscribe, page_view.
+REQ-4.1.9-03: B2C shall proxy the event to eventer POST /api/v1/events without changing field semantics.
+REQ-4.1.9-04: For an identified user, B2C shall set user_id from context if not provided in the body.
+REQ-4.1.9-05: Eventer failure shall not block critical user flows; the events endpoint may return 502 with a clear code; client-side buffering - TBD.
+REQ-4.1.9-06: Types treated as positive Gorse feedback (purchase, add_to_cart, favorite, subscribe) and read feedback (view) shall match Gorse configuration.
+REQ-4.1.9-07: B2C shall not write to Redis/Kafka directly; only via eventer.
+4.1.10 Buyer Identification and Context
+4.1.10.1 Description and Priority
+Some pages and actions are available anonymously; personal data (cart, orders, subscriptions) requires identification. Development uses the X-User-Id header; production uses JWT.
+Priority: High.
+4.1.10.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+Request without credentials to a public page
+200, personal sections empty
+S2
+Request to /pages/cart without user
+401
+S3
+Request with Authorization: Bearer
+Parse JWT, sub → user UUID
+S4
+Invalid UUID in X-User-Id (dev)
+401
+4.1.10.3 Functional Requirements
+REQ-4.1.10-01: B2C shall support OptionalUser for pages: home, search, publications, product, master, events.
+REQ-4.1.10-02: B2C shall require RequiredUser for: subscriptions, cart, checkout, order-success, orders, cart actions, checkout order, subscription actions.
+REQ-4.1.10-03: When AUTH_DEV_MODE=true, identification shall use the X-User-Id header.
+REQ-4.1.10-04: In production mode, identification shall use JWT in Authorization: Bearer.
+REQ-4.1.10-05: B2C shall not trust user_id in query parameters for access to others’ orders; ownership checks are enforced by orders and when assembling B2C pages.
+4.1.11 B2C Interaction with Upstream Services (Interface Summary)
+This subsection records expected HTTP dependencies of the central module (for verification and integration tests).
+Upstream
+Purpose for B2C
+Example calls
+users
+Buyer profiles, masters, subscriptions, addresses
+/masters/{id}, /masters/popular, /masters/batch, /users/{id}/subscriptions/...
+goods
+Catalog, categories, batch
+/goods/{id}, /goods/batch, /goods, /categories
+publications
+Feed and details
+/publications, /publications/{id}
+cart
+Cart
+/carts/{user_id}, /carts/{user_id}/items, /clear
+orders
+Orders, delivery
+/orders, /delivery-options
+search
+Search
+/search
+eventer
+Events
+/events
+Gorse
+Recommendations
+/api/recommend/{user_id}, item neighbors
+REQ-4.1.11-01: B2C HTTP client timeouts and retry counts to upstreams shall be configurable (B2C_UPSTREAM_TIMEOUT_SECONDS, B2C_UPSTREAM_RETRIES).
+REQ-4.1.11-02: After retries are exhausted for read operations, the page section shall degrade rather than return 500 for the whole page (except critical entities).
+4.1.12 Non-Functional Requirements Related to B2C
+REQ-4.1.12-01: B2C OpenAPI documentation shall be available at /docs for contract alignment with the frontend team.
+REQ-4.1.12-02: Page models shall be versionable; breaking changes require client agreement (API version /api/v1).
+REQ-4.1.12-03: B2C shall expose GET /healthz and GET /readyz (via the shared application factory) for orchestration in Kubernetes/Docker Compose.
+REQ-4.1.12-04: B2C logs shall include request_id and service name for correlation with upstreams.
+REQ-4.1.12-05: Target page response latency when upstreams are healthy - TBD (recommended p95 < 500 ms on demo environment with parallel calls).
+
+Frontend Screen to B2C Endpoint Mapping (Reference)
+Screen (marketplace analogue)
+B2C endpoint
+Home
+GET /api/v1/pages/home
+Search results
+GET /api/v1/pages/search
+Publication feed
+GET /api/v1/pages/publications
+Publication
+GET /api/v1/pages/publications/{id}
+Product page
+GET /api/v1/pages/products/{id}
+Master profile
+GET /api/v1/pages/masters/{id}
+Subscriptions
+GET /api/v1/pages/subscriptions
+Cart
+GET /api/v1/pages/cart
+Checkout
+GET /api/v1/pages/checkout
+Order thank-you
+GET /api/v1/pages/order-success/{order_id}
+Order list
+GET /api/v1/pages/orders
+Order details
+GET /api/v1/pages/orders/{order_id}
+4.2 System Features of of the Seller-Facing Part (B2B)
+This section specifies seller-facing system features of the handmade marketplace. Each feature is described using the same three-part pattern as Section 4.1: Description and Priority; Stimulus/Response Sequences; Functional Requirements.
+Scope: B2B owns seller stores, product catalogues, publications and access-controlled seller operations. Shared User, Order, Payment and Delivery services own their respective domain logic. B2B may retrieve permitted information from them or submit authorized requests.
+API contract status: All /api/v1/seller/... paths shown below are illustrative proposed routes (TBD), not approved implementation endpoints. They are included to align presentation with the B2C section; the final routes, payloads and response codes must be agreed in OpenAPI/Swagger. UI paths such as /seller/products are not API routes.
+4.2.1 Seller Access, Registration and Onboarding
+4.2.1.1 Description and Priority
+This feature allows an authenticated platform user to enter the seller workspace or register as a seller and create a store. User credentials and global user roles are maintained by shared platform services; the B2B subsystem checks the confirmed authorization context and manages the store profile. A user with buyer and seller roles may access both corresponding interfaces.
+
+4.2.1.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+An authenticated seller opens the seller workspace.
+The B2B subsystem verifies the seller role and returns accessible store information. GET /api/v1/seller/me - 200.
+S2
+An authenticated user without a seller profile chooses “Become a Seller”.
+The system presents onboarding and allows the user to submit store details POST /api/v1/seller/onboarding.
+S3
+The user submits valid, unique store details.
+The system verifies eligibility and creates the store profile; returns the store identifier and registration result (201 after confirmation).
+S4
+The user submits missing fields or an occupied username.
+The system rejects the request with field-specific validation or conflict information (400/409); no duplicate store profile is created.
+S5
+An unauthenticated or unauthorized user requests protected seller functionality.
+The system rejects access (401/403) and does not expose protected store data.
+S6
+An existing seller attempts registration again.
+The system returns the existing registration state rather than creating a duplicate seller profile.
+
+4.2.1.3 Functional Requirements
+REQ-4.2.1-01 (High). The B2B subsystem shall identify the authenticated user and verify the seller role when protected seller workspace functions are accessed.
+REQ-4.2.1-02 (High). The system shall grant access to store management operations only to users with the required seller permissions.
+REQ-4.2.1-03 (High). If a user is authenticated but does not have the seller role, the system shall allow the user to initiate seller registration.
+REQ-4.2.1-04 (High). The system shall support access to the seller workspace for users who have both buyer and seller roles.
+REQ-4.2.1-05 (High). The system shall reject access to protected B2B operations if authentication has not been confirmed.
+REQ-4.2.1-06 (High). The B2B subsystem shall not grant access to another seller's store solely on the basis of a store identifier supplied by the user.
+REQ-4.2.1-07 (High). The B2B subsystem shall not change passwords or other account credentials managed by the shared User Service.
+REQ-4.2.1-08 (High). The system shall allow an authenticated user to create a seller profile.
+REQ-4.2.1-09 (High). When creating a store, the system shall accept a store name, unique username, and other required profile information.
+REQ-4.2.1-10 (High). The system shall verify that all required fields are completed before confirming registration.
+REQ-4.2.1-11 (High). Each created store shall have a unique identifier and an association with the authenticated owner.
+REQ-4.2.1-12 (High). The system shall verify the uniqueness of the username used in the store's public address.
+REQ-4.2.1-13 (High). The system shall prevent duplicate seller-profile registration for an already registered user; if that user is eligible for multiple stores, additional store creation shall follow the separately agreed store-management rules.
+REQ-4.2.1-14 (High). After successful registration, the system shall grant the seller access to further store setup.
+REQ-4.2.1-15 (Medium). The system should provide the seller with an initial store setup checklist indicating completed steps.
+REQ-4.2.1-16 (Medium). The system should allow sellers to reopen the initial setup instructions.
+
+4.2.2 Store Profile Management
+4.2.2.1 Description and Priority
+The seller may retrieve and update information describing their store. Editable fields include the display name, biography/description and profile image. The public username is assigned during onboarding and is not editable in the present MVP specification.
+
+4.2.2.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+Seller opens store profile settings.
+The system returns that seller’s store profile. GET /api/v1/seller/store - 200.
+S2
+Seller submits valid changes to editable profile fields.
+The system validates ownership and changes, then returns the updated profile. PATCH /api/v1/seller/store -  200.
+S3
+Seller provides invalid or incomplete required data.
+The system rejects the update with relevant field errors; previously stored values remain unchanged.
+S4
+Seller attempts to edit the immutable public username.
+The system rejects changes to the immutable identifier.
+S5
+A user attempts to update another seller’s store.
+The system denies the operation (403) and does not modify the resource.
+
+4.2.2.3 Functional Requirements
+REQ-4.2.2-01 (High). The system shall allow the seller to retrieve stored information about their store.
+REQ-4.2.2-02 (High). The system shall allow editing of the store's display name and description.
+REQ-4.2.2-03 (High). The system shall support uploading and replacing the store's profile image.
+REQ-4.2.2-04 (High). The seller's unique username used in the store's public address shall not be changed after initial registration, in accordance with the current MVP specification.
+REQ-4.2.2-05 (High). When changes are saved, the system shall verify the user's permissions for the store concerned.
+REQ-4.2.2-06 (High). The system shall reject invalid profile data and report the fields that failed validation.
+REQ-4.2.2-07 (High). After a successful profile update, the system shall return the current saved values.
+REQ-4.2.2-08 (Medium). The system should allow sellers to navigate from their workspace to their store's public page.
+
+4.2.3 Product Catalog Management
+4.2.3.1 Description and Priority
+This feature lets a seller manage the products offered by their store: create, read, update and delete products, adjust prices and stock quantities, and control availability. Product creation is subject to subscription limits. The B2B subsystem owns the seller-side catalog operations, not shopping-cart or checkout behavior.
+
+4.2.3.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+Seller opens their product catalog.
+The system returns the seller’s products. GET /api/v1/seller/products - 200 (query/filter/page parameters are subject to agreement).
+S2
+Seller submits a valid new product.
+The system validates ownership, product fields and subscription entitlement, then creates the product. POST /api/v1/seller/products - 201.
+S3
+Seller selects an existing product and edits it.
+The system returns current product data and saves authorized changes. GET/PATCH /api/v1/seller/products/{product_id}.
+S4
+Seller requests deletion of their product and confirms.
+The system applies the agreed handling of links to publications and confirms removal. DELETE /api/v1/seller/products/{product_id}.
+S5
+Seller submits a negative price, negative stock, or missing required data.
+The system rejects the operation with validation errors (400/422); data are not changed.
+S6
+Seller has reached the product limit for their plan.
+The system rejects creation with a clear plan-limit error; it does not create another product.
+S7
+Seller requests a product not belonging to their store.
+The system denies access; the product remains unchanged.
+
+4.2.3.3 Functional Requirements
+REQ-4.2.3-01 (High). The system shall allow sellers to create products in their store catalogs.
+REQ-4.2.3-02 (High). The system shall allow sellers to retrieve a list of products belonging to their stores.
+REQ-4.2.3-03 (High). The system shall provide details of individual products, including name, description, price, quantity, availability status, and image.
+REQ-4.2.3-04 (High). The system shall allow sellers to edit their own products.
+REQ-4.2.3-05 (High). The system shall allow sellers to delete their own products after confirming the operation.
+REQ-4.2.3-06 (High). When a product is created, the system shall automatically associate it with the authenticated seller's store.
+REQ-4.2.3-07 (High). The system shall reject product creation when required attributes are missing.
+REQ-4.2.3-08 (High). The system shall reject negative price and product quantity values.
+REQ-4.2.3-09 (High). The system shall support updating the available product quantity and supported availability statuses.
+REQ-4.2.3-10 (High). Before creating a product, the system shall check the restrictions of the current subscription plan.
+REQ-4.2.3-11 (High). If the maximum permitted number of products has been reached, the system shall prevent the creation of an additional product and return information about the subscription restriction.
+REQ-4.2.3-12 (High). The system shall prohibit editing or deleting products owned by another seller.
+REQ-4.2.3-13 (High). When a product is deleted, the system shall apply the approved policy for references from publications; it shall not return stale product references as valid. The exact policy remains TBD.
+REQ-4.2.3-14 (Medium). The system should support searching a seller's products by name.
+REQ-4.2.3-15 (Medium). The system should allow products to be filtered by availability status.
+REQ-4.2.3-16 (Medium). The system should support paginated retrieval of products in the catalog.
+
+4.2.4 Publication and Linked-Product Management
+4.2.4.1 Description and Priority
+A seller may create and manage posts containing a title, text, optional cover image and ordered links to the seller’s products. The B2B subsystem validates ownership and subscription restrictions and makes successfully published content available to other authorized platform components. Buyer feed rendering belongs to B2C.
+
+4.2.4.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+Seller opens their publications list.
+The system returns the seller’s publications. GET /api/v1/seller/publications - 200.
+S2
+Seller creates a post with required text and optional cover/linked products.
+The system validates the payload and creates a publication. POST /api/v1/seller/publications - 201.
+S3
+Seller links or unlinks one of their products.
+The system verifies product ownership and updates the ordered product references. PATCH /api/v1/seller/publications/{publication_id}.
+S4
+Seller requests publication of valid content.
+The system checks completeness and subscription limits, changes the publication state and returns the confirmed result. POST /api/v1/seller/publications/{publication_id}/publish.
+S5
+Seller edits or deletes their publication.
+The system verifies ownership and applies the confirmed change. PATCH/DELETE /api/v1/seller/publications/{publication_id}.
+S6
+Seller links a nonexistent or third-party product.
+The system rejects the invalid product association and leaves published content unchanged.
+S7
+Seller exceeds a publication entitlement.
+The system refuses the restricted operation with an appropriate plan-limit response.
+
+4.2.4.3 Functional Requirements
+REQ-4.2.4-01 (High). The system shall allow authenticated sellers to create publications.
+REQ-4.2.4-02 (High). The system shall support saving a publication's title and text content.
+REQ-4.2.4-03 (High). The system shall support attaching a cover image to a publication.
+REQ-4.2.4-04 (High). The system shall allow sellers to retrieve their own publications.
+REQ-4.2.4-05 (High). The system shall allow sellers to edit and delete their own publications.
+REQ-4.2.4-06 (High). The system shall support linking one or more products belonging to the seller to a publication.
+REQ-4.2.4-07 (High). Before creating a link, the system shall verify that the product exists and belongs to the same seller.
+REQ-4.2.4-08 (High). The system shall allow a previously created link between a publication and a product to be removed.
+REQ-4.2.4-09 (High). The system shall preserve the order of linked products established by the seller.
+REQ-4.2.4-10 (High). Before publication, the system shall verify the presence of required data and the applicable subscription restrictions.
+REQ-4.2.4-11 (High). Following successful publication, the system shall make the published content available to authorized platform components.
+REQ-4.2.4-12 (High). The system shall prohibit editing or deleting publications owned by another seller.
+REQ-4.2.4-13 (Medium). The system should support saving an unfinished publication as a draft.
+REQ-4.2.4-14 (Medium). The system should provide the data necessary to preview a publication before posting.
+REQ-4.2.4-15 (Medium). The system should support searching a seller's publications by title.
+
+4.2.5 Media File Management
+4.2.5.1 Description and Priority
+Sellers can upload images for products, publication covers and store profiles. The subsystem checks file restrictions and associates successfully stored files with authorized resources. Object storage (possibly S3-compatible) is an implementation dependency rather than a seller-facing feature.
+
+4.2.5.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+Seller selects an image for upload.
+The subsystem validates the file and stores it; returns a usable media reference. POST /api/v1/seller/media - 201.
+S2
+Seller assigns an uploaded image to their product, post or profile.
+The system verifies resource ownership and stores the reference as part of the resource update.
+S3
+Seller uploads an unsupported type or oversized file.
+The system rejects the upload and returns a format/size validation error; no active reference is created.
+S4
+File storage fails.
+The system reports the failed upload and does not return a successful media attachment.
+S5
+Seller replaces a resource image.
+The new image becomes linked only after successful storage and authorization checks.
+
+4.2.5.3 Functional Requirements
+REQ-4.2.5-01 (High). The system shall allow image uploads for products, publications, and store profiles.
+REQ-4.2.5-02 (High). The system shall validate the format and size of uploaded files against platform restrictions.
+REQ-4.2.5-03 (High). The system shall reject unsupported files and provide information about the reason for rejection.
+REQ-4.2.5-04 (High). After an image is uploaded successfully, the system shall return an identifier or reference that can be used to associate it with a resource.
+REQ-4.2.5-05 (High). The system shall not maintain an active association between a product, publication, or store and an image whose upload failed.
+REQ-4.2.5-06 (High). The system shall support retrieval of previously saved images for display with their associated resources.
+REQ-4.2.5-07 (High). Before replacing an image associated with a resource, the system shall verify the seller's right to modify that resource.
+
+4.2.6 Subscription Plan Management
+4.2.6.1 Description and Priority
+The seller may view their current Free or Premium plan, compare available entitlements, and initiate a plan change. B2B enforces the confirmed product/publication quotas. Payment processing and confirmation are the responsibility of another platform component. The final Free/Premium feature matrix remains TBD in the source SRS.
+
+4.2.6.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+Seller opens the subscription page.
+The system returns the current plan, confirmed status and advertised entitlements. GET /api/v1/seller/subscription - 200.
+S2
+Seller chooses a different subscription plan.
+The B2B subsystem initiates a change with the responsible service and returns its accepted/pending/confirmed state. POST /api/v1/seller/subscription/change.
+S3
+The subscription service confirms the plan change.
+The system uses the updated confirmed entitlements for subsequent restricted operations.
+S4
+Seller attempts an operation beyond their quota.
+The system refuses the restricted operation and states which quota was exceeded.
+S5
+The subscription service cannot confirm the change.
+The system keeps the previously confirmed plan active and does not grant new privileges.
+
+4.2.6.3 Functional Requirements
+REQ-4.2.6-01 (High). The system shall support retrieval of information about the Free and Premium subscription plans.
+REQ-4.2.6-02 (High). The system shall provide the seller with information about their active subscription plan.
+REQ-4.2.6-03 (High). The system shall retrieve the applicable subscription restrictions and take them into account when carrying out seller operations.
+REQ-4.2.6-04 (High). The system shall prevent the creation of products and publications beyond the limits of the relevant subscription plan.
+REQ-4.2.6-05 (High). When an operation is rejected because of a subscription restriction, the system shall return an explanation of the refusal.
+REQ-4.2.6-06 (High). The system shall allow sellers to initiate a subscription plan change through the responsible service.
+REQ-4.2.6-07 (High). The system shall apply new subscription privileges only after the subscription status has been confirmed.
+REQ-4.2.6-08 (High). The system shall not independently confirm the activation of Premium subscriptions on the basis of an unverified user request.
+REQ-4.2.6-09 (Medium). The system should provide comparative information about the features of the available subscription plans.
+
+4.2.7 Seller Dashboard and Follower Information
+4.2.7.1 Description and Priority
+The seller dashboard brings together store-level summary information: new orders, orders awaiting shipment, product views and follower count. Follower records are supplied by the separate User Service. The B2B subsystem does not create, modify, delete or otherwise administer customer accounts.
+
+4.2.7.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+Seller opens the dashboard.
+The system returns available operational metrics only for the authorized store. GET /api/v1/seller/dashboard - 200.
+S2
+Seller opens follower details.
+The B2B subsystem requests permitted follower data from the User Service and returns the count and authorized details. GET /api/v1/seller/followers.
+S3
+There are no followers or recent orders.
+The system returns zero for a confirmed empty result and an empty list where appropriate.
+S4
+The User Service is unavailable.
+The system explicitly marks follower information as unavailable, rather than treating it as zero.
+S5
+A seller requests data for a different store.
+The system rejects unauthorized access and does not disclose other sellers’ metrics.
+S6
+Seller requests additional insights or low-stock alerts.
+If supported in the MVP, the system returns the optional summary information for that store.
+
+4.2.7.3 Functional Requirements
+REQ-4.2.7-01 (High). The system shall provide sellers with a dashboard containing key metrics for their stores.
+REQ-4.2.7-02 (High). The system shall display the number of new orders received from the Order Service.
+REQ-4.2.7-03 (High). The system shall display the number of orders awaiting shipment based on data from the Order Service.
+REQ-4.2.7-04 (High). The system shall display the store's follower count based on data from the User Service.
+REQ-4.2.7-05 (High). The system shall display product view counts for the specified reporting period based on data available to the platform.
+REQ-4.2.7-06 (High). The system shall provide sellers with metrics relating only to their own stores.
+REQ-4.2.7-07 (Medium). The system should provide a list of the store's most recent orders.
+REQ-4.2.7-08 (Medium). The system should support displaying products with low stock when a specified threshold is reached.
+REQ-4.2.7-09 (Medium). The system should provide shortcuts from the workspace to product and publication creation.
+REQ-4.2.7-10 (High). The system shall provide sellers with the number of followers of their stores.
+REQ-4.2.7-11 (High). To obtain follower information, the system shall contact the User Service.
+REQ-4.2.7-12 (High). When requesting followers, the system shall use a store or seller identifier for which access has been authorized.
+REQ-4.2.7-13 (High). The system shall provide sellers only with follower information they are permitted to access under platform rules.
+REQ-4.2.7-14 (High). The system shall not allow sellers to modify follower accounts through information-viewing functions.
+REQ-4.2.7-15 (High). If a store has no followers, the system shall display a count of zero.
+REQ-4.2.7-16 (High). If the User Service is unavailable, the system shall report that current information cannot be retrieved.
+REQ-4.2.7-17 (Medium). The system should support paginated viewing of followers if the User Service provides this capability.
+
+4.2.8 Seller-Side Order Information and Actions
+4.2.8.1 Description and Priority
+The B2B subsystem provides a seller-facing view of orders and forwards seller-initiated order actions to the separate Order Service. The Order Service remains authoritative for order state and business rules. Asynchronous events (Kafka) may participate in integration, but the event contract and communication direction are not yet specified.
+
+4.2.8.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+Seller opens their order list.
+The B2B subsystem retrieves orders associated with the authorized store. GET /api/v1/seller/orders.
+S2
+Seller opens an order detail.
+The system returns seller-authorized order information obtained from the Order Service. GET /api/v1/seller/orders/{order_id}.
+S3
+Seller submits a permitted order action.
+The system forwards the request to the Order Service; it reports success only after authoritative confirmation. Exact command/event contract: TBD.
+S4
+Order is missing, not owned, or action is forbidden.
+The system reports the corresponding failure and does not modify the order.
+S5
+Order Service is unavailable or rejects the command.
+The system reports unavailable/rejected status and does not invent a completed state.
+S6
+The Order Service reports a changed status.
+The B2B interface presents the confirmed order state after retrieval or an agreed event update.
+
+4.2.8.3 Functional Requirements
+REQ-4.2.8-01 (High). The system shall allow sellers to retrieve a list of orders for their store through the Order Service.
+REQ-4.2.8-02 (High). The system shall allow retrieving information about an individual order, including its identifier, status, and order contents available to the seller.
+REQ-4.2.8-03 (High). The system shall limit order retrieval to stores that the authenticated seller is authorized to access.
+REQ-4.2.8-04 (High). If a seller initiates a permitted action on an order, the B2B subsystem shall forward the request to the Order Service responsible for it.
+REQ-4.2.8-05 (High). The system shall display the result of an order change based on a state confirmed by the Order Service.
+REQ-4.2.8-06 (High). The system shall not independently modify the authoritative order state by bypassing the Order Service.
+REQ-4.2.8-07 (High). If the Order Service is unavailable, the B2B subsystem shall report that the information cannot be retrieved or the action cannot be completed.
+REQ-4.2.8-08 (Medium). The system should support filtering orders by status.
+REQ-4.2.8-09 (Medium). The system should support searching orders by identifier within a seller's orders.
+
+4.2.9 Seller Delivery Preferences
+4.2.9.1 Description and Priority
+This feature exposes configuration options for delivery methods offered by the platform, including self-pickup locations and enabled shipping options. It is limited to seller-side store preferences; delivery calculations, fulfillment and courier integration are outside the B2B implementation scope.
+
+4.2.9.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+Seller opens delivery preferences.
+The system returns the store’s current settings. GET /api/v1/seller/delivery-settings.
+S2
+Seller enables/disables an available method or edits permitted pickup details.
+The system validates ownership and required fields and stores or forwards the confirmed configuration. PATCH /api/v1/seller/delivery-settings.
+S3
+Required pickup information is missing or invalid.
+The system rejects the update with field-specific errors and keeps prior confirmed settings.
+S4
+Another user requests changes to a store they do not control.
+The system denies the action and does not modify settings.
+S5
+An external configuration dependency rejects an update.
+The B2B subsystem reports failure and does not falsely confirm a saved change.
+
+4.2.9.3 Functional Requirements
+REQ-4.2.9-01 (High). The system shall allow sellers to retrieve the current settings for the delivery methods available for their store.
+REQ-4.2.9-02 (High). The system shall allow sellers to enable and disable delivery methods supported by the platform, within the permitted settings.
+REQ-4.2.9-03 (High). When pickup is enabled, the system shall allow the seller to provide the supported pickup address fields.
+REQ-4.2.9-04 (High). The system shall validate mandatory configuration fields before saving.
+REQ-4.2.9-05 (High). The system shall reject changes to another store's delivery settings if the user lacks the required permissions.
+
+4.2.10 Shared Validation and Error Responses
+4.2.10.1 Description and Priority
+The B2B subsystem applies consistent authorization, validation and error rules to all seller-facing operations. This cross-cutting section specifies expected externally observable behavior rather than an additional seller screen.
+
+4.2.10.2 Stimulus/Response Sequences
+
+Stimulus
+Response
+S1
+A request contains invalid or missing required fields.
+The system rejects it with machine-readable validation information; it preserves existing confirmed data.
+S2
+An unauthenticated user requests a protected resource.
+The system returns an authentication failure (401).
+S3
+An authenticated seller requests another store’s resource.
+The system rejects the operation (403 or safe non-disclosure handling); no unauthorized data are returned.
+S4
+The requested resource does not exist.
+The system returns not-found (404).
+S5
+A required dependent service is unavailable.
+The response distinguishes dependency failure from invalid user input; success is not falsely confirmed.
+S6
+A server error occurs.
+The system returns a safe error description without exposing credentials, internal configuration or stack traces.
+
+4.2.10.3 Functional Requirements
+REQ-4.2.10-01 (High). Before executing a protected operation, the system shall verify the validity of the authentication context and the user's permissions.
+REQ-4.2.10-02 (High). If invalid input data are received, the system shall reject the operation and return information about the errors detected.
+REQ-4.2.10-03 (High). If the requested resource does not exist, the system shall return a resource-not-found message.
+REQ-4.2.10-04 (High). If the user does not have permission to perform the requested operation, the system shall reject it without modifying data.
+REQ-4.2.10-05 (High). The system shall not confirm successful completion of an operation if a required action was not performed.
+REQ-4.2.10-06 (High). If a request to an external service fails, the system shall return a result that distinguishes service unavailability from invalid user input.
+REQ-4.2.10-07 (High). Error messages shall not disclose credentials, confidential connection information, or internal server configuration parameters.
+REQ-4.2.10-08 (High). If a data modification request is rejected, the previously confirmed state of the affected resource shall be preserved.
+REQ-4.2.10-09 (Medium). The system should provide the frontend with information that allows users to retain data entered when validation fails and to resubmit a corrected request.
+                             4.3 Order Processing
+REQ-4.3-01: The system must create an order when a user initiates checkout for a pickup order.
+REQ-4.3-02: The system must create a YuKassa Safe Deal for an order upon checkout.
+REQ-4.3-03: The system must process a buyer payment through YuKassa and update the order upon successful payment.
+REQ-4.3-04: The system must allow a seller to confirm stock availability for an order.
+REQ-4.3-05: The system must allow a seller to confirm the item is ready at the pickup point.
+REQ-4.3-06: The system must generate a unique pickup code for the buyer in the application when the order is ready for pickup.
+REQ-4.3-07: The system must allow a seller to enter the buyer's pickup code to confirm fulfillment.
+REQ-4.3-08: The system must initiate the closure of the YuKassa Safe Deal when the order is fulfilled.
+REQ-4.3-09: The system must update the order after the seller receives the payout from YuKassa.
+REQ-4.3-10: The system must handle a buyer payment interruption by either cancelling the order or, if a deal was created, requesting its cancellation via the YuKassa API and then cancelling the order.
+REQ-4.3-11: The system must allow a buyer to cancel an order before seller confirmation, triggering a YuKassa Safe Deal cancellation and a refund if payment was made.
+REQ-4.3-12: The system must allow a seller to cancel an order due to lack of stock, triggering a YuKassa Safe Deal cancellation, resetting product stock, and applying a penalty to the seller.
+REQ-4.3-13: The system must allow a seller to cancel an order upon buyer request after confirmation, using the same cancellation flow as for lack of stock.
+REQ-4.3-14: The system must create an order when a user initiates checkout for a CDEK delivery order.
+REQ-4.3-15: The system must allow a seller to confirm stock availability, calculate the delivery cost via the CDEK API, and generate an invoice for the buyer including both the item and delivery costs.
+REQ-4.3-16: The system must create a YuKassa Safe Deal after the seller confirms the order and invoice.
+REQ-4.3-17: The system must process a buyer payment for the item and delivery through YuKassa and update the order accordingly.
+REQ-4.3-18: The system must allow a seller to register a shipment with the CDEK API and attach a tracking number.
+REQ-4.3-19: The system must integrate with the CDEK API to receive tracking status updates and update the order when the shipment arrives at the destination.
+REQ-4.3-20: The system must integrate with the CDEK API to detect when the buyer has picked up the order and update the order accordingly.
+REQ-4.3-21: The system must update the order after the seller receives the payout for a CDEK delivery order.
+REQ-4.3-22: The system must provide an administrative interface to view and manage all orders and their current statuses.
+REQ-4.3-23: The system must handle post-fulfillment return requests directly between the buyer and seller, outside the platform's automated processing flow.
+
+
+5. Other Nonfunctional Requirements
+5.1 Performance Requirements
+REQ-5.1-01: The main page must load in no more than 3 seconds.
+REQ-5.1-02: The content feed must load in no more than 3 seconds.
+REQ-5.1-03: Catalog search must return results in no more than 2 seconds.
+REQ-5.1-04: The free tariff must limit a seller to 10 to 15 products.
+REQ-5.1-05: The system must support at least 100 concurrent users for the pilot version.
+      5.2 Safety Requirements
+REQ-5.2-01: 100 percent of products must pass moderation before publication.
+REQ-5.2-02: 100 percent of posts must pass moderation before publication.
+REQ-5.2-03: Moderators must be able to accept products and posts before publication.
+REQ-5.2-04: Moderators must be able to reject products and posts before publication.
+REQ-5.2-05: Moderators must be able to hide any already published material.
+REQ-5.2-06: After moderation, 0 forbidden-category items may remain published.
+REQ-5.2-07: On the free tariff, 0 on-site payments are allowed.
+REQ-5.2-08: On the free tariff, the buyer must see the notice to contact the seller to clarify availability, payment, and delivery.
+    5.3 Security Requirements
+REQ-5.3-01: 100 percent of paid-tariff payments must go through Yukassa.
+REQ-5.3-02: The seller must connect their own payment account for Yukassa.
+REQ-5.3-03: 100 percent of buyer accounts must require authentication.
+REQ-5.3-04: 100 percent of order history must be protected behind authentication.
+REQ-5.3-05: 100 percent of subscriptions must be protected behind authentication.
+REQ-5.3-06: Personal messages between buyer and seller must remain private.
+REQ-5.3-07: 0 personal messages may be publicly exposed.
+REQ-5.3-08: The platform must use HTTPS/TLS 1.2 or higher as a default.
+
+Appendix A: Glossary
+This glossary defines the main domain, architectural, technical, and product terms used throughout the SRS. 
+Term
+Definition
+API (Application Programming Interface)
+A set of endpoints and contracts used by software components to communicate with each other.
+B2B subsystem
+The seller-facing part of the platform used for store management, product catalog management, publications, orders, delivery settings, and subscription plans.
+B2C subsystem
+The buyer-facing part of the platform used for content discovery, product browsing, subscriptions, cart management, checkout, and order history.
+BFF (Backend-for-Frontend)
+A backend component that aggregates data from multiple backend services and returns a page-oriented response adapted to the frontend. In this SRS, the central B2C module acts as a BFF.
+Buyer
+A platform user who browses handmade products and publications, follows sellers, manages a cart, and places orders.
+CDEK
+A third-party delivery service integrated with the platform for shipment creation and delivery tracking.
+Core API
+The central backend entry point that mediates communication between the frontend and backend business services.
+CRUD (Create, Read, Update, Delete)
+The four basic operations used to manage persistent entities such as products and publications.
+Degradation
+A controlled behavior in which a non-critical page section becomes unavailable while the rest of the page remains functional.
+Eventer
+A backend service that receives behavioral events from the B2C module and forwards or stores them for analytics and recommendation processing.
+Feed
+A continuously browsable collection of publications or recommendations displayed to the buyer.
+Gorse
+A recommendation engine used to generate product or content recommendations based on user interactions and feedback events.
+Hydration
+The process of enriching identifiers returned by one service with full entity data obtained from another service, for example, resolving product IDs into product cards.
+Idempotency-Key
+An HTTP request header used to ensure that retrying an order creation request does not create duplicate orders.
+JWT (JSON Web Token)
+A token format used in production to identify and authenticate users through the Authorization: Bearer header.
+Kafka
+A distributed event-streaming platform used in the behavioral event processing pipeline.
+Master
+The buyer-facing term used in B2C models for a seller or handmade creator. A master has a public profile, products, publications, and followers.
+MVP (Minimum Viable Product)
+The initial release containing the functionality required to demonstrate the platform and satisfy the project scope.
+OAuth2
+An authorization framework used in the platform for delegated authentication and integration with external identity or service providers.
+OpenAPI / Swagger
+A standard and toolset for describing HTTP API contracts and generating interactive API documentation.
+Page Model
+A structured response returned by a B2C page endpoint, containing metadata, sections, cards, and other data required to render a page.
+Post / Publication
+Content created by a seller and shown to buyers. A publication may contain text, an optional image, and links to one or more products.
+Premium Tier
+A paid seller subscription plan that provides additional platform capabilities compared with the Free Tier.
+Product
+A handmade item offered by a seller through the platform. A product may have a price, stock quantity, images, delivery method, and sale mode.
+Redis
+An in-memory data store used for caching, streams, and other performance-related data in the platform.
+Safe deal
+A payment mechanism in which funds associated with an online order are held by the payment provider and related actions depend on the confirmed order or delivery state.
+Sale mode
+The mode determining how a product can be purchased. In the current MVP specification the supported modes are online, out_of_stock, and deal_only.
+Sandbox environment
+A non-production environment provided by an external service for testing integrations without using live production credentials or transactions.
+Seller
+A creator, small business owner, or self-employed user who operates a store and offers handmade products on the platform.
+Subscription
+A buyer's relationship with a master that allows the buyer to follow the master's new products and publications.
+tsvector
+A PostgreSQL data type used by the platform to support full-text search.
+Upstream service
+A backend service from which the B2C or B2B subsystem retrieves information or to which it sends authorized operations.
+Yandex ID
+The external identity provider used by the platform for user authentication through OAuth2.
+YooKassa
+The external payment provider used for online payments and seller subscription billing.
+Acronyms
+Acronym
+Meaning
+API
+Application Programming Interface
+B2B
+Business-to-Business
+B2C
+Business-to-Consumer
+BFF
+Backend-for-Frontend
+CRUD
+Create, Read, Update, Delete
+HTTP
+Hypertext Transfer Protocol
+HTTPS
+Hypertext Transfer Protocol Secure
+JWT
+JSON Web Token
+MVP
+Minimum Viable Product
+OAuth2
+OAuth 2.0 Authorization Framework
+UI
+User Interface
+URL
+Uniform Resource Locator
+WCAG
+Web Content Accessibility Guidelines
+
+Appendix B: To Be Determined List
+The following items remain to be determined and require resolution before the corresponding parts of the SRS can be considered final. 
+ID
+Location
+Item to Be Determined
+Required Resolution
+TBD-1
+Section 2.7.3
+Exact structure and priority matrix of Free and Premium subscription features
+Confirm final subscription entitlements, limits, and priorities.
+TBD-2
+Section 2.7.3
+Full specification of Administrator and Moderator subsystems
+Define administrator and moderator roles, permissions, workflows, and interfaces in a separate SRS.
+TBD-3
+Sections 2.4.2, 2.7.3
+Observability and monitoring stack
+Select the monitoring, metrics, tracing, and alerting solution for the deployment environment.
+TBD-4
+Sections 2.7.3, 4.2.9
+Final list of self-pickup point fields
+Confirm the complete set of required pickup-point fields, such as city, address, working hours, and contact information.
+TBD-5
+Section 2.7.3
+Data retention and deletion policy under 152-FZ
+Define retention periods and deletion/anonymization rules for user content and order history.
+TBD-6
+Section 2.4.3
+Frontend hosting environment
+Select the final hosting option: Vercel or Yandex Cloud static/edge deployment.
+TBD-7
+Section 2.6
+Documentation standards and formats
+Define the final formats and maintenance requirements for user and developer documentation.
+TBD-8
+Section 3.3 / B2B Delivery Settings
+Final CDEK account configuration and integration details
+Define the seller-side CDEK configuration required for the MVP.
+TBD-9
+Section 4.1.3
+Search behavior when the Search Service is unavailable
+Decide whether the system returns zero results, the last known value, or another fallback response.
+TBD-10
+Section 4.1.7
+Product price drift between cart and catalog
+Define the reconciliation rule when a product price changes after being added to the cart.
+TBD-11
+Section 4.1.8
+Payment processing flow for the MVP
+Define whether the MVP uses a YooKassa sandbox flow, a stub, or another implementation and specify the order/payment state transitions.
+TBD-12
+Section 4.1.9
+Client-side event buffering
+Decide whether behavioral events should be buffered on the client when the Eventer service is unavailable.
+TBD-13
+Section 4.1.12
+Target B2C page response latency
+Establish the final latency target for B2C page responses under healthy upstream conditions.
+TBD-14
+Section 4.2.3
+Handling references to a deleted product
+Define whether deleted products are removed, marked unavailable, or retained as historical references in publications.
+TBD-15
+Section 4.2 introduction
+Final B2B API contracts
+Approve the final /api/v1/seller/... routes, request/response payloads, and response codes in OpenAPI/Swagger.
+TBD-16
+Section 4.2.8
+Seller order action command/event contract
+Define the exact synchronous or asynchronous contract between B2B and the Order Service for seller-initiated order actions.
+All items listed above are open and require resolution during the finalization of the MVP requirements and API contracts. 

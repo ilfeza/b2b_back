@@ -1,0 +1,161 @@
+ Container b2b_back-postgres-1 Running 
+ Image b2b_back-tests Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 513B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile.test
+#2 transferring dockerfile: 285B done
+#2 DONE 0.0s
+
+#3 [auth] library/python:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#4 [internal] load metadata for docker.io/library/python:3.12-slim
+#4 ...
+
+#5 [internal] load metadata for ghcr.io/astral-sh/uv:0.12.1
+#5 DONE 1.0s
+
+#4 [internal] load metadata for docker.io/library/python:3.12-slim
+#4 DONE 1.7s
+
+#6 [internal] load .dockerignore
+#6 transferring context: 124B done
+#6 DONE 0.0s
+
+#7 FROM ghcr.io/astral-sh/uv:0.12.1@sha256:cf4eedcaa81655197f625739489effcbe71b61ceb1506f332c3facae5deceded
+#7 resolve ghcr.io/astral-sh/uv:0.12.1@sha256:cf4eedcaa81655197f625739489effcbe71b61ceb1506f332c3facae5deceded 0.0s done
+#7 DONE 0.0s
+
+#8 [stage-0 1/6] FROM docker.io/library/python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1
+#8 resolve docker.io/library/python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1 0.0s done
+#8 DONE 0.0s
+
+#9 [internal] load build context
+#9 transferring context: 57.89kB 0.0s done
+#9 DONE 0.0s
+
+#10 [stage-0 3/6] COPY --from=ghcr.io/astral-sh/uv:0.12.1 /uv /usr/local/bin/uv
+#10 CACHED
+
+#11 [stage-0 4/6] COPY pyproject.toml uv.lock ./
+#11 CACHED
+
+#12 [stage-0 2/6] WORKDIR /app
+#12 CACHED
+
+#13 [stage-0 5/6] RUN uv sync --frozen --no-install-project
+#13 CACHED
+
+#14 [stage-0 6/6] COPY . .
+#14 DONE 0.0s
+
+#15 exporting to image
+#15 exporting layers 0.0s done
+#15 exporting manifest sha256:4a0cfa31944a4c8c675a4936f851f89727b855999c0b1c0f1d8e0db6097be9b3 done
+#15 exporting config sha256:23af87f4cfadda3acd11ca8c4b579000766b68b1836edd2414aaeb9d32e1341f done
+#15 exporting attestation manifest sha256:9492964f9ad91bf4de0665c63cd1615ae7fcefd3a904f89ecf14a0c3a38bc9d4 done
+#15 exporting manifest list sha256:f5c1c14325b8613b831daa5a70c8590fbc0342923bc28a5f49f8d2665a6faf23 done
+#15 naming to docker.io/library/b2b_back-tests:latest done
+#15 unpacking to docker.io/library/b2b_back-tests:latest 0.0s done
+#15 DONE 0.1s
+
+#16 resolving provenance for metadata file
+#16 DONE 0.0s
+ Image b2b_back-tests Built 
+ Container b2b_back-postgres-1 Waiting 
+ Container b2b_back-postgres-1 Healthy 
+ Container handmade-backend-test-report Creating 
+ Container handmade-backend-test-report Created 
+All checks passed!
+81 files already formatted
+============================= test session starts ==============================
+platform linux -- Python 3.12.15, pytest-9.1.1, pluggy-1.7.0
+rootdir: /app
+configfile: pyproject.toml
+testpaths: tests
+plugins: cov-7.1.0, anyio-4.15.1, asyncio-1.4.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 113 items
+
+tests/test_additional_behaviors.py ...........                           [  9%]
+tests/test_contracts.py .........                                        [ 17%]
+tests/test_integrations.py ...............                               [ 30%]
+tests/test_media.py ........                                             [ 38%]
+tests/test_minio_init.py ..                                              [ 39%]
+tests/test_postgres.py ......                                            [ 45%]
+tests/test_publications.py ...............                               [ 58%]
+tests/test_scripts.py ..                                                 [ 60%]
+tests/test_security.py .........................                         [ 82%]
+tests/test_seller_flow.py ....................                           [100%]
+
+------------------ generated xml file: /app/test-results.xml -------------------
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.15-final-0 _______________
+
+Name                                                Stmts   Miss Branch BrPart  Cover   Missing
+-----------------------------------------------------------------------------------------------
+marketplace/__init__.py                                 0      0      0      0   100%
+marketplace/b2b/__init__.py                             0      0      0      0   100%
+marketplace/b2b/api/__init__.py                         0      0      0      0   100%
+marketplace/b2b/api/routes.py                         147      1      4      1    99%   166
+marketplace/b2b/integrations/__init__.py                0      0      0      0   100%
+marketplace/b2b/integrations/contracts.py              53      0      2      0   100%
+marketplace/b2b/integrations/external.py               39      1      2      1    95%   24, 55->57
+marketplace/b2b/integrations/fakes.py                  52      2      2      0    96%   50, 53
+marketplace/b2b/integrations/storage.py                20      2      0      0    90%   44-45
+marketplace/b2b/main.py                                 5      5      0      0     0%   1-8
+marketplace/b2b/models/__init__.py                      0      0      0      0   100%
+marketplace/b2b/models/entities.py                     41      0      0      0   100%
+marketplace/b2b/repositories/__init__.py                0      0      0      0   100%
+marketplace/b2b/repositories/stores.py                 20      2      6      2    85%   16, 25
+marketplace/b2b/schemas/__init__.py                     0      0      0      0   100%
+marketplace/b2b/schemas/responses.py                   36      0      0      0   100%
+marketplace/b2b/schemas/store.py                       30      0      2      0   100%
+marketplace/b2b/services/__init__.py                    0      0      0      0   100%
+marketplace/b2b/services/facade.py                    108      5     42      5    93%   41, 90, 127, 191, 196
+marketplace/b2b/services/media.py                      51      1     10      1    97%   63
+marketplace/b2b/services/stores.py                     91      1     24      1    98%   65
+marketplace/b2b/services/subscriptions.py              42      0     16      0   100%
+marketplace/goods/__init__.py                           0      0      0      0   100%
+marketplace/goods/api/__init__.py                       0      0      0      0   100%
+marketplace/goods/api/routes.py                        49      0      0      0   100%
+marketplace/goods/main.py                               5      5      0      0     0%   1-8
+marketplace/goods/models/__init__.py                    0      0      0      0   100%
+marketplace/goods/models/entities.py                   28      0      0      0   100%
+marketplace/goods/repositories/__init__.py              0      0      0      0   100%
+marketplace/goods/repositories/catalog.py              15      0      0      0   100%
+marketplace/goods/schemas/__init__.py                   0      0      0      0   100%
+marketplace/goods/schemas/products.py                  44      2      8      2    92%   38, 42
+marketplace/goods/services/__init__.py                  0      0      0      0   100%
+marketplace/goods/services/catalog.py                 129      2     46      3    97%   42, 91->99, 104
+marketplace/publications/__init__.py                    0      0      0      0   100%
+marketplace/publications/api/__init__.py                0      0      0      0   100%
+marketplace/publications/api/routes.py                 43      0      0      0   100%
+marketplace/publications/main.py                        5      5      0      0     0%   1-8
+marketplace/publications/models/__init__.py             0      0      0      0   100%
+marketplace/publications/models/entities.py            28      0      0      0   100%
+marketplace/publications/repositories/__init__.py       0      0      0      0   100%
+marketplace/publications/repositories/posts.py         15      0      0      0   100%
+marketplace/publications/schemas/__init__.py            0      0      0      0   100%
+marketplace/publications/schemas/posts.py              25      0      2      0   100%
+marketplace/publications/services/__init__.py           0      0      0      0   100%
+marketplace/publications/services/posts.py             94      1     26      1    98%   98
+marketplace/shared/__init__.py                          0      0      0      0   100%
+marketplace/shared/app.py                              82      3     20      3    94%   40, 134->146, 143->142, 182-183
+marketplace/shared/clients.py                          44      0      0      0   100%
+marketplace/shared/config.py                           53      7     14      4    78%   48-51, 57, 59, 61
+marketplace/shared/db.py                               34      1      2      1    94%   41
+marketplace/shared/errors.py                           60      3      0      0    95%   107, 124-127
+marketplace/shared/http.py                             43      2     10      1    94%   63->67, 65-66
+marketplace/shared/readmodels.py                       14      0      0      0   100%
+marketplace/shared/repositories.py                     18      0      4      0   100%
+marketplace/shared/schemas.py                          68      0      0      0   100%
+marketplace/shared/security.py                         38      1     12      1    96%   64
+-----------------------------------------------------------------------------------------------
+TOTAL                                                1669     52    254     27    96%
+Coverage HTML written to dir htmlcov
+Coverage JSON written to file /app/coverage.json
+Required test coverage of 85% reached. Total coverage: 95.68%
+============================= 113 passed in 36.69s =============================

@@ -1,0 +1,732 @@
+{
+  "$defs": {
+    "MessageRejected": {
+      "additionalProperties": false,
+      "properties": {
+        "eventId": {
+          "format": "uuid",
+          "title": "Eventid",
+          "type": "string"
+        },
+        "version": {
+          "const": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "occurredAt": {
+          "format": "date-time",
+          "title": "Occurredat",
+          "type": "string"
+        },
+        "aggregateId": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Aggregateid",
+          "type": "string"
+        },
+        "eventType": {
+          "const": "message.rejected",
+          "title": "Eventtype",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/RejectedPayload"
+        }
+      },
+      "required": [
+        "eventId",
+        "version",
+        "occurredAt",
+        "aggregateId",
+        "eventType",
+        "payload"
+      ],
+      "title": "MessageRejected",
+      "type": "object"
+    },
+    "OrderPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "orderId": {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "title": "Orderid",
+          "type": "string"
+        },
+        "sellerId": {
+          "format": "uuid",
+          "title": "Sellerid",
+          "type": "string"
+        },
+        "previousStatus": {
+          "$ref": "#/$defs/OrderStatus"
+        },
+        "status": {
+          "$ref": "#/$defs/OrderStatus"
+        }
+      },
+      "required": [
+        "orderId",
+        "sellerId",
+        "previousStatus",
+        "status"
+      ],
+      "title": "OrderPayload",
+      "type": "object"
+    },
+    "OrderStatus": {
+      "enum": [
+        "created",
+        "paid",
+        "shipped",
+        "delivered",
+        "cancelled"
+      ],
+      "title": "OrderStatus",
+      "type": "string"
+    },
+    "OrderStatusChanged": {
+      "additionalProperties": false,
+      "properties": {
+        "eventId": {
+          "format": "uuid",
+          "title": "Eventid",
+          "type": "string"
+        },
+        "version": {
+          "const": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "occurredAt": {
+          "format": "date-time",
+          "title": "Occurredat",
+          "type": "string"
+        },
+        "aggregateId": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Aggregateid",
+          "type": "string"
+        },
+        "eventType": {
+          "const": "order.status_changed",
+          "title": "Eventtype",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/OrderPayload"
+        }
+      },
+      "required": [
+        "eventId",
+        "version",
+        "occurredAt",
+        "aggregateId",
+        "eventType",
+        "payload"
+      ],
+      "title": "OrderStatusChanged",
+      "type": "object"
+    },
+    "ProductCreated": {
+      "additionalProperties": false,
+      "properties": {
+        "eventId": {
+          "format": "uuid",
+          "title": "Eventid",
+          "type": "string"
+        },
+        "version": {
+          "const": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "occurredAt": {
+          "format": "date-time",
+          "title": "Occurredat",
+          "type": "string"
+        },
+        "aggregateId": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Aggregateid",
+          "type": "string"
+        },
+        "eventType": {
+          "const": "product.created",
+          "title": "Eventtype",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/ProductPayload"
+        }
+      },
+      "required": [
+        "eventId",
+        "version",
+        "occurredAt",
+        "aggregateId",
+        "eventType",
+        "payload"
+      ],
+      "title": "ProductCreated",
+      "type": "object"
+    },
+    "ProductDeleted": {
+      "additionalProperties": false,
+      "properties": {
+        "eventId": {
+          "format": "uuid",
+          "title": "Eventid",
+          "type": "string"
+        },
+        "version": {
+          "const": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "occurredAt": {
+          "format": "date-time",
+          "title": "Occurredat",
+          "type": "string"
+        },
+        "aggregateId": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Aggregateid",
+          "type": "string"
+        },
+        "eventType": {
+          "const": "product.deleted",
+          "title": "Eventtype",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/ProductPayload"
+        }
+      },
+      "required": [
+        "eventId",
+        "version",
+        "occurredAt",
+        "aggregateId",
+        "eventType",
+        "payload"
+      ],
+      "title": "ProductDeleted",
+      "type": "object"
+    },
+    "ProductPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "productId": {
+          "format": "uuid",
+          "title": "Productid",
+          "type": "string"
+        },
+        "sellerId": {
+          "format": "uuid",
+          "title": "Sellerid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "productId",
+        "sellerId"
+      ],
+      "title": "ProductPayload",
+      "type": "object"
+    },
+    "ProductUpdated": {
+      "additionalProperties": false,
+      "properties": {
+        "eventId": {
+          "format": "uuid",
+          "title": "Eventid",
+          "type": "string"
+        },
+        "version": {
+          "const": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "occurredAt": {
+          "format": "date-time",
+          "title": "Occurredat",
+          "type": "string"
+        },
+        "aggregateId": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Aggregateid",
+          "type": "string"
+        },
+        "eventType": {
+          "const": "product.updated",
+          "title": "Eventtype",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/ProductUpdatedPayload"
+        }
+      },
+      "required": [
+        "eventId",
+        "version",
+        "occurredAt",
+        "aggregateId",
+        "eventType",
+        "payload"
+      ],
+      "title": "ProductUpdated",
+      "type": "object"
+    },
+    "ProductUpdatedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "productId": {
+          "format": "uuid",
+          "title": "Productid",
+          "type": "string"
+        },
+        "sellerId": {
+          "format": "uuid",
+          "title": "Sellerid",
+          "type": "string"
+        },
+        "changedFields": {
+          "items": {
+            "enum": [
+              "title",
+              "description",
+              "image",
+              "price",
+              "saleMode",
+              "availableDeliveries",
+              "pickupPoints",
+              "dealContacts",
+              "inStock"
+            ],
+            "type": "string"
+          },
+          "maxItems": 9,
+          "minItems": 1,
+          "title": "Changedfields",
+          "type": "array"
+        }
+      },
+      "required": [
+        "productId",
+        "sellerId",
+        "changedFields"
+      ],
+      "title": "ProductUpdatedPayload",
+      "type": "object"
+    },
+    "PublicationDeleted": {
+      "additionalProperties": false,
+      "properties": {
+        "eventId": {
+          "format": "uuid",
+          "title": "Eventid",
+          "type": "string"
+        },
+        "version": {
+          "const": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "occurredAt": {
+          "format": "date-time",
+          "title": "Occurredat",
+          "type": "string"
+        },
+        "aggregateId": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Aggregateid",
+          "type": "string"
+        },
+        "eventType": {
+          "const": "publication.deleted",
+          "title": "Eventtype",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/PublicationPayload"
+        }
+      },
+      "required": [
+        "eventId",
+        "version",
+        "occurredAt",
+        "aggregateId",
+        "eventType",
+        "payload"
+      ],
+      "title": "PublicationDeleted",
+      "type": "object"
+    },
+    "PublicationPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "publicationId": {
+          "format": "uuid",
+          "title": "Publicationid",
+          "type": "string"
+        },
+        "sellerId": {
+          "format": "uuid",
+          "title": "Sellerid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "publicationId",
+        "sellerId"
+      ],
+      "title": "PublicationPayload",
+      "type": "object"
+    },
+    "PublicationPublished": {
+      "additionalProperties": false,
+      "properties": {
+        "eventId": {
+          "format": "uuid",
+          "title": "Eventid",
+          "type": "string"
+        },
+        "version": {
+          "const": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "occurredAt": {
+          "format": "date-time",
+          "title": "Occurredat",
+          "type": "string"
+        },
+        "aggregateId": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Aggregateid",
+          "type": "string"
+        },
+        "eventType": {
+          "const": "publication.published",
+          "title": "Eventtype",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/PublicationPublishedPayload"
+        }
+      },
+      "required": [
+        "eventId",
+        "version",
+        "occurredAt",
+        "aggregateId",
+        "eventType",
+        "payload"
+      ],
+      "title": "PublicationPublished",
+      "type": "object"
+    },
+    "PublicationPublishedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "publicationId": {
+          "format": "uuid",
+          "title": "Publicationid",
+          "type": "string"
+        },
+        "sellerId": {
+          "format": "uuid",
+          "title": "Sellerid",
+          "type": "string"
+        },
+        "status": {
+          "const": "published",
+          "default": "published",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "publicationId",
+        "sellerId"
+      ],
+      "title": "PublicationPublishedPayload",
+      "type": "object"
+    },
+    "PublicationUpdated": {
+      "additionalProperties": false,
+      "properties": {
+        "eventId": {
+          "format": "uuid",
+          "title": "Eventid",
+          "type": "string"
+        },
+        "version": {
+          "const": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "occurredAt": {
+          "format": "date-time",
+          "title": "Occurredat",
+          "type": "string"
+        },
+        "aggregateId": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Aggregateid",
+          "type": "string"
+        },
+        "eventType": {
+          "const": "publication.updated",
+          "title": "Eventtype",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/PublicationUpdatedPayload"
+        }
+      },
+      "required": [
+        "eventId",
+        "version",
+        "occurredAt",
+        "aggregateId",
+        "eventType",
+        "payload"
+      ],
+      "title": "PublicationUpdated",
+      "type": "object"
+    },
+    "PublicationUpdatedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "publicationId": {
+          "format": "uuid",
+          "title": "Publicationid",
+          "type": "string"
+        },
+        "sellerId": {
+          "format": "uuid",
+          "title": "Sellerid",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "published"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "changedFields": {
+          "items": {
+            "enum": [
+              "title",
+              "body",
+              "coverImage",
+              "status",
+              "productIds"
+            ],
+            "type": "string"
+          },
+          "maxItems": 5,
+          "minItems": 1,
+          "title": "Changedfields",
+          "type": "array"
+        }
+      },
+      "required": [
+        "publicationId",
+        "sellerId",
+        "status",
+        "changedFields"
+      ],
+      "title": "PublicationUpdatedPayload",
+      "type": "object"
+    },
+    "RejectedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "consumerGroup": {
+          "title": "Consumergroup",
+          "type": "string"
+        },
+        "originalTopic": {
+          "title": "Originaltopic",
+          "type": "string"
+        },
+        "originalPartition": {
+          "minimum": 0,
+          "title": "Originalpartition",
+          "type": "integer"
+        },
+        "originalOffset": {
+          "minimum": 0,
+          "title": "Originaloffset",
+          "type": "integer"
+        },
+        "reasonCode": {
+          "title": "Reasoncode",
+          "type": "string"
+        },
+        "attempts": {
+          "minimum": 1,
+          "title": "Attempts",
+          "type": "integer"
+        },
+        "originalSha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Originalsha256",
+          "type": "string"
+        },
+        "originalSize": {
+          "minimum": 0,
+          "title": "Originalsize",
+          "type": "integer"
+        },
+        "originalValueBase64": {
+          "title": "Originalvaluebase64",
+          "type": "string"
+        },
+        "truncated": {
+          "title": "Truncated",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "consumerGroup",
+        "originalTopic",
+        "originalPartition",
+        "originalOffset",
+        "reasonCode",
+        "attempts",
+        "originalSha256",
+        "originalSize",
+        "originalValueBase64",
+        "truncated"
+      ],
+      "title": "RejectedPayload",
+      "type": "object"
+    },
+    "SellerCreated": {
+      "additionalProperties": false,
+      "properties": {
+        "eventId": {
+          "format": "uuid",
+          "title": "Eventid",
+          "type": "string"
+        },
+        "version": {
+          "const": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "occurredAt": {
+          "format": "date-time",
+          "title": "Occurredat",
+          "type": "string"
+        },
+        "aggregateId": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Aggregateid",
+          "type": "string"
+        },
+        "eventType": {
+          "const": "seller.created",
+          "title": "Eventtype",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SellerPayload"
+        }
+      },
+      "required": [
+        "eventId",
+        "version",
+        "occurredAt",
+        "aggregateId",
+        "eventType",
+        "payload"
+      ],
+      "title": "SellerCreated",
+      "type": "object"
+    },
+    "SellerPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "sellerId": {
+          "format": "uuid",
+          "title": "Sellerid",
+          "type": "string"
+        },
+        "ownerUserId": {
+          "format": "uuid",
+          "title": "Owneruserid",
+          "type": "string"
+        },
+        "username": {
+          "pattern": "^[a-z][a-z0-9_]{2,31}$",
+          "title": "Username",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sellerId",
+        "ownerUserId",
+        "username"
+      ],
+      "title": "SellerPayload",
+      "type": "object"
+    }
+  },
+  "discriminator": {
+    "mapping": {
+      "message.rejected": "#/$defs/MessageRejected",
+      "order.status_changed": "#/$defs/OrderStatusChanged",
+      "product.created": "#/$defs/ProductCreated",
+      "product.deleted": "#/$defs/ProductDeleted",
+      "product.updated": "#/$defs/ProductUpdated",
+      "publication.deleted": "#/$defs/PublicationDeleted",
+      "publication.published": "#/$defs/PublicationPublished",
+      "publication.updated": "#/$defs/PublicationUpdated",
+      "seller.created": "#/$defs/SellerCreated"
+    },
+    "propertyName": "eventType"
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/SellerCreated"
+    },
+    {
+      "$ref": "#/$defs/ProductCreated"
+    },
+    {
+      "$ref": "#/$defs/ProductUpdated"
+    },
+    {
+      "$ref": "#/$defs/ProductDeleted"
+    },
+    {
+      "$ref": "#/$defs/PublicationPublished"
+    },
+    {
+      "$ref": "#/$defs/PublicationUpdated"
+    },
+    {
+      "$ref": "#/$defs/PublicationDeleted"
+    },
+    {
+      "$ref": "#/$defs/OrderStatusChanged"
+    },
+    {
+      "$ref": "#/$defs/MessageRejected"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "services": {
+    "b2b": {
+      "/readyz": 200,
+      "/docs": 200,
+      "/openapi.json": 200
+    },
+    "goods": {
+      "/readyz": 200,
+      "/docs": 200,
+      "/openapi.json": 200
+    },
+    "publications": {
+      "/readyz": 200,
+      "/docs": 200,
+      "/openapi.json": 200
+    }
+  },
+  "frontendRemoved": true,
+  "sellerId": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+  "products": 3,
+  "publishedPosts": 2,
+  "s3ImageHttpStatus": 200,
+  "source": "Docker Compose: PostgreSQL + source-built MinIO + 3 FastAPI services",
+  "externalAdapters": "development fakes for Users/Orders/Payment/Analytics"
+}

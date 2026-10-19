@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-19",
+  "environment": "local macOS ARM64; PostgreSQL 16.2; three independent uvicorn processes; S3 HTTP moto; explicit fake Users/Order/Payment/Analytics",
+  "seedRuns": 2,
+  "productsAfterSeed": 3,
+  "publishedPostsAfterSeed": 2,
+  "s3ObjectsAfterSeed": 1,
+  "requests": 50,
+  "concurrency": 5,
+  "durationSeconds": 0.136,
+  "p50ms": 11.09,
+  "p95ms": 24.53,
+  "slaVerified": false
+}

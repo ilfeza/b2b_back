@@ -1,0 +1,56 @@
+{
+  "observedAt": "2026-10-19T17:41:09.451056+00:00",
+  "allProjectContainersStopped": true,
+  "volumesPreserved": true,
+  "note": "Kafka exit 143 is requested SIGTERM; broker shutdown completed in its log.",
+  "services": [
+    {
+      "service": "b2b",
+      "container": "b2b_back-b2b-1",
+      "state": "exited",
+      "exitCode": 0
+    },
+    {
+      "service": "goods",
+      "container": "b2b_back-goods-1",
+      "state": "exited",
+      "exitCode": 0
+    },
+    {
+      "service": "kafka",
+      "container": "b2b_back-kafka-1",
+      "state": "exited",
+      "exitCode": 143
+    },
+    {
+      "service": "kafka-init",
+      "container": "b2b_back-kafka-init-1",
+      "state": "exited",
+      "exitCode": 0
+    },
+    {
+      "service": "minio",
+      "container": "b2b_back-minio-1",
+      "state": "exited",
+      "exitCode": 0
+    },
+    {
+      "service": "minio-init",
+      "container": "b2b_back-minio-init-1",
+      "state": "exited",
+      "exitCode": 0
+    },
+    {
+      "service": "postgres",
+      "container": "b2b_back-postgres-1",
+      "state": "exited",
+      "exitCode": 0
+    },
+    {
+      "service": "publications",
+      "container": "b2b_back-publications-1",
+      "state": "exited",
+      "exitCode": 0
+    }
+  ]
+}

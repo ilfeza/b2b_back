@@ -1,0 +1,182 @@
+x-app: &app
+  build: .
+  restart: unless-stopped
+  stop_grace_period: 30s
+  environment: &common
+    ENVIRONMENT: development
+    SERVICE_KEY: ${SERVICE_KEY:-dev-only-internal-key-change-before-deployment}
+    AUTH_DEV_MODE: "false"
+    EXTERNAL_FAKE_MODE: "false"
+    API_PREFIX: ${API_PREFIX:-/api}
+    PUBLIC_STOREFRONT_PREFIX: ${PUBLIC_STOREFRONT_PREFIX:-/shops}
+    GOODS_SERVICE_URL: http://goods:8000${API_PREFIX:-/api}
+    PUBLICATIONS_SERVICE_URL: http://publications:8000${API_PREFIX:-/api}
+    B2B_SERVICE_URL: http://b2b:8000${API_PREFIX:-/api}
+    KAFKA_ENABLED: ${KAFKA_ENABLED:-true}
+    KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_DOCKER_BOOTSTRAP_SERVERS:-kafka:29092}
+    KAFKA_B2B_GROUP_ID: ${KAFKA_B2B_GROUP_ID:-handmade.b2b.v1}
+    KAFKA_GOODS_GROUP_ID: ${KAFKA_GOODS_GROUP_ID:-handmade.goods.v1}
+    KAFKA_PUBLICATIONS_GROUP_ID: ${KAFKA_PUBLICATIONS_GROUP_ID:-handmade.publications.v1}
+    KAFKA_SELLERS_TOPIC: ${KAFKA_SELLERS_TOPIC:-handmade.sellers.v1}
+    KAFKA_PRODUCTS_TOPIC: ${KAFKA_PRODUCTS_TOPIC:-handmade.products.v1}
+    KAFKA_PUBLICATIONS_TOPIC: ${KAFKA_PUBLICATIONS_TOPIC:-handmade.publications.v1}
+    KAFKA_ORDERS_TOPIC: ${KAFKA_ORDERS_TOPIC:-handmade.orders.v1}
+    KAFKA_ORDERS_ENABLED: ${KAFKA_ORDERS_ENABLED:-false}
+    KAFKA_B2B_DLQ_TOPIC: ${KAFKA_B2B_DLQ_TOPIC:-handmade.dlq.b2b.v1}
+    KAFKA_GOODS_DLQ_TOPIC: ${KAFKA_GOODS_DLQ_TOPIC:-handmade.dlq.goods.v1}
+    KAFKA_PUBLICATIONS_DLQ_TOPIC: ${KAFKA_PUBLICATIONS_DLQ_TOPIC:-handmade.dlq.publications.v1}
+    KAFKA_POLL_INTERVAL_SECONDS: ${KAFKA_POLL_INTERVAL_SECONDS:-0.5}
+    KAFKA_RETRY_BASE_SECONDS: ${KAFKA_RETRY_BASE_SECONDS:-1}
+    KAFKA_RETRY_MAX_SECONDS: ${KAFKA_RETRY_MAX_SECONDS:-30}
+    KAFKA_DELIVERY_TIMEOUT_SECONDS: ${KAFKA_DELIVERY_TIMEOUT_SECONDS:-5}
+    KAFKA_SHUTDOWN_TIMEOUT_SECONDS: ${KAFKA_SHUTDOWN_TIMEOUT_SECONDS:-10}
+    KAFKA_HANDLER_MAX_ATTEMPTS: ${KAFKA_HANDLER_MAX_ATTEMPTS:-3}
+    KAFKA_MAX_EVENT_BYTES: ${KAFKA_MAX_EVENT_BYTES:-262144}
+  healthcheck:
+    test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://localhost:8000/readyz')"]
+    interval: 10s
+    timeout: 5s
+    retries: 10
+    start_period: 20s
+  networks: [backend]
+
+services:
+  kafka:
+    image: apache/kafka:4.1.1
+    hostname: kafka
+    restart: unless-stopped
+    environment:
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: INTERNAL://:29092,EXTERNAL://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:29092,EXTERNAL://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_HEAP_OPTS: -Xms256m -Xmx512m
+    ports: ["127.0.0.1:9092:9092"]
+    volumes: ["kafka-data:/var/lib/kafka/data"]
+    healthcheck:
+      test: [CMD-SHELL, "/opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --list >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 10s
+      retries: 15
+      start_period: 20s
+    networks: [backend]
+
+  kafka-init:
+    build: .
+    environment:
+      <<: *common
+    command: [python, -m, scripts.kafka_init]
+    depends_on:
+      kafka: {condition: service_healthy}
+    networks: [backend]
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: marketplace
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-postgres-only}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/001-init.sql:ro
+    ports: ["127.0.0.1:5432:5432"]
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U postgres -d marketplace]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    networks: [backend]
+
+  minio:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.minio
+    command: server /data --console-address :9001
+    environment:
+      MINIO_ROOT_USER: ${S3_ACCESS_KEY:-localminio}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_KEY:-localminio-secret}
+    volumes: ["minio-data:/data"]
+    ports: ["127.0.0.1:9000:9000", "127.0.0.1:9001:9001"]
+    networks: [backend]
+
+  minio-init:
+    build: .
+    depends_on: [minio]
+    environment:
+      S3_ENDPOINT: http://minio:9000
+      S3_BUCKET: handmade-media
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-localminio}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:-localminio-secret}
+    command: [python, -m, scripts.minio_init]
+    networks: [backend]
+
+  b2b:
+    <<: *app
+    environment:
+      <<: *common
+      DATABASE_URL: postgresql+asyncpg://b2b:b2b@postgres:5432/marketplace
+      AUTH_DEV_MODE: "true"
+      EXTERNAL_FAKE_MODE: "true"
+      S3_ENDPOINT: http://minio:9000
+      S3_PUBLIC_URL: http://localhost:9000/handmade-media
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-localminio}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:-localminio-secret}
+    command: [sh, -ec, "alembic -c alembic-b2b.ini upgrade head && exec uvicorn marketplace.b2b.main:factory --factory --host 0.0.0.0 --port 8000"]
+    ports: ["127.0.0.1:8080:8000"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      minio-init: {condition: service_completed_successfully}
+      kafka-init: {condition: service_completed_successfully}
+
+  goods:
+    <<: *app
+    environment:
+      <<: *common
+      DATABASE_URL: postgresql+asyncpg://goods:goods@postgres:5432/marketplace
+    command: [sh, -ec, "alembic -c alembic-goods.ini upgrade head && exec uvicorn marketplace.goods.main:factory --factory --host 0.0.0.0 --port 8000"]
+    ports: ["127.0.0.1:8081:8000"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      kafka-init: {condition: service_completed_successfully}
+
+  publications:
+    <<: *app
+    environment:
+      <<: *common
+      DATABASE_URL: postgresql+asyncpg://publications:publications@postgres:5432/marketplace
+    command: [sh, -ec, "alembic -c alembic-publications.ini upgrade head && exec uvicorn marketplace.publications.main:factory --factory --host 0.0.0.0 --port 8000"]
+    ports: ["127.0.0.1:8082:8000"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      kafka-init: {condition: service_completed_successfully}
+
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    profiles: [test]
+    environment:
+      TEST_POSTGRES_URL: postgresql+asyncpg://postgres:${POSTGRES_PASSWORD:-local-postgres-only}@postgres:5432/marketplace_test
+      TEST_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+    depends_on:
+      postgres: {condition: service_healthy}
+      kafka: {condition: service_healthy}
+    networks: [backend]
+
+volumes:
+  postgres-data:
+  minio-data:
+  kafka-data:
+networks:
+  backend:

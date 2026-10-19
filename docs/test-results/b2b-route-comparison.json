@@ -1,0 +1,163 @@
+{
+  "source": "docs/API-контракт и модель данных.docx; docs/source_text/API-контракт и модель данных.txt",
+  "scope": "21 B2B-used required routes plus optional uploads; method/path comparison only, not a conformance score",
+  "checked": 22,
+  "sameMethodAndPath": 17,
+  "changedPaths": 5,
+  "routes": [
+    {
+      "contractSection": "4.2",
+      "method": "POST",
+      "contractPath": "/api/users/me/become-seller",
+      "sameMethodAndPath": true,
+      "implementedPath": "/api/users/me/become-seller"
+    },
+    {
+      "contractSection": "5.7",
+      "method": "GET",
+      "contractPath": "/api/seller/profile",
+      "sameMethodAndPath": true,
+      "implementedPath": "/api/seller/profile"
+    },
+    {
+      "contractSection": "5.8",
+      "method": "PATCH",
+      "contractPath": "/api/seller/profile",
+      "sameMethodAndPath": true,
+      "implementedPath": "/api/seller/profile"
+    },
+    {
+      "contractSection": "5.9",
+      "method": "GET",
+      "contractPath": "/api/seller/delivery",
+      "sameMethodAndPath": true,
+      "implementedPath": "/api/seller/delivery"
+    },
+    {
+      "contractSection": "5.10",
+      "method": "PATCH",
+      "contractPath": "/api/seller/delivery",
+      "sameMethodAndPath": true,
+      "implementedPath": "/api/seller/delivery"
+    },
+    {
+      "contractSection": "6.2; B2B edit page",
+      "method": "GET",
+      "contractPath": "/api/products/{id}",
+      "sameMethodAndPath": false,
+      "implementedPath": "/api/seller/products/{product_id}"
+    },
+    {
+      "contractSection": "6.3",
+      "method": "POST",
+      "contractPath": "/api/products",
+      "sameMethodAndPath": true,
+      "implementedPath": "/api/products"
+    },
+    {
+      "contractSection": "6.4",
+      "method": "PATCH",
+      "contractPath": "/api/products/{id}",
+      "sameMethodAndPath": true,
+      "implementedPath": "/api/products/{product_id}"
+    },
+    {
+      "contractSection": "6.5",
+      "method": "DELETE",
+      "contractPath": "/api/products/{id}",
+      "sameMethodAndPath": true,
+      "implementedPath": "/api/products/{product_id}"
+    },
+    {
+      "contractSection": "6.6",
+      "method": "GET",
+      "contractPath": "/api/seller/products",
+      "sameMethodAndPath": true,
+      "implementedPath": "/api/seller/products"
+    },
+    {
+      "contractSection": "7.2; B2B edit page",
+      "method": "GET",
+      "contractPath": "/api/posts/{id}",
+      "sameMethodAndPath": false,
+      "implementedPath": "/api/seller/posts/{post_id}"
+    },
+    {
+      "contractSection": "7.3",
+      "method": "POST",
+      "contractPath": "/api/posts",
+      "sameMethodAndPath": true,
+      "implementedPath": "/api/posts"
+    },
+    {
+      "contractSection": "7.4",
+      "method": "PATCH",
+      "contractPath": "/api/posts/{id}",
+      "sameMethodAndPath": true,
+      "implementedPath": "/api/posts/{post_id}"
+    },
+    {
+      "contractSection": "7.5",
+      "method": "DELETE",
+      "contractPath": "/api/posts/{id}",
+      "sameMethodAndPath": true,
+      "implementedPath": "/api/posts/{post_id}"
+    },
+    {
+      "contractSection": "7.8",
+      "method": "GET",
+      "contractPath": "/api/seller/posts",
+      "sameMethodAndPath": true,
+      "implementedPath": "/api/seller/posts"
+    },
+    {
+      "contractSection": "8.2; role=seller",
+      "method": "GET",
+      "contractPath": "/api/orders",
+      "sameMethodAndPath": false,
+      "implementedPath": "/api/seller/orders"
+    },
+    {
+      "contractSection": "8.3",
+      "method": "GET",
+      "contractPath": "/api/orders/{id}",
+      "sameMethodAndPath": false,
+      "implementedPath": "/api/seller/orders/{order_id}"
+    },
+    {
+      "contractSection": "8.4",
+      "method": "PATCH",
+      "contractPath": "/api/orders/{id}/status",
+      "sameMethodAndPath": false,
+      "implementedPath": "/api/seller/orders/{order_id}/status"
+    },
+    {
+      "contractSection": "10.1",
+      "method": "GET",
+      "contractPath": "/api/plans",
+      "sameMethodAndPath": true,
+      "implementedPath": "/api/plans"
+    },
+    {
+      "contractSection": "10.2",
+      "method": "POST",
+      "contractPath": "/api/plans/subscribe",
+      "sameMethodAndPath": true,
+      "implementedPath": "/api/plans/subscribe"
+    },
+    {
+      "contractSection": "11.1",
+      "method": "GET",
+      "contractPath": "/api/seller/dashboard",
+      "sameMethodAndPath": true,
+      "implementedPath": "/api/seller/dashboard"
+    },
+    {
+      "contractSection": "12; optional",
+      "method": "POST",
+      "contractPath": "/api/uploads",
+      "sameMethodAndPath": true,
+      "implementedPath": "/api/uploads"
+    }
+  ]
+}

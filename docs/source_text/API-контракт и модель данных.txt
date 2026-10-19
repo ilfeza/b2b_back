@@ -1,0 +1,871 @@
+Полный API-контракт
+
+Часть 1. Общие соглашения
+1.1. Base URL
+Окружение
+URL
+Local dev
+http://localhost:8080/api
+Dev-стенд
+TBD
+Prod
+TBD
+1.2. Авторизация
+Метод: JWT в httpOnly cookie.
+Параметр
+Значение
+Имя cookie (access)
+auth-token
+Имя cookie (refresh, опц.)
+refresh-token
+Атрибуты
+HttpOnly; Secure; SameSite=Strict; Path=/
+Время жизни access
+1 час (рекомендую) или 24 часа (для MVP)
+Время жизни refresh
+7–30 дней (опционально)
+Фронт никогда не получает токен в теле ответа. Всё через Set-Cookie.
+CORS обязателен:
+text
+Access-Control-Allow-Origin: http://localhost:3000  (явно, не *)
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Methods: GET, POST, PATCH, DELETE, OPTIONS
+Access-Control-Allow-Headers: Content-Type
+1.3. Формат ответа
+Успех (200/201):
+json
+{
+  "data": { ... },
+  "error": null
+}
+Ошибка (4xx/5xx):
+json
+{
+  "data": null,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Поле title обязательно",
+    "details": { "field": "title" }
+  }
+}
+Коды ошибок:
+Код
+HTTP
+Когда
+VALIDATION_ERROR
+400
+Невалидные данные
+UNAUTHORIZED
+401
+Нет cookie / токен истёк
+FORBIDDEN
+403
+Нет прав (buyer лезет в /seller)
+NOT_FOUND
+404
+Объект не найден
+CONFLICT
+409
+Дубликат (email занят, username занят)
+SERVER_ERROR
+500
+Внутренняя ошибка
+1.4. Форматы полей
+Тип
+Формат
+Пример
+Даты
+ISO 8601 UTC
+"2026-10-08T14:30:00Z"
+Цены
+Целые числа в рублях
+1800 (не 1800.00, не "1800")
+ID
+Строки (UUID или slug)
+"p1", "550e8400-e29b-..."
+Валюта
+ISO 4217
+"RUB"
+Enum
+Строгий, без опечаток
+"online", "pickup"
+Картинки
+URL строки
+"https://cdn.../photo.jpg"
+1.5. Пагинация
+Запрос:
+text
+?page=1&pageSize=20
+Ответ:
+json
+{
+  "data": {
+    "items": [ ... ],
+    "total": 152,
+    "page": 1,
+    "pageSize": 20
+  },
+  "error": null
+}
+Для ленты постов — курсорная (опционально):
+text
+?cursor=<id>&limit=10
+json
+{
+  "data": {
+    "items": [ ... ],
+    "nextCursor": "post_20"  // или null, если конец
+  },
+  "error": null
+}
+1.6. Денормализация
+Важно: во всех ответах, где есть Product или Post, бэк вкладывает полный объект seller. Это защищает от N+1 запросов на фронте.
+json
+{
+  "id": "p1",
+  "title": "Чашка",
+  "sellerId": "s1",
+  "seller": { "id": "s1", "username": "keramika_ann", "displayName": "Анна Керамика", ... }
+}
+1.7. Вычисляемые поля для текущего пользователя
+Бэк вычисляет для пользователя из cookie:
+Поле
+Где
+Что означает
+Seller.isFollowing
+В Seller
+Подписан ли текущий юзер
+Post.isLiked
+В Post
+Лайкнул ли текущий юзер
+Фронт не хранит эти данные глобально — получает в каждом ответе.
+
+Часть 2. Модели данных
+2.1. User
+ts
+interface User {
+  id: string;
+  username: string;          // уникальный, нельзя менять
+  displayName: string;
+  avatar: string;            // URL
+  email: string;             // уникальный
+  roles: ("buyer" | "seller")[];
+  bio?: string;
+  createdAt: string;
+}
+2.2. Seller
+ts
+interface Seller {
+  id: string;
+  username: string;
+  displayName: string;
+  avatar: string;
+  bio?: string;
+  followersCount: number;
+  isFollowing: boolean;      // вычисляется для текущего юзера
+  rating: number;            // 0–5, дробное
+  productsCount: number;
+  postsCount: number;
+  joinedAt: string;
+}
+2.3. Product
+ts
+interface Product {
+  id: string;
+  title: string;
+  description?: string;
+  image: string;
+  price: number;             // целое, рубли
+  currency: "RUB";
+  sellerId: string;
+  seller: Seller;            // денормализация
+  saleMode: "online" | "out_of_stock" | "deal_only";
+  availableDeliveries: ("pickup" | "cdek")[];
+  pickupPoints?: { city: string; address: string }[];
+  dealContacts?: string;
+  inStock: number;
+  createdAt: string;
+}
+2.4. Post
+ts
+interface Post {
+  id: string;
+  sellerId: string;
+  seller: Seller;
+  title: string;
+  body: html;
+  coverImage?: string;
+  products: Product[];       // прикреплённые товары
+  createdAt: string;
+  likesCount: number;
+  commentsCount: number;
+  isLiked: boolean;          // вычисляется для текущего юзера
+}
+Примечание:
+Изменение API-контракта — посты теперь в HTML.
+Поле Post.body теперь содержит HTML-строку (например, <h2>Заголовок</h2><p>Текст с <strong>жирным</strong></p><ul><li>пункт</li></ul>).
+Обязательное требование: бэкенд должен санитизировать HTML перед сохранением в БД. Используйте:
+Kotlin: библиотека OWASP Java HTML Sanitizer или jsoup в режиме Safelist.basic().
+Альтернатива: сохранять как есть, но санитизировать на рендере (фронт уже это делает через DOMPurify, но это defense in depth — лучше санитизировать на обоих концах).
+Зачем: клиент может отправить в body любой HTML напрямую через curl, минуя наш UI. Без санитизации на бэке злоумышленник запишет в БД <script>...</script>, и при рендере он сработает у всех читателей.
+Что разрешаем: p, h1-h3, strong, em, s, ul, ol, li, blockquote, br.Что запрещаем: script, iframe, style, on* атрибуты, href="javascript:..."
+2.5. Order
+ts
+interface Order {
+  id: string;
+  createdAt: string;
+  status: "created" | "paid" | "shipped" | "delivered" | "cancelled";
+  buyer: User;
+  seller: Seller;
+  items: { product: Product; quantity: number }[];
+  delivery: "pickup" | "cdek";
+  pickupPoint?: { city: string; address: string };
+  trackingNumber?: string;
+  total: number;
+}
+2.6. Cart
+Корзина на клиенте (localStorage), эндпоинтов нет. При оформлении заказа items[] уходит в POST /orders.
+ts
+interface CartItem {
+  productId: string;
+  quantity: number;
+  delivery: "pickup" | "cdek";
+}
+2.7. Plan
+ts
+interface Plan {
+  tier: "free" | "premium";
+  name: string;
+  price: number;
+  features: { label: string; included: boolean }[];
+}
+2.8. SellerDeliverySettings
+ts
+interface SellerDeliverySettings {
+  pickupEnabled: boolean;
+  pickupPoints: { city: string; address: string }[];
+  cdekEnabled: boolean;
+}
+
+Часть 3. Auth
+3.1. POST /auth/login
+Вход по email и паролю.
+Body:
+json
+{ "email": "user@example.com", "password": "secret123" }
+Response (200):
+text
+Set-Cookie: auth-token=<jwt>; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=3600
+json
+{
+  "data": {
+    "user": {
+      "id": "u1",
+      "username": "ivan",
+      "displayName": "Иван Петров",
+      "avatar": "https://...",
+      "email": "user@example.com",
+      "roles": ["buyer"],
+      "createdAt": "2025-01-01T10:00:00Z"
+    }
+  },
+  "error": null
+}
+Ошибки:
+401 UNAUTHORIZED — неверный email/пароль.
+400 VALIDATION_ERROR — пустые поля.
+3.2. POST /auth/yandex
+Обмен code от Яндекс ID на сессию.
+Body:
+json
+{ "code": "abc123", "state": "xyz789" }
+Response (200):
+text
+Set-Cookie: auth-token=<jwt>; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=3600
+json
+{
+  "data": { "user": { ... } },
+  "error": null
+}
+Логика бэка:
+Обменять code на токен Яндекса (server-to-server с client_secret).
+Получить профиль (email, name, avatar).
+Найти или создать User в БД.
+Если новый — роль buyer.
+Выпустить свою сессию (cookie).
+3.3. POST /auth/register
+Регистрация через email/пароль. Всегда создаёт buyer.
+Body:
+json
+{
+  "email": "new@example.com",
+  "password": "secret123",
+  "displayName": "Иван",
+  "username": "ivan_petrov"
+}
+Response (201): та же cookie + { user }.
+Ошибки:
+409 CONFLICT — email или username уже занят.
+3.4. POST /auth/logout
+Response (200):
+text
+Set-Cookie: auth-token=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0
+json
+{ "data": null, "error": null }
+3.5. GET /auth/me
+Восстанавливает текущего пользователя из cookie. Вызывается при загрузке приложения.
+Response (200):
+json
+{ "data": { "user": { ... } }, "error": null }
+Ошибки:
+401 UNAUTHORIZED — cookie нет или токен истёк.
+3.6. POST /auth/refresh (опционально)
+Обновляет access-токен.
+Response (200):
+text
+Set-Cookie: auth-token=<new-jwt>; HttpOnly; ...
+Если не делаем refresh — access-токен живёт 24 часа, после чего пользователь перелогинивается.
+
+Часть 4. Users
+4.1. PATCH /users/me
+Обновление профиля покупателя.
+Body (все поля опциональны):
+json
+{
+  "displayName": "Иван Петров",
+  "bio": "Люблю handmade",
+  "avatar": "https://..."
+}
+Response (200):
+json
+{ "data": { "user": { ... } }, "error": null }
+4.2. POST /users/me/become-seller
+Повышение до продавца. Вызывается из /account → «Стать продавцом».
+Body:
+json
+{
+  "username": "keramika_ann",
+  "displayName": "Анна Керамика",
+  "bio": "Керамика ручной работы"
+}
+Response (200): обновлённый user с добавленной ролью seller + созданный Seller-профиль.
+json
+{
+  "data": {
+    "user": { ..., "roles": ["buyer", "seller"] },
+    "seller": { "id": "s1", "username": "keramika_ann", ... }
+  },
+  "error": null
+}
+Ошибки:
+409 CONFLICT — username занят.
+400 VALIDATION_ERROR — username содержит недопустимые символы.
+
+Часть 5. Sellers
+5.1. GET /sellers/:username
+Публичная страница продавца.
+Response (200): Seller (с isFollowing вычисленным).
+Ошибки: 404 NOT_FOUND.
+5.2. GET /sellers
+Список продавцов (для поиска).
+Query: ?q=&page=&pageSize=
+Response: Paginated<Seller>
+5.3. GET /sellers/:username/posts
+Посты продавца.
+Query: ?page=&pageSize=
+Response: Paginated<Post>
+5.4. GET /sellers/:username/products
+Товары продавца.
+Query: ?q=&page=&pageSize=
+Response: Paginated<Product>
+5.5. POST /sellers/:id/follow
+Подписка.
+Response (200):
+json
+{
+  "data": { "isFollowing": true, "followersCount": 1241 },
+  "error": null
+}
+5.6. DELETE /sellers/:id/follow
+Отписка.
+Response (200):
+json
+{
+  "data": { "isFollowing": false, "followersCount": 1240 },
+  "error": null
+}
+5.7. GET /seller/profile
+Профиль текущего продавца (для B2B). Не путать с GET /sellers/:username — это приватный, с настройками.
+Response: Seller + настройки.
+json
+{
+  "data": {
+    "id": "s1",
+    "username": "keramika_ann",
+    "displayName": "Анна Керамика",
+    "avatar": "...",
+    "bio": "...",
+    "followersCount": 1240,
+    "rating": 4.9,
+    "productsCount": 12,
+    "postsCount": 8,
+    "joinedAt": "...",
+    "planTier": "free",
+    "delivery": {
+      "pickupEnabled": true,
+      "pickupPoints": [{ "city": "Москва", "address": "ул. Ленина, 5" }],
+      "cdekEnabled": true
+    }
+  },
+  "error": null
+}
+Ошибки: 403 FORBIDDEN (если юзер не seller).
+5.8. PATCH /seller/profile
+Обновление профиля продавца.
+Body:
+json
+{
+  "displayName": "Анна К.",
+  "bio": "...",
+  "avatar": "..."
+}
+Response: обновлённый Seller.
+Ошибки:
+403 FORBIDDEN — не seller.
+400 VALIDATION_ERROR.
+5.9. GET /seller/delivery
+Настройки доставки.
+Response (200):
+json
+{
+  "data": {
+    "pickupEnabled": true,
+    "pickupPoints": [{ "city": "Москва", "address": "ул. Ленина, 5" }],
+    "cdekEnabled": true
+  },
+  "error": null
+}
+5.10. PATCH /seller/delivery
+Обновление настроек доставки.
+Body: то же.
+Response: обновлённые настройки.
+
+Часть 6. Products
+6.1. GET /products
+Список товаров для B2C (публичный).
+Query: ?q=&page=&pageSize=&sellerId=&delivery=&saleMode=
+Response: Paginated<Product>
+6.2. GET /products/:id
+Карточка товара.
+Response: Product.
+Ошибки: 404 NOT_FOUND.
+6.3. POST /products (только seller)
+Создание товара.
+Body:
+json
+{
+  "title": "Керамическая чашка",
+  "description": "Ручная лепка",
+  "image": "https://...",
+  "price": 1800,
+  "saleMode": "online",
+  "availableDeliveries": ["pickup", "cdek"],
+  "pickupPoints": [{ "city": "Москва", "address": "ул. Ленина, 5" }],
+  "dealContacts": null,
+  "inStock": 5
+}
+Что бэк делает:
+Валидирует поля.
+Проверяет: если availableDeliveries включает pickup — pickupPoints обязателен.
+Проверяет: если saleMode === "deal_only" — dealContacts обязателен.
+Присваивает id, sellerId (из cookie), currency: "RUB", createdAt.
+Response (201): созданный Product.
+Ошибки:
+403 FORBIDDEN — не seller.
+400 VALIDATION_ERROR.
+403 FORBIDDEN — превышен лимит тарифа (Free = 10 товаров).
+6.4. PATCH /products/:id (только seller, только свой)
+Body: Partial<Product> (без id, sellerId, seller, createdAt).
+Response: обновлённый Product.
+Ошибки:
+403 FORBIDDEN — не seller или чужой товар.
+404 NOT_FOUND.
+6.5. DELETE /products/:id (только seller, только свой)
+Response (200): { data: null, error: null }.
+6.6. GET /seller/products
+Товары текущего продавца. Отдельный эндпоинт, потому что бэк сам знает sellerId из cookie.
+Query: ?q=&saleMode=&page=&pageSize=
+Response: Paginated<Product>.
+Ошибки: 403 FORBIDDEN.
+
+Часть 7. Posts
+7.1. GET /posts
+Лента постов для главной.
+Query: ?cursor=&limit= (курсорная) или ?page=&pageSize= (страничная).
+Response: Paginated<Post> или { items, nextCursor }.
+7.2. GET /posts/:id
+Response: Post.
+7.3. POST /posts (только seller)
+Создание поста.
+Body:
+json
+{
+  "title": "Как создаётся чашка",
+  "body": "Текст поста...",
+  "coverImage": "https://...",
+  "productIds": ["p1", "p2"]
+}
+Что бэк делает:
+Валидирует.
+Проверяет, что все productIds принадлежат продавцу.
+Присваивает id, sellerId, createdAt, likesCount: 0, commentsCount: 0.
+Response (201): Post.
+Ошибки:
+403 FORBIDDEN — не seller, или товар чужой.
+400 VALIDATION_ERROR.
+403 FORBIDDEN — превышен лимит постов (Free = 5).
+7.4. PATCH /posts/:id (только seller, только свой)
+Body: Partial<Post> (без id, sellerId, seller, createdAt, likesCount, commentsCount).
+Response: обновлённый Post.
+7.5. DELETE /posts/:id (только seller, только свой)
+Response: { data: null, error: null }.
+7.6. POST /posts/:id/like
+Поставить лайк.
+Response (200):
+json
+{ "data": { "isLiked": true, "likesCount": 43 }, "error": null }
+7.7. DELETE /posts/:id/like
+Убрать лайк.
+Response:
+json
+{ "data": { "isLiked": false, "likesCount": 42 }, "error": null }
+7.8. GET /seller/posts
+Посты текущего продавца.
+Query: ?q=&page=&pageSize=
+Response: Paginated<Post>.
+
+Часть 8. Orders
+8.1. POST /orders
+Создание заказов из корзины.
+Body:
+json
+{
+  "groups": [
+    {
+      "sellerId": "s1",
+      "delivery": "cdek",
+      "items": [
+        { "productId": "p1", "quantity": 2 },
+        { "productId": "p3", "quantity": 1 }
+      ],
+      "pickupPoint": null
+    },
+    {
+      "sellerId": "s1",
+      "delivery": "pickup",
+      "items": [{ "productId": "p2", "quantity": 1 }],
+      "pickupPoint": { "city": "Москва", "address": "ул. Ленина, 5" }
+    }
+  ],
+  "contact": {
+    "name": "Иван Петров",
+    "phone": "+7 999 123-45-67",
+    "email": "user@example.com"
+  }
+}
+Что бэк делает:
+Проверяет, что все товары существуют, saleMode === "online", inStock >= quantity.
+Берёт цены из БД (не доверяет клиенту).
+Для каждой группы создаёт отдельный Order (по продавцу + доставке).
+Списывает со склада (inStock -= quantity).
+Инициирует платёж через YooKassa.
+Возвращает заказы + ссылку на оплату.
+Response (201):
+json
+{
+  "data": {
+    "orders": [
+      { "id": "ord1", "total": 5000, "status": "created", ... },
+      { "id": "ord2", "total": 3200, "status": "created", ... }
+    ],
+    "paymentUrl": "https://yoomoney.ru/checkout/..."
+  },
+  "error": null
+}
+Ошибки:
+400 VALIDATION_ERROR — товар закончился / не найден.
+401 UNAUTHORIZED — не залогинен.
+8.2. GET /orders
+Заказы текущего пользователя.
+Поведение зависит от роли:
+Если buyer — его покупки.
+Если seller — если query ?role=seller — входящие заказы.
+Если обе роли — по умолчанию buyer.
+Query: ?role=buyer|seller&status=&page=&pageSize=
+Response: Paginated<Order>.
+8.3. GET /orders/:id
+Response: Order.
+Проверка прав: юзер должен быть либо buyer этого заказа, либо seller.
+Ошибки: 403 FORBIDDEN, 404 NOT_FOUND.
+8.4. PATCH /orders/:id/status (только seller)
+Смена статуса.
+Body:
+json
+{ "status": "shipped", "trackingNumber": "CDEK123456789" }
+Валидные переходы:
+paid → shipped
+shipped → delivered
+любой (до shipped) → cancelled
+Response: обновлённый Order.
+Ошибки:
+403 FORBIDDEN — не seller этого заказа.
+400 VALIDATION_ERROR — недопустимый переход.
+8.5. POST /webhooks/yookassa (внутренний)
+YooKassa вызывает бэк при успешной оплате. Бэк меняет статус created → paid.
+Фронт этот эндпоинт не вызывает. Но бэк должен его реализовать — иначе оплата не подтвердится.
+
+Часть 9. Search
+Два варианта — выберите один.
+Вариант A — единый эндпоинт
+GET /search?q=...&page=1&pageSize=20
+Response:
+json
+{
+  "data": {
+    "posts": { "items": [...], "total": 5 },
+    "products": { "items": [...], "total": 12 },
+    "sellers": { "items": [...], "total": 3 }
+  },
+  "error": null
+}
+Вариант B — три отдельных (рекомендую)
+Использовать существующие эндпоинты с ?q=:
+GET /posts?q=...
+GET /products?q=...
+GET /sellers?q=...
+Фронт уже так работает — три отдельных запроса при переключении таба. Меньше работы на бэке.
+
+Часть 10. Plans
+10.1. GET /plans
+Response:
+json
+{
+  "data": [
+    {
+      "tier": "free",
+      "name": "Free",
+      "price": 0,
+      "features": [
+        { "label": "Товаров до 10", "included": true },
+        { "label": "Постов до 5", "included": true },
+        { "label": "Аналитика", "included": false },
+        { "label": "Приоритет в выдаче", "included": false },
+        { "label": "Комиссия 10%", "included": true }
+      ]
+    },
+    {
+      "tier": "premium",
+      "name": "Premium",
+      "price": 990,
+      "features": [
+        { "label": "Товаров без лимита", "included": true },
+        { "label": "Постов без лимита", "included": true },
+        { "label": "Аналитика", "included": true },
+        { "label": "Приоритет в выдаче", "included": true },
+        { "label": "Комиссия 5%", "included": true }
+      ]
+    }
+  ],
+  "error": null
+}
+10.2. POST /plans/subscribe (только seller)
+Body:
+json
+{ "tier": "premium" }
+Response:
+json
+{
+  "data": { "paymentUrl": "https://yoomoney.ru/..." },
+  "error": null
+}
+Фронт редиректит пользователя на paymentUrl. После оплаты (webhook) бэк обновляет planTier.
+
+Часть 11. Dashboard (B2B)
+11.1. GET /seller/dashboard
+Сводка для дашборда.
+Response:
+json
+{
+  "data": {
+    "newOrdersCount": 3,
+    "shippedOrdersCount": 2,
+    "totalOrdersCount": 15,
+    "totalProductsCount": 12,
+    "lowStockProducts": [
+      { "id": "p1", "title": "Чашка", "inStock": 2 }
+    ],
+    "recentOrders": [ /* последние 5 заказов, Order[] */ ]
+  },
+  "error": null
+}
+Альтернатива: фронт делает три отдельных запроса (GET /orders?role=seller&status=paid, GET /seller/products, GET /orders?role=seller) и агрегирует на клиенте. Это проще для бэка, но медленнее (3 запроса).
+Рекомендую: один /seller/dashboard — быстрее, меньше кода на фронте.
+
+Часть 12. Uploads (опционально)
+Пока картинки — URL-строки. Пользователь вставляет ссылку.
+Для будущего: POST /uploads (multipart/form-data), возвращает { url: "https://cdn.../..." }. Фронт загружает файл и вставляет URL в форму.
+Для MVP — не нужно.
+
+Часть 13. Что нужно от бэка срочно (приоритизация)
+Приоритет 1 — блокеры для интеграции
+#
+Эндпоинт
+Зачем
+1
+GET /auth/me
+Восстановление сессии при загрузке
+2
+POST /auth/login
+Вход по email
+3
+POST /auth/logout
+Выход
+4
+GET /products
+Каталог, поиск
+5
+GET /products/:id
+Карточка товара
+6
+CORS с credentials
+Без этого ничего не работает
+Приоритет 2 — основной флоу
+#
+Эндпоинт
+7
+GET /posts
+8
+GET /posts/:id
+9
+GET /sellers/:username
+10
+GET /sellers/:username/products
+11
+GET /sellers/:username/posts
+12
+POST /sellers/:id/follow
+13
+DELETE /sellers/:id/follow
+14
+POST /orders
+15
+GET /orders
+16
+GET /orders/:id
+Приоритет 3 — B2B
+#
+Эндпоинт
+17
+POST /users/me/become-seller
+18
+GET /seller/products
+19
+POST /products
+20
+PATCH /products/:id
+21
+DELETE /products/:id
+22
+GET /seller/posts
+23
+POST /posts
+24
+PATCH /posts/:id
+25
+DELETE /posts/:id
+26
+PATCH /orders/:id/status
+27
+GET /seller/profile
+28
+PATCH /seller/profile
+29
+GET /seller/delivery
+30
+PATCH /seller/delivery
+31
+GET /seller/dashboard
+Приоритет 4 — опционально
+POST /auth/register (если регистрация через email)
+POST /auth/yandex
+POST /auth/refresh
+GET /plans
+POST /plans/subscribe
+POST /posts/:id/like
+DELETE /posts/:id/like
+PATCH /users/me
+
+Часть 14. Сводка по страницам — что каждая запрашивает
+Страница
+Эндпоинты
+/ (Home)
+GET /posts
+/search?tab=posts
+GET /posts?q=
+/search?tab=products
+GET /products?q=
+/search?tab=sellers
+GET /sellers?q=
+/seller/[username]
+GET /sellers/:username
+/seller/[username]?tab=posts
+GET /sellers/:username/posts
+/seller/[username]?tab=products
+GET /sellers/:username/products
+/product/[id]
+GET /products/:id
+/cart
+ничего (localStorage)
+/checkout
+POST /orders
+/login
+POST /auth/login, POST /auth/yandex
+/register
+POST /auth/register, POST /auth/yandex
+/account
+GET /auth/me, PATCH /users/me
+/account/orders
+GET /orders?role=buyer
+/account/orders/[id]
+GET /orders/:id
+/seller
+GET /seller/dashboard
+/seller/onboarding
+POST /users/me/become-seller
+/seller/pricing
+GET /plans, POST /plans/subscribe
+/seller/products
+GET /seller/products, DELETE /products/:id
+/seller/products/new
+POST /products
+/seller/products/[id]
+GET /products/:id, PATCH /products/:id
+/seller/posts
+GET /seller/posts, DELETE /posts/:id
+/seller/posts/new
+POST /posts
+/seller/posts/[id]
+GET /posts/:id, PATCH /posts/:id
+/seller/orders
+GET /orders?role=seller
+/seller/orders/[id]
+GET /orders/:id, PATCH /orders/:id/status
+/seller/delivery
+GET /seller/delivery, PATCH /seller/delivery
+/seller/profile
+GET /seller/profile, PATCH /seller/profile
+Плюс на любой странице:
+GET /auth/me — при загрузке приложения (через hydrate).
+POST /sellers/:id/follow / DELETE — при клике на «Подписаться».
+POST /posts/:id/like / DELETE — при клике на лайк.
+

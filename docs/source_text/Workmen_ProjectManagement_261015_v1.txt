@@ -1,0 +1,911 @@
+PROJECT MANAGEMENTREPORT
+E-Commerce Platform for Selling andPromoting Handmade Products
+
+
+Project team
+The Workmen
+Prepared by
+Timergalin Timur; Lavitskaya Alexandra; 
+Tolmatskaya Irina; Madenov Denis
+Document version
+1.0
+Creation date
+14.10.2026
+
+Table of Contents
+1. Project Plan & Schedule
+  1.1 Project Plan 
+  1.2 Task to Requirements Mapping 
+  1.3 Gantt Chart 
+  1.4 Dependency Chart 
+2. Project Milestones and Deliverables
+  2.1 Project Milestones 
+  2.2 Milestone Deliverables and Acceptance Criteria 
+  2.3 Milestone Timeline
+3. RACI Matrix
+  3.1 Team Roles and Responsibilities 
+  3.2 RACI Matrix for Project Tasks 
+  3.3 RACI Application in the Project
+4. Project Management Tool
+  4.1 Selected Project Management Tool 
+  4.2 Backlog and Task Organization 
+  4.3 Task Tracking and Sprint Planning 
+  4.4 Tool Screenshots and Project Link
+5. Dependencies & Risk Management
+  5.1 Task Dependencies
+  5.2 Project Risks and Mitigation Strategies
+  5.3 Risk Monitoring and Responsibility Assignment
+
+6. References
+Revision History
+Name
+Date
+Reason For Changes
+Version
+The Workmen 
+15.10.2026
+Initial version of the Project Management Report, including the project schedule, milestones, RACI matrix, tool tracking, dependencies, and risk management. 
+1.0
+
+1. Project Plan & Schedule
+1.1 Project Plan
+Tasks are listed in the order they start. Milestones are listed on the day they are due.
+17 Sep:
+FE-01 Shell (through 22 Sep, frontend). Desktop layouts for the buyer, the seller, and sign-in, with shared buttons and empty states.
+BC-01 Platform (through 19 Sep, B2C). Docker Compose, PostgreSQL, Redis, health checks, and one shared error format.
+BB-01 Schema (through 19 Sep, B2B). Tables for the store, products, posts, images, the subscription, and delivery settings.
+OR-01 Order model (through 18 Sep, orders). Cart and order tables, plus the pickup and CDEK status list.
+19 Sep:
+M1 Platform boots. Compose is up and the health checks pass.
+OR-02 Cart storage (through 21 Sep, orders). Add, change, and remove cart lines, and keep the price snapshot.
+20 Sep:
+BC-02 Yandex ID (through 22 Sep, B2C). Sign-in through Yandex ID, a JWT for the APIs, and a dev user header.
+BB-02 Onboarding (through 22 Sep, B2B). An authenticated user creates one store with a unique username.
+22 Sep:
+M2 Sign-in and a store. A person can sign in and register as a seller.
+23 Sep:
+FE-02 Login (through 24 Sep, frontend). Yandex sign-in and registration screens, including the seller redirect.
+BC-03 Profiles (through 25 Sep, B2C). Buyer profile editing and the public master card.
+BB-03 Store profile (through 24 Sep, B2B). Edit the display name and bio. The username stays fixed.
+OR-03 Order creation (through 24 Sep, orders). Turn the cart into one order, ignore a repeated submit, and clear the cart.
+25 Sep:
+FE-03 Home (through 26 Sep, frontend). Home feed of posts with linked product snippets.
+BB-04 Media (through 26 Sep, B2B). Image upload for a product, a post, and the store profile.
+OR-04 Delivery options (through 26 Sep, orders). Delivery choices and totals for checkout.
+26 Sep:
+BC-04 Page assembler (through 28 Sep, B2C). One page response per screen. A failed side section does not blank the page.
+27 Sep:
+FE-04 Search (frontend). Search page with tabs for posts, products, and sellers.
+BB-05a Product create (through 28 Sep, B2B). Create a product and list the products of the signed-in store.
+OR-05 YooKassa (through 4 Oct, orders). Sandbox safe deal, payment webhook, and cancel when payment is interrupted.
+28 Sep:
+M3 Product and unpaid order. A product with an image exists, and a cart can become an order.
+FE-05 Product page (through 29 Sep, frontend). Gallery, price, stock, sale mode, and the seller card.
+29 Sep:
+BC-07 Product and master pages (through 30 Sep, B2C). APIs for the product page and the public master page.
+BB-05b Product edit (through 1 Oct, B2B). Edit, delete, stock, sale mode, and filters in the seller's own catalog.
+30 Sep:
+FE-06 Master profile (frontend). Public seller page and the publication page.
+1 Oct:
+FE-07 Cart (through 2 Oct, frontend). Cart grouped by seller and delivery method, with quantity controls.
+BC-10 Cart and checkout pages (through 4 Oct, B2C). Page APIs for the cart, checkout, and the buyer's orders.
+2 Oct:
+BB-08 Delivery settings (through 3 Oct, B2B). Pickup points with city and address, and a CDEK on/off switch.
+3 Oct:
+FE-08 Checkout (through 6 Oct, frontend). Checkout screen and the return from YooKassa.
+4 Oct:
+BB-06 Quotas (through 5 Oct, B2B). Free plan: 10 products, 5 posts, and no on-site payment. Premium is listed for comparison.
+5 Oct:
+BC-05 Home and publications (through 6 Oct, B2C). APIs for the home feed and a publication page.
+OR-06 Pickup fulfillment (through 7 Oct, orders). Seller confirms stock, the buyer gets a pickup code, and the code closes the safe deal.
+6 Oct:
+M4 Buyer can pay. A sandbox payment moves the order to paid.
+BB-07 Publications (through 9 Oct, B2B). Draft and publish a post, with the seller's products linked in order.
+7 Oct:
+FE-09 Buyer orders (through 8 Oct, frontend). Buyer profile and the order list and detail.
+BC-06 Search (through 9 Oct, B2C). Product search in PostgreSQL.
+8 Oct:
+OR-07 Cancellations (through 9 Oct, orders). Buyer or seller cancels. Stock is restored and a seller penalty is only recorded.
+9 Oct:
+M5 Discovery and pickup API. Home and search read real data. A pickup code can close the deal through the API.
+FE-10 Follow (frontend). Follow button and the subscriptions page.
+10 Oct:
+FE-11 Seller shell (through 11 Oct, frontend). Seller sidebar, onboarding checklist, profile, and the Free versus Premium page.
+BC-08 Follow (through 11 Oct, B2C). Follow and unfollow a master. Anonymous requests are rejected.
+BB-10 Seller order facade (through 12 Oct, B2B). Seller order list, and status changes sent to the order service.
+OR-08 CDEK (through 15 Oct, orders). Delivery quote, shipment registration, tracking, and payout in the CDEK sandbox.
+12 Oct:
+FE-12 Catalog UI (through 13 Oct, frontend). Seller product list and the create/edit form, including the image.
+BC-09 Events and recommendations (through 14 Oct, B2C). Record views and cart events, and fill the home recommendations from follows and recency.
+13 Oct:
+BB-09 Dashboard (through 14 Oct, B2B). Counts for new orders, followers, views, and low stock.
+14 Oct:
+FE-13 Post composer (through 15 Oct, frontend). Write a post, attach the seller's products, and show a preview.
+15 Oct:
+BC-11 OpenAPI (through 16 Oct, B2C). A rough API document for the page endpoints.
+BB-11 Errors and OpenAPI (through 17 Oct, B2B). Plain error responses and a short seller API document.
+16 Oct:
+FE-14 Seller orders (through 17 Oct, frontend). Seller order list, pickup-code entry, and cancel.
+OR-09 Premium charge (through 17 Oct, orders). YooKassa charge for Premium. The plan changes only after payment is confirmed.
+17 Oct:
+BC-16 Repair and demo (through 23 Oct, B2C). Fix the buyer path and connect the early screens to the live APIs.
+18 Oct:
+FE-15 Delivery and events (through 19 Oct, frontend). Delivery settings screen and a few view and cart events.
+BB-16 Repair and demo (through 23 Oct, B2B). Fix the seller path used in the demo. Seed a store if the screens are still thin.
+OR-16 Repair and demo (through 23 Oct, orders). Rehearse pay, pickup close, and CDEK, and fix what breaks.
+19 Oct:
+M6 Rough feature complete. The seller can close a pickup order on screen. A post links a product. CDEK and Premium work on the happy path.
+20 Oct:
+FE-16 Repair and demo (through 23 Oct, frontend). Walk both journeys, fix what the script breaks, and write the gap list.
+23 Oct:
+M7 Demo. Rehearsed buyer and seller demo, a short README, rough OpenAPI, and the gap list.
+1.2 Task to Requirements Mapping
+
+Requirement
+Tasks
+What the task delivers
+REQ-4.1.1-01..03, 06..10
+BC-04
+B2C is the only buyer API. Page assembly, section status, 404 for a missing main entity.
+REQ-4.1.1-04..05
+BC-01
+Unified error JSON and X-Request-Id.
+REQ-4.1.2-01..05, 07..09
+BC-05, FE-03
+Home page sections and the buyer feed.
+REQ-4.1.2-06
+BC-09
+Recommendations from follows, recency, and popularity. Gorse is not built.
+REQ-4.1.3-01..06
+BC-06, FE-04
+Search, facets, and result order. PostgreSQL tsvector, not MeiliSearch.
+REQ-4.1.3-07
+BC-09, FE-04
+A search event can be sent.
+REQ-4.1.4-01..06
+BC-05, BC-09, FE-06
+Publication feed and detail. The product strip can fail without hiding the text.
+REQ-4.1.5-01..03, 05..06
+BC-07, FE-05
+Product page. A missing product is 404. Similar items and in-cart flag.
+REQ-4.1.5-04
+BC-03, BC-07
+Master block on the product page.
+REQ-4.1.5-07..09
+BC-07, FE-06, BC-08
+Master page and follow from that page.
+REQ-4.1.6-01..06
+BC-08, FE-10
+Subscription list, follow, and unfollow. Anonymous access is 401.
+REQ-4.1.7-01..06, 08
+OR-02, BC-10, FE-07
+Cart lines, totals, and the price snapshot.
+REQ-4.1.7-07
+BC-09, FE-15
+Add-to-cart event.
+REQ-4.1.8-01..02
+BC-10, OR-04, FE-08
+Checkout page: cart, addresses, delivery options, totals.
+REQ-4.1.8-03..06
+OR-03, BC-10
+Create the order from cart snapshots, pass Idempotency-Key, clear the cart.
+REQ-4.1.8-07..09
+BC-10, FE-09
+Order success, list, and detail, only for the owner.
+REQ-4.1.8-10
+OR-05
+Payment is the YooKassa sandbox, not a stub.
+REQ-4.1.8-11
+BC-09
+Purchase event for recommendations.
+REQ-4.1.9-01..07
+BC-09, FE-15
+POST /events into Redis. Kafka, a separate eventer, and Gorse are not built.
+REQ-4.1.10-01..05
+BC-02, FE-02
+Public pages stay open. Cart, checkout, orders, and follow require a user. JWT in the demo, dev header only when enabled.
+REQ-4.1.11-01..02
+BC-04, BC-16
+Upstream timeout and retries. A failed read degrades a section instead of failing the page.
+REQ-4.1.12-01
+BC-11
+Rough OpenAPI for the page models.
+REQ-4.1.12-02
+BC-04
+Contracts stay on /api/v1.
+REQ-4.1.12-03..04
+BC-01
+Health endpoints and logs with request id.
+REQ-4.1.12-05
+—
+No timed latency check. The suggested p95 target stays open.
+REQ-4.2.1-01..14
+BB-02
+Seller role check, one store, unique username, no duplicate registration.
+REQ-4.2.1-15..16
+BB-02, FE-11
+Onboarding checklist, reopenable later.
+REQ-4.2.2-01..02, 04..08
+BB-03, FE-11
+Read and edit the store. Username is immutable. Link to the public page.
+REQ-4.2.2-03
+BB-04, FE-11
+Upload and replace the store image.
+REQ-4.2.3-01..03, 06..07
+BB-05a, FE-12
+Create, list, and read products bound to the caller's store.
+REQ-4.2.3-04..05, 08..16
+BB-05b, FE-12
+Edit, delete, stock, sale mode, filters, and pagination. A deleted product stays linked but unavailable.
+REQ-4.2.4-01..15
+BB-07, FE-13
+Create, draft, publish, and delete posts. Link the seller's own products in order.
+REQ-4.2.5-01..07
+BB-04, FE-12, FE-13
+Image upload, type and size checks, and a reference only after a successful store.
+REQ-4.2.6-01..05, 09
+BB-06, FE-11
+Free limits and the plan comparison. Premium analytics and search boost are shown and not built.
+REQ-4.2.6-06..08
+OR-09, BB-06
+Premium starts only after the YooKassa webhook. A failed charge leaves Free in place.
+REQ-4.2.7-01..17
+BB-09, FE-11
+Dashboard for this store only: orders, followers, views, low stock. An outage is not shown as zero.
+REQ-4.2.8-01..09
+BB-10, FE-14, OR-06
+Seller order list and status actions. The order service stays the source of truth.
+REQ-4.2.9-01..05
+BB-08, FE-15
+Pickup and CDEK toggles. Pickup fields are city and address.
+REQ-4.2.10-01..09
+BB-05b, BB-11
+401, 403, 404, and validation errors. A rejected write keeps the previous values.
+REQ-4.3-01, 14
+OR-03
+Create a pickup order and a CDEK order from checkout.
+REQ-4.3-02..03, 09..10
+OR-05
+Safe deal, payment, payout update, and cancel when payment stops.
+REQ-4.3-04..08
+OR-06
+Stock confirmation, ready state, pickup code, and close of the safe deal.
+REQ-4.3-11..13
+OR-07
+Buyer and seller cancellation. Stock is restored. The penalty is recorded, not collected.
+REQ-4.3-15..21
+OR-08
+CDEK quote, invoice, shipment, tracking, pickup detection, and payout.
+REQ-4.3-22
+—
+No admin order console. Administrators are out of this release.
+REQ-4.3-23
+OR-16
+Returns stay a direct buyer-seller matter, as the requirement says.
+REQ-5.1-01..02
+—
+No timed check that home and the feed load within 3 seconds.
+REQ-5.1-03
+BC-06
+Search is built. The 2 second target is not measured.
+REQ-5.1-04
+BB-06
+Free plan allows 10 products, inside the stated 10 to 15.
+REQ-5.1-05
+—
+No test for 100 concurrent users.
+REQ-5.2-01..02
+BB-01, BB-07
+A publish status exists. There is no moderator queue.
+REQ-5.2-03..06
+—
+Moderator accept, reject, and hide are a separate SRS.
+REQ-5.2-07..08
+BB-06, FE-05
+Free-plan products are deal-only, with a notice to contact the seller.
+REQ-5.3-01..02
+OR-05
+Paid-plan payments go through YooKassa. The seller connects a sandbox shop.
+REQ-5.3-03
+BC-02, FE-02
+Buyer entry is Yandex ID. No password is stored.
+REQ-5.3-04
+OR-03, BC-10, FE-09
+Order history is behind authentication and an ownership check.
+REQ-5.3-05
+BC-08, FE-10
+Follow and the subscriptions page require a signed-in buyer.
+REQ-5.3-06..07
+—
+There is no messaging feature, so no message can be exposed.
+REQ-5.3-08
+BC-01
+Client and server traffic is HTTPS.
+
+1.3 Gantt Chart
+
+1.4 Dependency Chart
+
+2. Project Milestones and Deliverables
+This section defines the major project milestones, their expected deliverables, acceptance criteria, and completion dates. The schedule follows the deadlines established by the course instructor and covers the project lifecycle from topic selection to final project submission and defense. The project is developed by a team of four students. As of 15 October 2026, the project topic has been approved, the Project Proposal Report (R1) and Software Requirements Specification (R2) have been completed, and the system architecture, API contracts, and data model have been designed. Backend development has started, while formal software testing has not yet been performed. The remaining schedule focuses on completing the Project Management Report (R3), preparing the Test Plan and conducting testing where implemented functionality is available (R4), integrating the implemented components, and preparing the final project documentation and demonstration. The target scope is the MVP specified in the SRS. However, the actual implementation scope depends on the time available and the progress achieved by the team. Any functionality not implemented or not verified by the final deadline will be explicitly documented as a limitation rather than reported as completed.
+2.1 Project Milestones
+Project milestones represent significant checkpoints used to monitor progress and verify that the project is ready to proceed to the next stage. The milestone dates for academic deliverables are fixed by the instructor. Technical milestones are aligned with these deadlines.
+The project includes eight major milestones.
+ID
+Milestone
+Target Date
+Status
+M1
+Project Topic Selection
+10 September 2026
+Completed
+M2
+Project Topic Presentation and Validation
+17 September 2026
+Completed
+M3
+R1: Project Proposal Report Submission
+24 September 2026
+Completed
+M4
+R2: Software Requirements Specification and Design Baseline
+8 October 2026
+Completed
+M5
+R3: Project Management Report Submission
+15 October 2026
+In progress
+M6
+R4: Test Plan Preparation and Testing Activities
+21 October 2026
+Planned
+M7
+Pre-Defense and Final Demonstration Readiness
+22 October 2026
+Planned
+M8
+Final Documentation Submission and Project Defense
+23 October 2026
+Planned
+M1 - the team selected the project topic: E-Commerce Platform for Selling and Promoting Handmade Products. The main objective was to develop a marketplace that combines product discovery, seller-generated content, and purchasing in one platform.
+M2 - the team presented the proposed project to the instructor. This milestone provided an opportunity to clarify the problem statement, evaluate the proposed solution, and adjust the project scope before preparing the main proposal report.
+M3 - the team prepared the initial project report covering the problem statement, project goal, target audience, use cases, analogue analysis, Customer Journey Map, SMART objectives, technology stack, UI prototyping, expected outputs, and cost estimation.
+M4 - the team completed the SRS, establishing the functional and non-functional requirements and defining the intended MVP scope. The system architecture, API contracts, and data model were also designed. These artifacts provide the baseline for implementation and testing.
+M5 - the team prepares the project management documentation, including the project schedule, milestones, deliverables, RACI matrix, project management tool evidence, task dependencies, and risk mitigation strategies.
+M6 - the team prepares a Test Plan following the instructor's IEEE-based recommendations. Testing activities will cover implemented and testable functionality. Test cases, acceptance criteria, execution results, and identified defects will be documented. Features that cannot be tested because they have not been implemented or are not operational will be recorded explicitly.
+M7 - the team prepares and reviews the integrated project, final documentation, presentation, and demonstration scenario. The team checks the consistency of the reported requirements, implementation status, and test results, and addresses critical issues that can be resolved before the final defense.
+M8 - the team submits the final project documentation and presentation and demonstrates the implemented system. The final presentation must not exceed seven minutes, followed by a three-minute product demonstration. Each team member must participate in the presentation.
+2.2 Milestone Deliverables and Acceptance Criteria
+Each milestone produces one or more deliverables that provide evidence of progress. Deliverables are considered complete when they satisfy the criteria specified below.
+2.2.1 Deliverables Overview
+ID
+Deliverable
+Related Milestone
+Acceptance Criteria
+D1
+Approved Project Topic and Topic Presentation
+M1-M2
+The project topic and its main purpose are defined and presented to the instructor.
+D2
+Project Proposal Report (R1)
+M3
+The report covers all eight required areas, including the problem statement, user analysis, use cases, analogues, CJM, SMART objectives, technology stack, expected outcomes, and cost estimation.
+D3
+Software Requirements Specification (R2)
+M4
+The document describes the project scope, user classes, interfaces, system features, and non-functional requirements. Its terminology and functional scope provide a consistent basis for development.
+D4
+System Design Baseline
+M4
+The architecture, API contracts, and data model are documented sufficiently to guide frontend and backend implementation.
+D5
+Project Management Report (R3)
+M5
+The report includes a project schedule, Gantt chart, milestone and deliverable definitions, RACI matrix, task dependencies, risk management approach, and evidence of project management tool usage. A link to the team's actual project workspace is provided.
+D6
+Test Plan (R4)
+M6
+The plan covers the required testing scope, test items, risks, features in and out of scope, testing approach, acceptance criteria, suspension and resumption conditions, deliverables, tasks, environment, responsibilities, schedule, and approvals.
+D7
+Test Cases and Test Execution Evidence
+M6-M8
+Test cases are traceable to relevant SRS requirements. Executed tests have recorded pass/fail results and supporting evidence where applicable. Defects and untested features are documented.
+D8
+Integrated Software Build and Demonstration Scenario
+M7-M8
+The implemented frontend and backend components can be demonstrated through the available end-to-end workflows. Setup limitations, missing components, and known defects are documented.
+D9
+Final Project Documentation and Presentation
+M8
+The final materials cover the project objectives, requirements, system design, project management, testing, documentation, implementation results, and conclusions. The presentation and demonstration comply with the instructor's time limits.
+
+2.2.2 Detailed Milestone Deliverables
+Milestone M1-M2: Project Topic Selection and Validation
+The deliverables are the approved project topic and the topic presentation. The milestone is considered complete when the team has presented the proposed solution and established a sufficiently clear scope to proceed with detailed project analysis.
+Milestone M3: Project Proposal Report (R1)
+The deliverable is the Project Proposal Report submitted on 24 September 2026. It establishes the problem to be solved, the target users, the proposed solution, the initial objectives, and the expected project outcomes. The milestone is considered complete when the report contains all required sections and has been submitted in accordance with the instructor's requirements.
+Milestone M4: SRS and Design Baseline (R2)
+The deliverables are the approved SRS, the system architecture, API contracts, and the data model. Together, these artifacts define the expected system behavior and the interfaces used by the frontend and backend components. The milestone is considered complete when the requirements and design artifacts are available for the development team and can be used as a reference for implementation.
+
+Milestone M5: Project Management Report (R3)
+The deliverable is the Project Management Report due on 15 October 2026. It formalizes the project schedule, deliverables, task ownership, milestone dates, dependencies, and risks. The milestone is considered complete when all required report sections are present, the RACI matrix reflects the actual team structure, and the project management tool is accessible through the provided link. Screenshots or exported views must demonstrate real task organization or progress tracking.
+
+Milestone M6: Test Plan and Testing (R4)
+The primary deliverable is the Test Plan due on 21 October 2026. It defines how the implemented system will be tested and how test outcomes will be evaluated. Testing activities will be performed against the available implementation. Priority will be given to the central user workflows, backend API behavior, component integration, authorization and validation rules, and handling of errors. The exact test coverage depends on which features are operational by the testing deadline. The milestone is considered complete when the Test Plan contains the required sections and the available testing activities have documented results. Requirements that cannot be tested because the corresponding features are incomplete will be identified as not tested, with the reason recorded.
+
+Milestone M7: Pre-Defense and Demonstration Readiness
+The deliverables are an integrated, demonstrable build, a draft of the final documentation, a presentation draft, and a defined demonstration scenario. The milestone is considered complete when the team has reviewed the materials for consistency, verified that the demonstration works for the selected implemented workflows, and identified any remaining limitations or critical defects.
+
+Milestone M8: Final Documentation and Project Defense
+The final deliverables include the final project report, presentation, software demonstration, test results, documentation, and repository reference. The final report should summarize the implemented functionality, compare actual results with the original objectives, explain the testing outcomes, and describe remaining limitations and future improvements. The source code repository must include a README and a release version tag, as required by the instructor. The milestone is considered complete when the final materials have been submitted and the project has been presented and demonstrated according to the defense requirements.
+2.3 Milestone Timeline
+The timeline below combines the instructor's fixed academic deadlines with the technical activities required to prepare the final project. Activities from 15 to 23 October are planned around the current development status and may run in parallel where possible.
+Period / Deadline
+Main Activities
+Expected Result
+Dependency
+10 September
+Select the project topic and establish its main goal.
+Approved project topic (M1).
+None
+11-17 September
+Develop and deliver the topic presentation; review feedback and clarify scope.
+Validated project concept (M2).
+M1
+18-24 September
+Analyze the problem, users, analogues, and expected outcomes; prepare the Project Proposal Report.
+Submitted R1 report (M3).
+M2
+25 September - 8 October
+Specify requirements, user classes, interfaces, system features, architecture, API contracts, and data model.
+SRS and design baseline (M4).
+M3
+9-15 October
+Prepare the project schedule, milestones, deliverables, RACI matrix, project tool evidence, and risk register.
+Project Management Report (M5).
+M4
+15-18 October
+Finalize the Test Plan structure, identify priority test cases, and continue implementation of high-priority features.
+Initial test plan and prioritized test cases.
+SRS and current implementation
+16-20 October
+Integrate available frontend and backend functionality; prepare and execute tests for operational components; record defects.
+Integrated testable build and preliminary execution evidence.
+API contracts, data model, implementation progress
+19-21 October
+Finalize the IEEE-based Test Plan, document available test results, and submit R4.
+Submitted Test Plan and testing evidence (M6).
+Test preparation and available implementation
+21-22 October
+Review the integrated build, prepare the final presentation and documentation, verify the demo, and conduct a pre-defense review.
+Presentation draft and demonstration-ready project (M7).
+Available implementation and testing results
+23 October
+Submit the final documentation, deliver the presentation, and demonstrate the implemented system.
+Final project submission and defense (M8).
+M7
+Schedule Management and Completion Rules
+The project schedule is constrained by fixed academic deadlines. Implementation and testing activities will therefore be prioritized according to their contribution to the required project demonstration and to the requirements established in the SRS. The team's target is to implement the specified MVP scope. If the remaining time is insufficient to implement all requirements, the team will deliver a coherent subset of core workflows that can be demonstrated and verified. The final report and testing records will distinguish implemented and tested functionality from functionality that is incomplete or untested.
+Technical tasks may proceed in parallel where dependencies permit. Final integration and demonstration depend on the availability of compatible API contracts, working backend components, and a frontend capable of communicating with them. Testing results will be recorded only after the corresponding tests have actually been executed.
+The project lead, Timergalin Timur, coordinates overall progress and owns order-processing backend work. The remaining technical workstreams are owned as follows: Denis Madenov - frontend development; Irina Tolmatskaya - B2B backend development; Alexandra Lavitskaya - B2C backend development. Each workstream owner is responsible for reporting implementation status, identifying blockers, and providing the evidence required for integration and testing.
+The final milestone will be reached once the team has submitted the required documentation and presentation and has demonstrated the product in its actual state. Any remaining limitations will be reported transparently and used as input for the conclusion and future development recommendations.
+3. RACI Matrix
+This section defines the roles and responsibilities of the project team using the RACI methodology. The purpose of the matrix is to establish clear ownership of project activities, avoid duplication of effort, and ensure that every task has an assigned person responsible for its execution and a person accountable for its completion.
+The team consists of four members with distinct technical responsibilities. Timergalin Timur coordinates the overall project and develops the order-processing backend. Madenov Denis is responsible for frontend development, Tolmatskaya Irina owns the B2B backend, and Lavitskaya Alexandra owns the B2C backend.
+The RACI matrix covers project coordination, implementation, integration, testing, documentation, and final delivery. The assignment of responsibilities follows the system scope defined in the Software Requirements Specification (SRS) and the milestones presented in Section 2.
+For cross-functional activities, the project lead coordinates dependencies and deliverable completion, while each subsystem owner remains responsible for the technical quality and status of their own workstream. The matrix defines the primary distribution of responsibility; individual development tasks may be further decomposed into smaller assignments in the project management tool.
+3.1 Team Roles and Responsibilities
+The project team consists of four members. Each member owns a primary area of work and contributes to activities that require coordination between subsystems.
+3.1.1 Project Team Structure
+Team Member
+Primary Role
+Main Responsibilities
+Timergalin Timur
+Project Lead and Order-Processing Backend Developer
+Coordinates project planning, milestone tracking, task dependencies, and risk escalation. Develops the backend responsible for order processing and coordinates integration between the order-processing logic and the B2C/B2B components. Coordinates the preparation of shared project deliverables.
+Madenov Denis
+Frontend Developer
+Develops the frontend interfaces and connects them to the agreed backend API contracts. Implements the user-facing workflows, interface states, validation feedback, and responsive behavior required by the selected implementation scope. Supports frontend testing and preparation of the demonstration.
+Tolmatskaya Irina
+B2B Backend Developer
+Develops seller-facing backend functionality, including store management, product catalog operations, publication management, media handling, subscription-related restrictions, delivery preferences, and seller-side authorization and validation, according to the agreed implementation scope.
+Lavitskaya Alexandra
+B2C Backend Developer
+Develops buyer-facing backend functionality, including page-oriented API responses, content and product discovery, search integration, buyer subscriptions, cart and checkout interactions, buyer identification, and behavioral event processing, according to the agreed implementation scope.
+The responsibilities described above represent the primary ownership areas rather than a restriction on collaboration. For example, the frontend developer must coordinate with the backend developers when API contracts change, while the backend developers must coordinate with one another where the B2C, B2B, and order-processing workflows interact. The exact implementation scope may be adjusted according to the remaining development time. Such adjustments do not change the assigned subsystem ownership. Each member remains responsible for reporting the actual status of their work, identifying blockers, and providing evidence of completed functionality and testing.
+3.1.2 Responsibility Boundaries
+To reduce ambiguity during implementation and integration, the following responsibility boundaries are established.
+Project coordination. Timergalin Timur coordinates the overall schedule, monitors milestone progress, maintains visibility of cross-component dependencies, and raises issues that may affect the project deadlines. Each team member is responsible for keeping their assigned tasks and statuses up to date.
+Frontend. Madenov Denis owns the client-side implementation and its integration with backend APIs. Backend business rules and persistent data management remain the responsibility of the relevant backend subsystem owners.
+B2B backend. Tolmatskaya Irina owns seller-facing backend functionality. This includes seller operations and their associated authorization, validation, and interaction with other platform services.
+B2C backend. Lavitskaya Alexandra owns buyer-facing backend functionality. This includes preparing page responses and coordinating calls to relevant upstream services for buyer-facing workflows.
+Order-processing backend. Timergalin Timur owns the order-processing component. The B2C subsystem may initiate buyer-facing order operations, but the order-processing component remains responsible for the order-related logic assigned to it. The frontend communicates through the documented API contracts instead of directly accessing backend services.
+Testing and integration. Each subsystem owner is responsible for verifying their own component and supporting integration testing. Timergalin Timur coordinates cross-component verification and the consolidation of test results. A task is not considered verified merely because its implementation has been committed; the relevant test or verification evidence must be recorded.
+Documentation and final delivery. Each member provides accurate information about their own component. Timergalin Timur coordinates the completion of shared deliverables, while all members contribute to the final report, presentation, and demonstration. Every team member must participate in the final presentation, as required by the instructor.
+3.2 RACI Matrix for Project Tasks
+3.2.1 RACI Assignment Matrix
+The following matrix assigns responsibility for the principal project tasks and deliverables. The task groups correspond to the current project plan and its remaining milestones: project management, implementation, testing, integration, documentation, and final defense.
+Team member abbreviations:
+TT - Timergalin Timur, Project Lead and Order-Processing Backend Developer.
+MD - Madenov Denis, Frontend Developer.
+TI - Tolmatskaya Irina, B2B Backend Developer.
+LA - Lavitskaya Alexandra, B2C Backend Developer.
+
+ID
+Project Task / Deliverable
+TT
+MD
+TI
+LA
+PM-01
+Project planning, milestone tracking, and schedule coordination
+A/R
+C
+C
+C
+PM-02
+Project management tool configuration and task status updates
+A
+R
+R
+R
+PM-03
+Requirements-to-task mapping and tracking against the SRS
+A
+R
+R
+R
+ARCH-01
+Cross-component architecture and API-contract change coordination
+A/R
+C
+R
+R
+DEV-01
+Frontend implementation and client-side API integration
+C
+A/R
+C
+C
+DEV-02
+B2B backend implementation
+C
+C
+A/R
+C
+DEV-03
+B2C backend implementation
+C
+C
+C
+A/R
+DEV-04
+Order-processing backend implementation
+A/R
+I
+C
+C
+INT-01
+Frontend and backend integration across the selected workflows
+A
+R
+R
+R
+DOC-01
+Project Management Report (R3) preparation and consolidation
+A
+R
+R
+R
+TEST-01
+Test Plan (R4) preparation and coordination
+A
+R
+R
+R
+TEST-02
+Frontend component and UI behavior testing
+C
+A/R
+C
+C
+TEST-03
+B2B backend API and business-rule testing
+C
+I
+A/R
+C
+TEST-04
+B2C backend API and page-response testing
+C
+C
+C
+A/R
+TEST-05
+Order-processing and order-state testing
+A/R
+I
+C
+C
+TEST-06
+Cross-component integration, system, and regression testing
+A
+R
+R
+R
+DOC-02
+Frontend usage documentation, screenshots, and UI instructions
+I
+A/R
+C
+C
+DOC-03
+B2B backend and API documentation
+I
+C
+A/R
+C
+DOC-04
+B2C backend and API documentation
+I
+C
+C
+A/R
+DOC-05
+Order-processing documentation and integration notes
+A/R
+C
+C
+C
+REL-01
+Repository readiness, README coordination, and release preparation
+A
+R
+R
+R
+FINAL-01
+Final project documentation, presentation, and defense preparation
+A
+R
+R
+R
+FINAL-02
+Final product demonstration and presentation participation
+A/R
+R
+R
+R
+
+3.2.2 Interpretation of the Main Assignments
+The matrix follows several important principles.
+Project coordination and reporting. Timergalin Timur is accountable for maintaining overall project visibility and coordinating shared deliverables. Other members are responsible for providing accurate status information for their own workstreams and contributing the technical information required for project reports.
+Component implementation. Each technical workstream has one clear owner. Denis Madenov is accountable for frontend implementation, Irina Tolmatskaya for B2B backend development, Alexandra Lavitskaya for B2C backend development, and Timur Timergalin for the order-processing backend. This ensures that implementation issues have a clear owner and can be escalated when they affect integration or deadlines.
+Cross-component integration. Integration requires contributions from all four members because the selected workflows depend on interactions between the frontend and backend components. Timurgalin Timur is accountable for coordinating this work, but each subsystem owner remains responsible for making their component available and resolving defects within their area.
+Testing. Every developer is responsible for preparing and executing relevant tests for their own component. Cross-component testing requires cooperation between workstream owners and is coordinated by the project lead. The test results must reflect the actual execution status; functionality that has not been tested must not be reported as having passed.
+Final delivery. Timergalin Timur coordinates the consolidated submission and defense preparation. Each member remains responsible for explaining and demonstrating their part of the system. The project lead's accountability for the shared result does not replace the responsibility of individual owners for their components.
+3.3 RACI Application in the Project
+The RACI matrix defines how responsibilities are distributed among the four project team members. It is used together with the project schedule and project management tool to clarify task ownership and support coordination between development workstreams.
+The following definitions apply throughout the matrix:
+Code
+Meaning
+Application
+R
+Responsible
+Performs the task or produces the required deliverable.
+A
+Accountable
+Owns the task outcome and ensures its completion.
+C
+Consulted
+Provides input when a task affects their area of responsibility.
+I
+Informed
+Receives updates about relevant progress or decisions.
+Each task must have at least one Responsible person and exactly one Accountable person. A team member may be both Responsible and Accountable, indicated by A/R.
+In this project, implementation responsibilities follow the established component ownership: Denis Madenov is responsible for the frontend, Irina Tolmatskaya for the B2B backend, Alexandra Lavitskaya for the B2C backend, and Timergalin Timur for the order-processing backend and overall project coordination.
+Tasks involving multiple components, integration, testing, or shared documentation require collaboration between the relevant team members. Timergalin Timur coordinates cross-component dependencies and shared project deliverables, while each component owner remains responsible for reporting progress and addressing issues within their assigned area.
+The RACI matrix is used alongside the project management tool. Detailed tasks, deadlines, dependencies, statuses, and completion evidence are tracked in the tool, while the matrix identifies who performs each task and who is accountable for its completion. Any changes to task ownership must be reflected in the project records.
+
+4. Project Management Tool
+4.1 Tool and Workspace Configuration
+Configuration Item
+Team Configuration
+Tool name
+Jira (Atlassian)
+Workspace / project URL
+https://ilffeza.atlassian.net/?continue=https%3A%2F%2Filffeza.atlassian.net%2Fwelcome%2Fsoftware%3FprojectId%3D10000&atlOrigin=eyJpIjoiMTk2ODlkNjdmMDJmNDAyYWEwODA2YWU0YjZhZWUzZGEiLCJwIjoiamlyYS1zb2Z0d2FyZSJ9
+The Jira project is not publicly accessible via a shared link. If access to the workspace is required, please provide your email address, and we will send you an invitation to the project.
+
+Board or project name
+E-Commerce Platform for Selling and Promoting Handmade Products
+Workflow columns / statuses
+Idea → In Progress → In Review → Done
+Planning approach
+Scrum-based iterative development. Tasks are distributed across short sprints with defined start and end dates.
+Task conventions
+Tasks use unique Jira identifiers (e.g., SCRUM-24), descriptive titles, assigned owners, priorities, and sprint allocations. Task descriptions, SRS references, dependencies, and acceptance criteria are documented where applicable.
+
+4.2 Task Tracking and Evidence
+The following screenshots demonstrate how Jira is used to organize development activities, monitor task statuses, and manage work across sprints.
+
+Figure 1 — Scrum board displaying the current development workflow.
+The Scrum board provides a visual representation of task progress across four workflow stages: Idea, In Progress, In Review, and Done. Each task card contains a unique identifier, a task title, and an assigned team member. The board allows the team to identify ongoing work, tasks awaiting review, and completed activities.
+
+Figure 2 -  Sprint 3 showing planned tasks, assigned developers, and task statuses.
+Sprint 3 contains 13 development tasks covering product management, search functionality, shopping cart operations, subscription integration, and seller-facing features. The screenshot demonstrates how work is distributed among team members and monitored within a defined time period.
+
+Figure 3 - Sprint 4 and the product backlog.
+Sprint 4 contains seven planned tasks, including delivery integration, order management, testing, security validation, and frontend development. The backlog contains additional tasks that have not yet been assigned to a sprint. This separation enables the team to distinguish scheduled development activities from future work.
+
+Figure 4 — Jira activity log showing sprint events and task status changes.
+The activity log records sprint-related events, including task additions, task completions, and sprint closure. It provides a historical record of changes made in the project management workspace and supports tracking of project activities.
+
+
+The team uses Jira to coordinate the development of the handmade e-commerce platform. Project requirements are organized into Epics and individual development tasks, with responsibilities distributed among four developers working on frontend, payment services, B2C, and B2B components. Tasks are assigned to sprints according to the development plan, while future activities remain in the product backlog. The Scrum board provides visibility into task progress through the Idea, In Progress, In Review, and Done statuses. Sprint dates, task ownership, and activity history support coordination and progress monitoring. 
+
+
+5. Dependencies & Risk Management
+5.1 Key Dependencies
+ID
+Dependency
+Affects
+Management Action
+DEP-01
+SRS scope and TBD decisions
+Backlog, estimates, and acceptance criteria
+Confirm scope and explicitly track unresolved decisions before approval.
+DEP-02
+API / data contracts
+Frontend integration and cross-service testing
+Agree request/response contracts early; record changes in the board and API documentation.
+DEP-03
+Authentication and external services availability
+Login and checkout actions
+Verify test access early; maintain a documented fallback
+DEP-04
+Hardware and optimization
+Responsiveness and project assessment by end users
+Test the optimization throughout the changes; implement light frameworks and preplan the demonstration
+DEP-05
+Completion of B2C and B2B functional modules
+Test implementation and final demo
+Integrate continuously and reserve time for stabilization and refactoring
+DEP-06
+Test results and documentation
+Project task management and final submission
+Make test evidence and documentation part of the acceptance criteria.
+
+Dependency Flow
+The expected high-level sequence is: 
+requirements and scope baseline (DEP-01) → API contracts and design (DEP-02) → parallel B2C/B2B implementation (DEP-05) → external integration or the agreed MVP fallback (DEP-03) → hardware and optimization validation (DEP-04) → integration and acceptance testing, with test results and documentation treated as acceptance criteria (DEP-06) → final demo and handover. B2C and B2B development may proceed in parallel after the shared contracts and data ownership are agreed. Record any exception to this sequence in the schedule and project board.
+5.2 Risk Register and Mitigation
+ID
+Risk
+Probability / Impact
+Mitigation
+Owner / Status
+R-01
+External service or API is unavailable or changes.
+Medium / Strong
+Validate access early; isolate integration behind a service boundary; document approved demo fallback.
+Timur / Active
+R-02
+One frontend developer becomes a bottleneck or integration work arrives late.
+Medium / Strong
+Agree API contracts early; build mock responses where appropriate; integrate in small increments.
+Denis / Active
+R-03
+API or architecture assumptions are inconsistent across SRS sections.
+Low / Mild
+Resolve conflicts before implementation; record the accepted decision and update SRS/API contracts.
+Alexandra / Watched
+R-04
+TBD requirements or scope changes cause rework.
+Low / Strong
+Keep a decision log; baseline scope; assess schedule impact before accepting changes.
+Timur / Watched
+R-05
+System testing and defect fixing are left until the end.
+High / Low
+Run continuous integration tests; reserve a stabilization window; make test evidence a milestone criterion.
+Irina; Denis / Not started
+R-06
+Access-control or sensitive-data handling defect affects user/order data.
+Medium/ Strong
+Test authorization and ownership checks; use sandbox credentials; never put secrets in source control or frontend code.
+Alexadra; Irina; Timur / Watched
+
+The register is reviewed once a week and updated whenever a risk changes state. Two risks are currently treated as active (R-01, R-02), the rest are watched. A risk that has not moved in three consecutive reviews gets either downgraded or pushed to the supervisor — sitting on a stale risk is worse than admitting it is no longer relevant. 
+5.3 Review and Escalation
+5.3.1 Review Cadence
+Meeting
+Frequency
+Scope
+Output
+Daily stand-up
+Daily
+New blockers, contract changes, integration status between B2C and B2B streams.
+New risks and dependencies entered into the register the same day.
+Weekly planning / review
+Weekly
+Full pass over open dependencies, active risks, overdue tasks, milestone confidence.
+Updated register, revised owners and due dates, escalation decisions.
+5.3.2 Standing Agenda (Weekly Review)
+
+Item
+Purpose
+1
+Open dependencies (DEP-xx)
+Identify blockers still unresolved and confirm next action.
+2
+High-priority risks (R-xx)
+Review items rated Medium or High on either axis, plus any status change since last review.
+3
+Overdue tasks
+Record what slipped and why.
+4
+Milestone confidence
+Assign a green / yellow/ red rating per upcoming milestone with a one-line justification.
+5
+New items
+Enter any new dependency, risk, or scope change before the meeting closes.
+5.3.3 Change Recording
+Every change agreed in a review is recorded in the project-management tool with the following fields:
+Field
+Meaning
+Owner
+The single person accountable for the item.
+Action
+A concrete next step, not a restatement of the problem.
+Due date
+The date by which the action must be completed.
+Status
+One of: Open / In progress / Blocked / Closed.
+Items without a named owner and a due date are not considered tracked and are escalated at the next review.
+5.3.4 Escalation Triggers
+
+Condition
+Threshold
+1
+Critical-path dependency slip
+DEP-01, DEP-02, or DEP-05 exceeds its agreed tolerance.
+2
+High-impact risk
+A risk with Impact = H is realised or becomes likely, and the current mitigation is insufficient.
+3
+Milestone confidence
+Rating returns red, or returns amber for two consecutive reviews.
+4
+Scope change
+A proposed change would push the final demo past the agreed deadline.
+5.3.5 Escalation Path
+Stage
+Escalated to
+Deadline for response
+Required content
+First
+Project coordinator
+Within one review cycle
+Affected milestone, what happened, options considered, recommended action, decision requested.
+Second
+Academic supervisor
+If unresolved after one cycle by the coordinator
+Full escalation record from stage one, plus coordinator's response and remaining gap.
+5.3.6 Closure Criteria
+Item type
+Closed when
+Dependency
+Satisfied and verified by the affected stream.
+Risk
+Fully mitigated, or confirmed to no longer apply.
+Task
+Completed and accepted by its owner.
+Closed items remain visible in the register for the duration of the project, so the audit trail is preserved for the final submission.
+
+
+6. References
+[1] The Workmen. Software Requirements Specification (SRS), "E-Commerce Platform for Selling and Promoting Handmade Products," Version 1.0 approved, 8 October 2026.
+[2] WorkshopBank. "RACI Matrix for a Software Development Team." [Online]. Available: https://workshopbank.com/raci-matrix
+[3] Atlassian. "Confluence Guide." [Online]. Available: https://www.atlassian.com/software/confluence/resources
+[4] RACI Sample Spreadsheet. [Online]. Available: https://docs.google.com/spreadsheets/d/1YOQX60gdfVCrU0MxbMYmEUvT-NRVN4IM/edit?gid=1962088659#gid=1962088659
+[5] GanttPRO. "Project Scheduling and Gantt Chart Tool." [Online]. Available: https://ganttpro.com/

@@ -1,0 +1,409 @@
+{
+  "status": "passed",
+  "operations": {
+    "b2b": {
+      "enabled": true,
+      "consumerGroup": "handmade.b2b.v1",
+      "subscriptions": [
+        "handmade.products.v1",
+        "handmade.publications.v1"
+      ],
+      "producerConnected": true,
+      "consumerConnected": true,
+      "outboxPending": 0,
+      "outboxPublished": 1,
+      "deadLetters": 0,
+      "outbox": [
+        {
+          "event_id": "cc4eb3d8-8ebc-4051-92be-6f91a97aa126",
+          "event_type": "seller.created",
+          "aggregate_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "topic": "handmade.sellers.v1",
+          "published_at": "2026-10-19T17:25:28.548984+00:00",
+          "attempts": 3
+        }
+      ],
+      "receipts": [
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "event_id": "22ea10f8-d035-4adc-a9aa-d23e1ae1db1c",
+          "event_type": "product.deleted",
+          "aggregate_id": "3484a262-93ab-48ad-8ad3-5e3dc282c8cf",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "occurred_at": "2026-10-19T17:33:31.427324+00:00",
+          "processed_at": "2026-10-19T17:33:33.551583+00:00",
+          "message_hash": "5e66f85020c2ab8ae9c31e3820ff3314123b76cb477fa6155d74bff13e304ea0",
+          "topic": "handmade.products.v1",
+          "partition": 1,
+          "offset": 5
+        },
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "event_id": "8c5c5c5a-aaaa-4473-84cb-4b81bc2daedc",
+          "event_type": "product.updated",
+          "aggregate_id": "3484a262-93ab-48ad-8ad3-5e3dc282c8cf",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "occurred_at": "2026-10-19T17:33:31.391478+00:00",
+          "processed_at": "2026-10-19T17:33:33.543130+00:00",
+          "message_hash": "9599ec216e62d8cb61692a8e840a63fe338fad5be0dcf503d6b64e0bd119da3e",
+          "topic": "handmade.products.v1",
+          "partition": 1,
+          "offset": 4
+        },
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "event_id": "7c6436e9-5e7f-4b3b-a9ab-7081abd288cc",
+          "event_type": "product.created",
+          "aggregate_id": "3484a262-93ab-48ad-8ad3-5e3dc282c8cf",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "occurred_at": "2026-10-19T17:33:18.553079+00:00",
+          "processed_at": "2026-10-19T17:33:33.533432+00:00",
+          "message_hash": "1a08e139c86200892236bacafffc71ce07d8e14ded1676d79c22055ddaff4d0b",
+          "topic": "handmade.products.v1",
+          "partition": 1,
+          "offset": 3
+        },
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "event_id": "c6e331f4-f12c-4875-8085-b47a64bbdc4b",
+          "event_type": "publication.deleted",
+          "aggregate_id": "139b4699-090a-4d2b-9238-c6663563723c",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "occurred_at": "2026-10-19T17:33:31.421339+00:00",
+          "processed_at": "2026-10-19T17:33:33.524816+00:00",
+          "message_hash": "c89e61157595be6d0c77b5ed7eef24be1ec9dd6ab74d6dfdb50ce9728e5e021d",
+          "topic": "handmade.publications.v1",
+          "partition": 2,
+          "offset": 2
+        },
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "event_id": "9a76b583-a99c-42b8-b27e-4c9e41e15663",
+          "event_type": "publication.updated",
+          "aggregate_id": "139b4699-090a-4d2b-9238-c6663563723c",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "occurred_at": "2026-10-19T17:33:31.407461+00:00",
+          "processed_at": "2026-10-19T17:33:33.513495+00:00",
+          "message_hash": "8bf488a0c1fbedc45ce4a266e83c06e70eeeb60af65e3693842d40f80ac5583d",
+          "topic": "handmade.publications.v1",
+          "partition": 2,
+          "offset": 1
+        },
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "event_id": "fcafd63a-f71d-4d65-a07e-17eebda1dad6",
+          "event_type": "publication.published",
+          "aggregate_id": "139b4699-090a-4d2b-9238-c6663563723c",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "occurred_at": "2026-10-19T17:33:31.217541+00:00",
+          "processed_at": "2026-10-19T17:33:33.493245+00:00",
+          "message_hash": "fc98befd9aa5c71f5a9475307b8b8837c38aa74dd45fb2d0d3b7bf4fbd678562",
+          "topic": "handmade.publications.v1",
+          "partition": 2,
+          "offset": 0
+        },
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "event_id": "625a97ab-8b37-4d91-9b3a-962f19cb7fb5",
+          "event_type": "product.deleted",
+          "aggregate_id": "aae0a778-8ce3-4c9e-8765-a7108bd047ef",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "occurred_at": "2026-10-19T17:25:25.906417+00:00",
+          "processed_at": "2026-10-19T17:25:27.631721+00:00",
+          "message_hash": "e7ed4047bca96e6a3a9c0ffcfe94648007d9b59d38ed4f706b77b13c0ffd91db",
+          "topic": "handmade.products.v1",
+          "partition": 1,
+          "offset": 2
+        },
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "event_id": "8457d43f-8034-4ce9-9720-f5b637d4d04a",
+          "event_type": "product.updated",
+          "aggregate_id": "aae0a778-8ce3-4c9e-8765-a7108bd047ef",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "occurred_at": "2026-10-19T17:25:25.858617+00:00",
+          "processed_at": "2026-10-19T17:25:27.624527+00:00",
+          "message_hash": "b2108043ec3543e4ad03f59f394287b8f6270a351076caec4d4e98dfcb7697dc",
+          "topic": "handmade.products.v1",
+          "partition": 1,
+          "offset": 1
+        },
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "event_id": "89897033-1a51-459d-9e64-ee13e636795f",
+          "event_type": "product.created",
+          "aggregate_id": "aae0a778-8ce3-4c9e-8765-a7108bd047ef",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "occurred_at": "2026-10-19T17:25:12.541944+00:00",
+          "processed_at": "2026-10-19T17:25:27.616365+00:00",
+          "message_hash": "46dbd5a5f6fffee5bed0ccf6df3640a68846e1925d2426a352b82841519980dd",
+          "topic": "handmade.products.v1",
+          "partition": 1,
+          "offset": 0
+        },
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "event_id": "4b837ca7-4d69-416a-9065-d4defa7d5133",
+          "event_type": "publication.deleted",
+          "aggregate_id": "692333ff-e44d-41a5-88fb-5aee423bc4ef",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "occurred_at": "2026-10-19T17:25:25.898422+00:00",
+          "processed_at": "2026-10-19T17:25:27.607218+00:00",
+          "message_hash": "0f0973d6aaef949f0fcb678afee434c9e639cbf3ff3dafb219cc91164dc517b4",
+          "topic": "handmade.publications.v1",
+          "partition": 1,
+          "offset": 2
+        },
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "event_id": "0b9927e7-912c-46fb-b5b6-9a744137741f",
+          "event_type": "publication.updated",
+          "aggregate_id": "692333ff-e44d-41a5-88fb-5aee423bc4ef",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "occurred_at": "2026-10-19T17:25:25.880637+00:00",
+          "processed_at": "2026-10-19T17:25:27.599061+00:00",
+          "message_hash": "203480671edd7defc7250f179c013cdd104eb2f22db938ffee785e71f8231b2a",
+          "topic": "handmade.publications.v1",
+          "partition": 1,
+          "offset": 1
+        },
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "event_id": "69e341b2-023c-48ec-84ec-7d1899d627cd",
+          "event_type": "publication.published",
+          "aggregate_id": "692333ff-e44d-41a5-88fb-5aee423bc4ef",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "occurred_at": "2026-10-19T17:25:25.663082+00:00",
+          "processed_at": "2026-10-19T17:25:27.586073+00:00",
+          "message_hash": "6be0928cab650557c4b66a5e368227ea511d0abe71b43c10cb47228b391ed28c",
+          "topic": "handmade.publications.v1",
+          "partition": 1,
+          "offset": 0
+        }
+      ],
+      "activity": [
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "event_type": "product.deleted",
+          "processed_count": 2,
+          "last_occurred_at": "2026-10-19T17:33:31.427324+00:00"
+        },
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "event_type": "publication.deleted",
+          "processed_count": 2,
+          "last_occurred_at": "2026-10-19T17:33:31.421339+00:00"
+        },
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "event_type": "publication.updated",
+          "processed_count": 2,
+          "last_occurred_at": "2026-10-19T17:33:31.407461+00:00"
+        },
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "event_type": "product.updated",
+          "processed_count": 2,
+          "last_occurred_at": "2026-10-19T17:33:31.391478+00:00"
+        },
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "event_type": "publication.published",
+          "processed_count": 2,
+          "last_occurred_at": "2026-10-19T17:33:31.217541+00:00"
+        },
+        {
+          "consumer_group": "handmade.b2b.v1",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "event_type": "product.created",
+          "processed_count": 2,
+          "last_occurred_at": "2026-10-19T17:33:18.553079+00:00"
+        }
+      ]
+    },
+    "goods": {
+      "enabled": true,
+      "consumerGroup": "handmade.goods.v1",
+      "subscriptions": [
+        "handmade.sellers.v1"
+      ],
+      "producerConnected": true,
+      "consumerConnected": true,
+      "outboxPending": 0,
+      "outboxPublished": 6,
+      "deadLetters": 0,
+      "outbox": [
+        {
+          "event_id": "22ea10f8-d035-4adc-a9aa-d23e1ae1db1c",
+          "event_type": "product.deleted",
+          "aggregate_id": "3484a262-93ab-48ad-8ad3-5e3dc282c8cf",
+          "topic": "handmade.products.v1",
+          "published_at": "2026-10-19T17:33:33.217769+00:00",
+          "attempts": 0
+        },
+        {
+          "event_id": "8c5c5c5a-aaaa-4473-84cb-4b81bc2daedc",
+          "event_type": "product.updated",
+          "aggregate_id": "3484a262-93ab-48ad-8ad3-5e3dc282c8cf",
+          "topic": "handmade.products.v1",
+          "published_at": "2026-10-19T17:33:33.214168+00:00",
+          "attempts": 0
+        },
+        {
+          "event_id": "7c6436e9-5e7f-4b3b-a9ab-7081abd288cc",
+          "event_type": "product.created",
+          "aggregate_id": "3484a262-93ab-48ad-8ad3-5e3dc282c8cf",
+          "topic": "handmade.products.v1",
+          "published_at": "2026-10-19T17:33:33.209829+00:00",
+          "attempts": 0
+        },
+        {
+          "event_id": "625a97ab-8b37-4d91-9b3a-962f19cb7fb5",
+          "event_type": "product.deleted",
+          "aggregate_id": "aae0a778-8ce3-4c9e-8765-a7108bd047ef",
+          "topic": "handmade.products.v1",
+          "published_at": "2026-10-19T17:25:27.610187+00:00",
+          "attempts": 0
+        },
+        {
+          "event_id": "8457d43f-8034-4ce9-9720-f5b637d4d04a",
+          "event_type": "product.updated",
+          "aggregate_id": "aae0a778-8ce3-4c9e-8765-a7108bd047ef",
+          "topic": "handmade.products.v1",
+          "published_at": "2026-10-19T17:25:27.608408+00:00",
+          "attempts": 0
+        },
+        {
+          "event_id": "89897033-1a51-459d-9e64-ee13e636795f",
+          "event_type": "product.created",
+          "aggregate_id": "aae0a778-8ce3-4c9e-8765-a7108bd047ef",
+          "topic": "handmade.products.v1",
+          "published_at": "2026-10-19T17:25:27.605635+00:00",
+          "attempts": 0
+        }
+      ],
+      "receipts": [
+        {
+          "consumer_group": "handmade.goods.v1",
+          "event_id": "cc4eb3d8-8ebc-4051-92be-6f91a97aa126",
+          "event_type": "seller.created",
+          "aggregate_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "occurred_at": "2026-10-19T17:25:11.590098+00:00",
+          "processed_at": "2026-10-19T17:25:38.653924+00:00",
+          "message_hash": "f8e333ded0ad989b5afb849bf5139c004424e0e50800817ef6b2ddbc4313668a",
+          "topic": "handmade.sellers.v1",
+          "partition": 0,
+          "offset": 0
+        }
+      ],
+      "activity": [
+        {
+          "consumer_group": "handmade.goods.v1",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "event_type": "seller.created",
+          "processed_count": 1,
+          "last_occurred_at": "2026-10-19T17:25:11.590098+00:00"
+        }
+      ]
+    },
+    "publications": {
+      "enabled": true,
+      "consumerGroup": "handmade.publications.v1",
+      "subscriptions": [
+        "handmade.sellers.v1"
+      ],
+      "producerConnected": true,
+      "consumerConnected": true,
+      "outboxPending": 0,
+      "outboxPublished": 6,
+      "deadLetters": 0,
+      "outbox": [
+        {
+          "event_id": "c6e331f4-f12c-4875-8085-b47a64bbdc4b",
+          "event_type": "publication.deleted",
+          "aggregate_id": "139b4699-090a-4d2b-9238-c6663563723c",
+          "topic": "handmade.publications.v1",
+          "published_at": "2026-10-19T17:33:32.851712+00:00",
+          "attempts": 0
+        },
+        {
+          "event_id": "9a76b583-a99c-42b8-b27e-4c9e41e15663",
+          "event_type": "publication.updated",
+          "aggregate_id": "139b4699-090a-4d2b-9238-c6663563723c",
+          "topic": "handmade.publications.v1",
+          "published_at": "2026-10-19T17:33:32.849542+00:00",
+          "attempts": 0
+        },
+        {
+          "event_id": "fcafd63a-f71d-4d65-a07e-17eebda1dad6",
+          "event_type": "publication.published",
+          "aggregate_id": "139b4699-090a-4d2b-9238-c6663563723c",
+          "topic": "handmade.publications.v1",
+          "published_at": "2026-10-19T17:33:32.846086+00:00",
+          "attempts": 0
+        },
+        {
+          "event_id": "4b837ca7-4d69-416a-9065-d4defa7d5133",
+          "event_type": "publication.deleted",
+          "aggregate_id": "692333ff-e44d-41a5-88fb-5aee423bc4ef",
+          "topic": "handmade.publications.v1",
+          "published_at": "2026-10-19T17:25:27.589505+00:00",
+          "attempts": 0
+        },
+        {
+          "event_id": "0b9927e7-912c-46fb-b5b6-9a744137741f",
+          "event_type": "publication.updated",
+          "aggregate_id": "692333ff-e44d-41a5-88fb-5aee423bc4ef",
+          "topic": "handmade.publications.v1",
+          "published_at": "2026-10-19T17:25:27.586945+00:00",
+          "attempts": 0
+        },
+        {
+          "event_id": "69e341b2-023c-48ec-84ec-7d1899d627cd",
+          "event_type": "publication.published",
+          "aggregate_id": "692333ff-e44d-41a5-88fb-5aee423bc4ef",
+          "topic": "handmade.publications.v1",
+          "published_at": "2026-10-19T17:25:27.583225+00:00",
+          "attempts": 0
+        }
+      ],
+      "receipts": [
+        {
+          "consumer_group": "handmade.publications.v1",
+          "event_id": "cc4eb3d8-8ebc-4051-92be-6f91a97aa126",
+          "event_type": "seller.created",
+          "aggregate_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "occurred_at": "2026-10-19T17:25:11.590098+00:00",
+          "processed_at": "2026-10-19T17:25:28.552294+00:00",
+          "message_hash": "f8e333ded0ad989b5afb849bf5139c004424e0e50800817ef6b2ddbc4313668a",
+          "topic": "handmade.sellers.v1",
+          "partition": 0,
+          "offset": 0
+        }
+      ],
+      "activity": [
+        {
+          "consumer_group": "handmade.publications.v1",
+          "seller_id": "7c267d35-7581-476e-bbf6-8e836c153034",
+          "event_type": "seller.created",
+          "processed_count": 1,
+          "last_occurred_at": "2026-10-19T17:25:11.590098+00:00"
+        }
+      ]
+    }
+  },
+  "wireMessageMatchesOutboxAndReceipt": {
+    "eventId": "7c6436e9-5e7f-4b3b-a9ab-7081abd288cc",
+    "topic": "handmade.products.v1",
+    "partition": 1,
+    "offset": 3,
+    "key": "3484a262-93ab-48ad-8ad3-5e3dc282c8cf"
+  }
+}

@@ -1,0 +1,2 @@
+3484a262-93ab-48ad-8ad3-5e3dc282c8cf	{"eventId":"7c6436e9-5e7f-4b3b-a9ab-7081abd288cc","version":1,"occurredAt":"2026-10-19T17:33:18.553079Z","aggregateId":"3484a262-93ab-48ad-8ad3-5e3dc282c8cf","eventType":"product.created","payload":{"productId":"3484a262-93ab-48ad-8ad3-5e3dc282c8cf","sellerId":"7c267d35-7581-476e-bbf6-8e836c153034"}}
+Processed a total of 1 messages

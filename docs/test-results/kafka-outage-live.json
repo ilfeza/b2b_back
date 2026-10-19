@@ -1,0 +1,90 @@
+{
+  "status": "passed",
+  "realBrokerStoppedAndRestarted": true,
+  "goodsRestartedDuringOutage": true,
+  "pendingBeforeRecovery": [
+    {
+      "event_id": "7c6436e9-5e7f-4b3b-a9ab-7081abd288cc",
+      "event_type": "product.created",
+      "aggregate_id": "3484a262-93ab-48ad-8ad3-5e3dc282c8cf",
+      "topic": "handmade.products.v1",
+      "published_at": null,
+      "attempts": 0
+    },
+    {
+      "event_id": "fcafd63a-f71d-4d65-a07e-17eebda1dad6",
+      "event_type": "publication.published",
+      "aggregate_id": "139b4699-090a-4d2b-9238-c6663563723c",
+      "topic": "handmade.publications.v1",
+      "published_at": null,
+      "attempts": 0
+    }
+  ],
+  "sellerId": "7c267d35-7581-476e-bbf6-8e836c153034",
+  "productId": "3484a262-93ab-48ad-8ad3-5e3dc282c8cf",
+  "publicationId": "139b4699-090a-4d2b-9238-c6663563723c",
+  "transport": "HTTP -> PostgreSQL transactional outbox -> Apache Kafka KRaft -> B2B inbox/activity",
+  "events": [
+    {
+      "event_id": "22ea10f8-d035-4adc-a9aa-d23e1ae1db1c",
+      "event_type": "product.deleted",
+      "aggregate_id": "3484a262-93ab-48ad-8ad3-5e3dc282c8cf",
+      "topic": "handmade.products.v1",
+      "published_at": "2026-10-19T17:33:33.217769+00:00",
+      "attempts": 0,
+      "consumerGroup": "handmade.b2b.v1"
+    },
+    {
+      "event_id": "8c5c5c5a-aaaa-4473-84cb-4b81bc2daedc",
+      "event_type": "product.updated",
+      "aggregate_id": "3484a262-93ab-48ad-8ad3-5e3dc282c8cf",
+      "topic": "handmade.products.v1",
+      "published_at": "2026-10-19T17:33:33.214168+00:00",
+      "attempts": 0,
+      "consumerGroup": "handmade.b2b.v1"
+    },
+    {
+      "event_id": "7c6436e9-5e7f-4b3b-a9ab-7081abd288cc",
+      "event_type": "product.created",
+      "aggregate_id": "3484a262-93ab-48ad-8ad3-5e3dc282c8cf",
+      "topic": "handmade.products.v1",
+      "published_at": "2026-10-19T17:33:33.209829+00:00",
+      "attempts": 0,
+      "consumerGroup": "handmade.b2b.v1"
+    },
+    {
+      "event_id": "c6e331f4-f12c-4875-8085-b47a64bbdc4b",
+      "event_type": "publication.deleted",
+      "aggregate_id": "139b4699-090a-4d2b-9238-c6663563723c",
+      "topic": "handmade.publications.v1",
+      "published_at": "2026-10-19T17:33:32.851712+00:00",
+      "attempts": 0,
+      "consumerGroup": "handmade.b2b.v1"
+    },
+    {
+      "event_id": "9a76b583-a99c-42b8-b27e-4c9e41e15663",
+      "event_type": "publication.updated",
+      "aggregate_id": "139b4699-090a-4d2b-9238-c6663563723c",
+      "topic": "handmade.publications.v1",
+      "published_at": "2026-10-19T17:33:32.849542+00:00",
+      "attempts": 0,
+      "consumerGroup": "handmade.b2b.v1"
+    },
+    {
+      "event_id": "fcafd63a-f71d-4d65-a07e-17eebda1dad6",
+      "event_type": "publication.published",
+      "aggregate_id": "139b4699-090a-4d2b-9238-c6663563723c",
+      "topic": "handmade.publications.v1",
+      "published_at": "2026-10-19T17:33:32.846086+00:00",
+      "attempts": 0,
+      "consumerGroup": "handmade.b2b.v1"
+    }
+  ],
+  "sellerCreatedReceipt": {
+    "eventId": "cc4eb3d8-8ebc-4051-92be-6f91a97aa126",
+    "receivedBy": [
+      "goods",
+      "publications"
+    ]
+  }
+}

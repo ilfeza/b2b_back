@@ -1,0 +1,46 @@
+{
+  "run": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "139",
+    "time": "44.438",
+    "timestamp": "2026-10-19T17:38:32.293072+00:00",
+    "hostname": "1aabe33e80ee"
+  },
+  "testModules": {
+    "test_additional_behaviors": 11,
+    "test_contracts": 9,
+    "test_events": 24,
+    "test_integrations": 15,
+    "test_kafka_live": 2,
+    "test_media": 8,
+    "test_minio_init": 2,
+    "test_postgres": 6,
+    "test_publications": 15,
+    "test_scripts": 2,
+    "test_security": 25,
+    "test_seller_flow": 20
+  },
+  "coverage": {
+    "covered_lines": 2054,
+    "num_statements": 2117,
+    "percent_covered": 95.45269995939911,
+    "percent_covered_display": "95",
+    "missing_lines": 63,
+    "excluded_lines": 24,
+    "percent_statements_covered": 97.02409069437884,
+    "percent_statements_covered_display": "97",
+    "num_branches": 346,
+    "num_partial_branches": 45,
+    "covered_branches": 297,
+    "missing_branches": 49,
+    "percent_branches_covered": 85.83815028901734,
+    "percent_branches_covered_display": "86"
+  },
+  "environment": "Docker Linux ARM64, Python 3.12.15, PostgreSQL 16, Apache Kafka 4.1.1 KRaft",
+  "realKafkaIntegrationTests": 2,
+  "externalServices": "Only external Users/Auth, Order/Payment and Analytics use adapters; Goods/Publications and Kafka are real",
+  "coverageIncludes": "marketplace package"
+}

@@ -1,0 +1,663 @@
+{
+  "mode": "development; external adapters fake",
+  "requests": {
+    "GET /api/seller/profile": {
+      "status": 200,
+      "body": {
+        "data": {
+          "id": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+          "username": "demo_workshop",
+          "displayName": "Демо мастерская",
+          "bio": "Керамика ручной работы",
+          "avatar": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+          "joinedAt": "2026-10-19T16:53:09.793353Z",
+          "isFollowing": false,
+          "rating": null,
+          "followersCount": 0,
+          "productsCount": 3,
+          "postsCount": 2,
+          "unavailableSections": [],
+          "ownerUserId": "11111111-1111-4111-8111-111111111111",
+          "createdAt": "2026-10-19T16:53:09.793353Z",
+          "planTier": "free",
+          "delivery": {
+            "pickupEnabled": true,
+            "pickupPoints": [
+              {
+                "city": "Москва",
+                "address": "Демонстрационный адрес, 1"
+              }
+            ],
+            "cdekEnabled": true
+          },
+          "publicUrl": "/shops/demo_workshop"
+        },
+        "error": null
+      }
+    },
+    "GET /api/seller/delivery": {
+      "status": 200,
+      "body": {
+        "data": {
+          "pickupEnabled": true,
+          "pickupPoints": [
+            {
+              "city": "Москва",
+              "address": "Демонстрационный адрес, 1"
+            }
+          ],
+          "cdekEnabled": true
+        },
+        "error": null
+      }
+    },
+    "GET /api/seller/products": {
+      "status": 200,
+      "body": {
+        "data": {
+          "items": [
+            {
+              "title": "Демо блюдце",
+              "description": "",
+              "image": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+              "price": 1800,
+              "saleMode": "deal_only",
+              "availableDeliveries": [
+                "pickup"
+              ],
+              "pickupPoints": [
+                {
+                  "city": "Москва",
+                  "address": "Демонстрационный адрес, 1"
+                }
+              ],
+              "dealContacts": "Свяжитесь с мастерской для оформления заказа",
+              "inStock": 3,
+              "id": "e8c6c105-bde4-4146-9d72-1b7bbd970938",
+              "createdAt": "2026-10-19T16:53:09.927777Z",
+              "updatedAt": "2026-10-19T16:53:09.927779Z",
+              "sellerId": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+              "currency": "RUB",
+              "deletedAt": null,
+              "purchasable": false,
+              "seller": {
+                "id": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+                "username": "demo_workshop",
+                "displayName": "Демо мастерская",
+                "avatar": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+                "bio": "Керамика ручной работы",
+                "joinedAt": "2026-10-19T16:53:09.793353Z",
+                "followersCount": 0,
+                "productsCount": 3,
+                "postsCount": 2,
+                "rating": null,
+                "isFollowing": false,
+                "unavailableSections": []
+              }
+            },
+            {
+              "title": "Демо ваза",
+              "description": "",
+              "image": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+              "price": 1200,
+              "saleMode": "deal_only",
+              "availableDeliveries": [
+                "pickup"
+              ],
+              "pickupPoints": [
+                {
+                  "city": "Москва",
+                  "address": "Демонстрационный адрес, 1"
+                }
+              ],
+              "dealContacts": "Свяжитесь с мастерской для оформления заказа",
+              "inStock": 2,
+              "id": "cb9f9840-c3af-4e3f-92cd-6fa91340cc69",
+              "createdAt": "2026-10-19T16:53:09.912297Z",
+              "updatedAt": "2026-10-19T16:53:09.912299Z",
+              "sellerId": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+              "currency": "RUB",
+              "deletedAt": null,
+              "purchasable": false,
+              "seller": {
+                "id": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+                "username": "demo_workshop",
+                "displayName": "Демо мастерская",
+                "avatar": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+                "bio": "Керамика ручной работы",
+                "joinedAt": "2026-10-19T16:53:09.793353Z",
+                "followersCount": 0,
+                "productsCount": 3,
+                "postsCount": 2,
+                "rating": null,
+                "isFollowing": false,
+                "unavailableSections": []
+              }
+            },
+            {
+              "title": "Демо чашка",
+              "description": "",
+              "image": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+              "price": 600,
+              "saleMode": "deal_only",
+              "availableDeliveries": [
+                "pickup"
+              ],
+              "pickupPoints": [
+                {
+                  "city": "Москва",
+                  "address": "Демонстрационный адрес, 1"
+                }
+              ],
+              "dealContacts": "Свяжитесь с мастерской для оформления заказа",
+              "inStock": 1,
+              "id": "1f4c8e7a-b9f8-4ae9-9eb9-09c115710758",
+              "createdAt": "2026-10-19T16:53:09.892579Z",
+              "updatedAt": "2026-10-19T16:53:09.892581Z",
+              "sellerId": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+              "currency": "RUB",
+              "deletedAt": null,
+              "purchasable": false,
+              "seller": {
+                "id": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+                "username": "demo_workshop",
+                "displayName": "Демо мастерская",
+                "avatar": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+                "bio": "Керамика ручной работы",
+                "joinedAt": "2026-10-19T16:53:09.793353Z",
+                "followersCount": 0,
+                "productsCount": 3,
+                "postsCount": 2,
+                "rating": null,
+                "isFollowing": false,
+                "unavailableSections": []
+              }
+            }
+          ],
+          "total": 3,
+          "page": 1,
+          "pageSize": 20
+        },
+        "error": null
+      }
+    },
+    "GET /api/seller/posts": {
+      "status": 200,
+      "body": {
+        "data": {
+          "items": [
+            {
+              "title": "Демо: новая коллекция",
+              "body": "<h2>Ручная работа</h2><p>История создания новой коллекции.</p>",
+              "coverImage": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+              "status": "published",
+              "productIds": [
+                "cb9f9840-c3af-4e3f-92cd-6fa91340cc69",
+                "e8c6c105-bde4-4146-9d72-1b7bbd970938"
+              ],
+              "id": "2615e9dc-cd55-495d-bd54-9c07e3970502",
+              "createdAt": "2026-10-19T16:53:09.996148Z",
+              "updatedAt": "2026-10-19T16:53:09.996148Z",
+              "sellerId": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+              "publishedAt": "2026-10-19T16:53:09.995856Z",
+              "seller": {
+                "id": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+                "username": "demo_workshop",
+                "displayName": "Демо мастерская",
+                "avatar": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+                "bio": "Керамика ручной работы",
+                "joinedAt": "2026-10-19T16:53:09.793353Z",
+                "followersCount": 0,
+                "productsCount": 3,
+                "postsCount": 2,
+                "rating": null,
+                "isFollowing": false,
+                "unavailableSections": []
+              },
+              "products": [
+                {
+                  "title": "Демо ваза",
+                  "description": "",
+                  "image": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+                  "price": 1200,
+                  "saleMode": "deal_only",
+                  "availableDeliveries": [
+                    "pickup"
+                  ],
+                  "pickupPoints": [
+                    {
+                      "city": "Москва",
+                      "address": "Демонстрационный адрес, 1"
+                    }
+                  ],
+                  "dealContacts": "Свяжитесь с мастерской для оформления заказа",
+                  "inStock": 2,
+                  "id": "cb9f9840-c3af-4e3f-92cd-6fa91340cc69",
+                  "createdAt": "2026-10-19T16:53:09.912297Z",
+                  "updatedAt": "2026-10-19T16:53:09.912299Z",
+                  "sellerId": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+                  "currency": "RUB",
+                  "deletedAt": null,
+                  "purchasable": false,
+                  "seller": {
+                    "id": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+                    "username": "demo_workshop",
+                    "displayName": "Демо мастерская",
+                    "avatar": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+                    "bio": "Керамика ручной работы",
+                    "joinedAt": "2026-10-19T16:53:09.793353Z",
+                    "followersCount": 0,
+                    "productsCount": 3,
+                    "postsCount": 2,
+                    "rating": null,
+                    "isFollowing": false,
+                    "unavailableSections": []
+                  }
+                },
+                {
+                  "title": "Демо блюдце",
+                  "description": "",
+                  "image": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+                  "price": 1800,
+                  "saleMode": "deal_only",
+                  "availableDeliveries": [
+                    "pickup"
+                  ],
+                  "pickupPoints": [
+                    {
+                      "city": "Москва",
+                      "address": "Демонстрационный адрес, 1"
+                    }
+                  ],
+                  "dealContacts": "Свяжитесь с мастерской для оформления заказа",
+                  "inStock": 3,
+                  "id": "e8c6c105-bde4-4146-9d72-1b7bbd970938",
+                  "createdAt": "2026-10-19T16:53:09.927777Z",
+                  "updatedAt": "2026-10-19T16:53:09.927779Z",
+                  "sellerId": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+                  "currency": "RUB",
+                  "deletedAt": null,
+                  "purchasable": false,
+                  "seller": {
+                    "id": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+                    "username": "demo_workshop",
+                    "displayName": "Демо мастерская",
+                    "avatar": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+                    "bio": "Керамика ручной работы",
+                    "joinedAt": "2026-10-19T16:53:09.793353Z",
+                    "followersCount": 0,
+                    "productsCount": 3,
+                    "postsCount": 2,
+                    "rating": null,
+                    "isFollowing": false,
+                    "unavailableSections": []
+                  }
+                }
+              ],
+              "likesCount": null,
+              "commentsCount": null,
+              "isLiked": false,
+              "unavailableSections": []
+            },
+            {
+              "title": "Демо: как создаётся керамика",
+              "body": "<h2>Ручная работа</h2><p>История создания новой коллекции.</p>",
+              "coverImage": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+              "status": "published",
+              "productIds": [
+                "1f4c8e7a-b9f8-4ae9-9eb9-09c115710758",
+                "cb9f9840-c3af-4e3f-92cd-6fa91340cc69"
+              ],
+              "id": "ed75a4bc-4f66-4b5e-b4f2-eebc14bad1c4",
+              "createdAt": "2026-10-19T16:53:09.967157Z",
+              "updatedAt": "2026-10-19T16:53:09.967158Z",
+              "sellerId": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+              "publishedAt": "2026-10-19T16:53:09.966461Z",
+              "seller": {
+                "id": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+                "username": "demo_workshop",
+                "displayName": "Демо мастерская",
+                "avatar": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+                "bio": "Керамика ручной работы",
+                "joinedAt": "2026-10-19T16:53:09.793353Z",
+                "followersCount": 0,
+                "productsCount": 3,
+                "postsCount": 2,
+                "rating": null,
+                "isFollowing": false,
+                "unavailableSections": []
+              },
+              "products": [
+                {
+                  "title": "Демо чашка",
+                  "description": "",
+                  "image": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+                  "price": 600,
+                  "saleMode": "deal_only",
+                  "availableDeliveries": [
+                    "pickup"
+                  ],
+                  "pickupPoints": [
+                    {
+                      "city": "Москва",
+                      "address": "Демонстрационный адрес, 1"
+                    }
+                  ],
+                  "dealContacts": "Свяжитесь с мастерской для оформления заказа",
+                  "inStock": 1,
+                  "id": "1f4c8e7a-b9f8-4ae9-9eb9-09c115710758",
+                  "createdAt": "2026-10-19T16:53:09.892579Z",
+                  "updatedAt": "2026-10-19T16:53:09.892581Z",
+                  "sellerId": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+                  "currency": "RUB",
+                  "deletedAt": null,
+                  "purchasable": false,
+                  "seller": {
+                    "id": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+                    "username": "demo_workshop",
+                    "displayName": "Демо мастерская",
+                    "avatar": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+                    "bio": "Керамика ручной работы",
+                    "joinedAt": "2026-10-19T16:53:09.793353Z",
+                    "followersCount": 0,
+                    "productsCount": 3,
+                    "postsCount": 2,
+                    "rating": null,
+                    "isFollowing": false,
+                    "unavailableSections": []
+                  }
+                },
+                {
+                  "title": "Демо ваза",
+                  "description": "",
+                  "image": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+                  "price": 1200,
+                  "saleMode": "deal_only",
+                  "availableDeliveries": [
+                    "pickup"
+                  ],
+                  "pickupPoints": [
+                    {
+                      "city": "Москва",
+                      "address": "Демонстрационный адрес, 1"
+                    }
+                  ],
+                  "dealContacts": "Свяжитесь с мастерской для оформления заказа",
+                  "inStock": 2,
+                  "id": "cb9f9840-c3af-4e3f-92cd-6fa91340cc69",
+                  "createdAt": "2026-10-19T16:53:09.912297Z",
+                  "updatedAt": "2026-10-19T16:53:09.912299Z",
+                  "sellerId": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+                  "currency": "RUB",
+                  "deletedAt": null,
+                  "purchasable": false,
+                  "seller": {
+                    "id": "3731edfe-c8eb-4525-8fab-9add0f31c208",
+                    "username": "demo_workshop",
+                    "displayName": "Демо мастерская",
+                    "avatar": "http://localhost:9000/handmade-media/3731edfe-c8eb-4525-8fab-9add0f31c208/98c3964c-509d-47d5-ac28-dea3c6cf5581.png",
+                    "bio": "Керамика ручной работы",
+                    "joinedAt": "2026-10-19T16:53:09.793353Z",
+                    "followersCount": 0,
+                    "productsCount": 3,
+                    "postsCount": 2,
+                    "rating": null,
+                    "isFollowing": false,
+                    "unavailableSections": []
+                  }
+                }
+              ],
+              "likesCount": null,
+              "commentsCount": null,
+              "isLiked": false,
+              "unavailableSections": []
+            }
+          ],
+          "total": 2,
+          "page": 1,
+          "pageSize": 20
+        },
+        "error": null
+      }
+    },
+    "GET /api/plans": {
+      "status": 200,
+      "body": {
+        "data": [
+          {
+            "tier": "free",
+            "name": "Free",
+            "price": 0,
+            "features": [
+              {
+                "label": "Товаров до 10",
+                "included": true
+              },
+              {
+                "label": "Публикаций до 5",
+                "included": true
+              },
+              {
+                "label": "Продажи по договорённости",
+                "included": true
+              },
+              {
+                "label": "Онлайн-оплата",
+                "included": false
+              }
+            ]
+          },
+          {
+            "tier": "premium",
+            "name": "Premium",
+            "price": 990,
+            "features": [
+              {
+                "label": "Товары и публикации без лимита",
+                "included": true
+              },
+              {
+                "label": "Онлайн-продажи после подтверждения платежных прав",
+                "included": true
+              },
+              {
+                "label": "Расширенная аналитика (не реализована в MVP)",
+                "included": false
+              },
+              {
+                "label": "Приоритет в поиске (не реализован в MVP)",
+                "included": false
+              }
+            ]
+          }
+        ],
+        "error": null
+      }
+    },
+    "GET /api/seller/dashboard": {
+      "status": 200,
+      "body": {
+        "data": {
+          "newOrdersCount": 0,
+          "awaitingShipmentCount": 0,
+          "shippedOrdersCount": 0,
+          "totalOrdersCount": 0,
+          "totalProductsCount": 3,
+          "lowStockProducts": [
+            {
+              "id": "cb9f9840-c3af-4e3f-92cd-6fa91340cc69",
+              "title": "Демо ваза",
+              "inStock": 2
+            },
+            {
+              "id": "1f4c8e7a-b9f8-4ae9-9eb9-09c115710758",
+              "title": "Демо чашка",
+              "inStock": 1
+            }
+          ],
+          "recentOrders": [],
+          "followersCount": 0,
+          "productViewsCount": 0,
+          "unavailableSections": [],
+          "period": {
+            "from": "2026-09-19T16:58:26.514201Z",
+            "to": "2026-10-19T16:58:26.514201Z"
+          },
+          "quickActions": {
+            "createProduct": "/seller/products/new",
+            "createPost": "/seller/posts/new"
+          },
+          "demoData": true
+        },
+        "error": null
+      }
+    },
+    "GET /api/seller/orders": {
+      "status": 200,
+      "body": {
+        "data": {
+          "items": [],
+          "total": 0,
+          "page": 1,
+          "pageSize": 20
+        },
+        "error": null
+      }
+    },
+    "GET /api/orders?role=seller": {
+      "status": 404,
+      "body": {
+        "data": null,
+        "error": {
+          "code": "NOT_FOUND",
+          "message": "Запрос отклонён",
+          "details": null,
+          "requestId": "018d88cc-7261-456a-8de4-d0792ced1c5c"
+        }
+      }
+    },
+    "GET /api/products/3731edfe-c8eb-4525-8fab-9add0f31c208": {
+      "status": 405,
+      "body": {
+        "data": null,
+        "error": {
+          "code": "METHOD_NOT_ALLOWED",
+          "message": "Запрос отклонён",
+          "details": null,
+          "requestId": "90213512-e770-40d8-88e3-d3c94d7e8d47"
+        }
+      }
+    },
+    "GET /api/posts/3731edfe-c8eb-4525-8fab-9add0f31c208": {
+      "status": 405,
+      "body": {
+        "data": null,
+        "error": {
+          "code": "METHOD_NOT_ALLOWED",
+          "message": "Запрос отклонён",
+          "details": null,
+          "requestId": "f7df81e6-5150-4377-acb9-fa91fa6bee96"
+        }
+      }
+    },
+    "POST /api/plans/subscribe": {
+      "status": 400,
+      "body": {
+        "data": null,
+        "error": {
+          "code": "VALIDATION_ERROR",
+          "message": "Некорректные данные",
+          "details": {
+            "errors": [
+              {
+                "field": "header.Idempotency-Key",
+                "message": "Field required"
+              }
+            ]
+          },
+          "requestId": "cae8c132-6dbf-4835-b94f-f303e4a566d5"
+        }
+      }
+    },
+    "PATCH /api/seller/profile": {
+      "status": 400,
+      "body": {
+        "data": null,
+        "error": {
+          "code": "VALIDATION_ERROR",
+          "message": "Некорректные данные",
+          "details": {
+            "errors": [
+              {
+                "field": "body.displayName",
+                "message": "String should have at least 1 character"
+              }
+            ]
+          },
+          "requestId": "92f314b9-77d1-42fc-a42d-20fa039c323a"
+        }
+      }
+    },
+    "PATCH /api/products/3731edfe-c8eb-4525-8fab-9add0f31c208": {
+      "status": 404,
+      "body": {
+        "data": null,
+        "error": {
+          "code": "NOT_FOUND",
+          "message": "Зависимый сервис отклонил запрос",
+          "details": {
+            "source": "goods"
+          },
+          "requestId": "51189a25-51a7-423c-a141-9ab84fb5c0d9"
+        }
+      }
+    },
+    "PATCH /api/seller/profile invalid cookie": {
+      "status": 401,
+      "body": {
+        "data": null,
+        "error": {
+          "code": "UNAUTHORIZED",
+          "message": "Недействительная сессия",
+          "details": null,
+          "requestId": "84b38e74-e732-4708-8d39-ea15e7809d5e"
+        }
+      }
+    },
+    "GET /api/products/existing-id": {
+      "status": 405,
+      "body": {
+        "data": null,
+        "error": {
+          "code": "METHOD_NOT_ALLOWED",
+          "message": "Запрос отклонён",
+          "details": null,
+          "requestId": "aa1f77f2-8dca-41f9-9364-bd0a1e37cf9b"
+        }
+      }
+    },
+    "GET /api/posts/existing-id": {
+      "status": 405,
+      "body": {
+        "data": null,
+        "error": {
+          "code": "METHOD_NOT_ALLOWED",
+          "message": "Запрос отклонён",
+          "details": null,
+          "requestId": "1d3b35a2-8b48-4391-890a-880f3e139b5c"
+        }
+      }
+    }
+  },
+  "savedOpenApiMatchesRuntime": true,
+  "corsPreflight": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-methods": "GET, POST, PATCH, DELETE, OPTIONS",
+      "access-control-max-age": "600",
+      "access-control-allow-headers": "Accept, Accept-Language, Content-Language, Content-Type, Idempotency-Key, X-CSRF-Protection, X-Request-Id, X-User-Id",
+      "access-control-allow-credentials": "true",
+      "access-control-allow-origin": "http://localhost:3000"
+    }
+  }
+}
